@@ -1,4 +1,4 @@
-package org.sbrubbles.variablegenerics;
+package org.sbrubbles.genericcons;
 
 import static org.junit.Assert.assertArrayEquals;
 
@@ -8,6 +8,10 @@ import java.util.Map;
 
 import org.javaruntype.type.Types;
 import org.junit.Test;
+import org.sbrubbles.genericcons.Cons;
+import org.sbrubbles.genericcons.InvalidTypeException;
+import org.sbrubbles.genericcons.MissingTypeParametersException;
+import org.sbrubbles.genericcons.UnexpectedTypeException;
 
 public class ConsTest {
   private static class FailedSonOfCons<First, Rest> extends Cons<First, Rest> {
