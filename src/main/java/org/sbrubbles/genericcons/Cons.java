@@ -63,7 +63,30 @@ public class Cons<First, Rest> {
     return types;
   }
   
+  @Override
+  public final boolean equals(Object obj) {
+    if(this == obj)
+      return true;
+    
+    // obj should be an anonymous subclass of Cons
+    // so getClass() comparisons fail
+    if(obj == null || ! (obj instanceof Cons))
+      return false;
+    
+    final Cons<?, ?> other = (Cons<?, ?>) obj;
+    return (this.types.equals(other.types));
+  }
+  
+  @Override
+  public final int hashCode() {
+    return this.types.hashCode();
+  }
+  
+  @Override
+  public String toString() {
+    String typesStr = this.types.toString();
+    return "<" + typesStr.substring(1, typesStr.length() - 1) + ">";
+  }
+  
   // TODO check if a given argument list matches the types specified here
-  // TODO equality
-  // TODO toString
 }

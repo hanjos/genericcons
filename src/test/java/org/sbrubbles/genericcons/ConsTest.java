@@ -1,6 +1,8 @@
 package org.sbrubbles.genericcons;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,6 +61,12 @@ public class ConsTest {
         cons.getTypes().toArray());
   }
   
+  @SuppressWarnings("rawtypes")
+  @Test(expected = MissingTypeParametersException.class)
+  public void rawCtor() {
+    new Cons() { /**/ };
+  }
+  
   @Test(expected = InvalidTypeException.class)
   public void namedSubclass() {
     new FailedSonOfCons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>();
@@ -95,5 +103,53 @@ public class ConsTest {
         cons.getTypes().toArray());
     
     ((List) cons.getTypes()).add(Types.ARRAY_OF_BIG_DECIMAL);
+  }
+  
+  @Test
+  public void simpleEquality() {
+    assertEquals(
+        new Cons<String, Number>() { /**/ }, 
+        new Cons<String, Number>() { /**/ });
+  }
+  
+  @Test
+  public void simpleInequality() {
+    Cons<String, Number> string_number = new Cons<String, Number>() { /**/ };
+    Cons<String, Integer> string_integer = new Cons<String, Integer>() { /**/ };
+    
+    assertFalse(string_number.equals(string_integer));
+  }
+  
+  @Test
+  public void nullInequality() {
+    Cons<String, Number> string_number = new Cons<String, Number>() { /**/ };
+    
+    assertFalse(string_number.equals(null));
+  }
+  
+  @Test
+  public void complexEquality() {
+    Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>> cons1 = 
+      new Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() { /**/ };
+      
+    Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>> cons2 = 
+      new Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() { /**/ };
+      
+    assertEquals(cons1, cons2);
+  }
+  
+  @Test
+  public void simpleToString() {
+    assertEquals(
+        "<java.lang.String, java.lang.Number>", 
+        new Cons<String, Number>() { /**/ }.toString());
+  }
+  
+  @Test
+  public void compositeToString() {
+    assertEquals(
+        "<java.lang.String, java.util.List<java.lang.Number>, java.lang.Object, java.util.Map<java.lang.String,java.lang.Integer>>", 
+        new Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() { /**/ }
+          .toString());
   }
 }
