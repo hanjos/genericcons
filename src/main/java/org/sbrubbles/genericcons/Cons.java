@@ -1,12 +1,12 @@
 package org.sbrubbles.genericcons;
 
+import org.javaruntype.type.Type;
+import org.javaruntype.type.Types;
+
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.javaruntype.type.Type;
-import org.javaruntype.type.Types;
 
 public class Cons<First, Rest> {
   private List<? extends Type<?>> types;
@@ -83,7 +83,7 @@ public class Cons<First, Rest> {
   }
   
   @Override
-  public String toString() {
+  public final String toString() {
     String typesStr = this.types.toString();
     return "<" + typesStr.substring(1, typesStr.length() - 1) + ">";
   }
