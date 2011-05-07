@@ -28,7 +28,7 @@ public class ConsTest {
   
   @Test
   public void ctorWithTwoTypes() {
-    Cons<String, Number> cons = new Cons<String, Number>() {};
+    Cons<String, Number> cons = new Cons<String, Number>() { /**/ };
     
     assertArrayEquals(
         new Object[] { Types.STRING, Types.NUMBER },
@@ -38,7 +38,7 @@ public class ConsTest {
   @Test
   public void ctorWithFiveTypes() {
     Cons<String, Cons<Number, Cons<Object, Cons<Object[], Serializable>>>> cons = 
-      new Cons<String, Cons<Number, Cons<Object, Cons<Object[], Serializable>>>>() {};
+      new Cons<String, Cons<Number, Cons<Object, Cons<Object[], Serializable>>>>() { /**/ };
     
     assertArrayEquals(
         new Object[] { Types.STRING, Types.NUMBER, Types.OBJECT, Types.ARRAY_OF_OBJECT, Types.SERIALIZABLE },
@@ -48,7 +48,7 @@ public class ConsTest {
   @Test
   public void ctorWithCompositeTypes() {
     Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>> cons = 
-      new Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() {};
+      new Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() { /**/ };
     
     assertArrayEquals(
         new Object[] { Types.STRING, Types.LIST_OF_NUMBER, Types.OBJECT, Types.MAP_OF_STRING_INTEGER },
@@ -62,28 +62,29 @@ public class ConsTest {
   
   @Test(expected = UnexpectedTypeException.class)
   public void anonymousSubclassOfANamedSubclass() {
-    new FailedSonOfCons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() {};
+    new FailedSonOfCons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() { /**/ };
   }
   
   @Test(expected = UnexpectedTypeException.class)
   public void oneTypeVariableFixedFromAnonymousSubclassOfANamedSubclass() {
-    new LimpingSonOfCons<Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() {};
+    new LimpingSonOfCons<Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() { /**/ };
   }
   
   @Test(expected = MissingTypeParametersException.class)
   public void bothTypeVariablesFixedFromAnonymousSubclassOfANamedSubclass() {
-    new FrozenSonOfCons() {};
+    new FrozenSonOfCons() { /**/ };
   }
   
+  @SuppressWarnings("synthetic-access")
   @Test(expected = MissingTypeParametersException.class)
   public void bothTypeVariablesFixedFromAnonymousSubclassOfANamedSubclassOfANamedSubclass() {
-    new FrozenGrandsonOfCons() {};
+    new FrozenGrandsonOfCons() { /**/ };
   }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @Test(expected = UnsupportedOperationException.class)
   public void immutableGetTypes() {
-    Cons<String, Number> cons = new Cons<String, Number>() {};
+    Cons<String, Number> cons = new Cons<String, Number>() { /**/ };
     
     assertArrayEquals(
         new Object[] { Types.STRING, Types.NUMBER },
