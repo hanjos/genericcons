@@ -35,7 +35,7 @@ public class Cons<First, Rest> {
     
     // end of recursion, add it and return
     if(! (type instanceof ParameterizedType) || ((ParameterizedType) type).getRawType() != Cons.class) {
-      result.add(Types.forJavaLangReflectType(type));
+      result.add(convertToFullType(type));
       return result;
     }
     
@@ -45,10 +45,18 @@ public class Cons<First, Rest> {
     java.lang.reflect.Type[] actualTypes = cons.getActualTypeArguments();
     assert actualTypes.length == 2;
     
-    result.add(Types.forJavaLangReflectType(actualTypes[0]));
+    result.add(convertToFullType(actualTypes[0]));
     result.addAll(getTypesFrom(actualTypes[1]));
     
     return result;
+  }
+
+  private Type<?> convertToFullType(java.lang.reflect.Type type) throws InvalidTypeException {
+    try {
+      return Types.forJavaLangReflectType(type);
+    } catch (Throwable t) {
+      throw new InvalidTypeException(type, t);
+    }
   }
 
   public final List<? extends Type<?>> getTypes() {

@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import org.javaruntype.exceptions.TypeValidationException;
 import org.javaruntype.type.Types;
 import org.junit.Test;
 
@@ -56,7 +55,7 @@ public class ConsTest {
         cons.getTypes().toArray());
   }
   
-  @Test(expected = TypeValidationException.class)
+  @Test(expected = InvalidTypeException.class)
   public void namedSubclass() {
     new FailedSonOfCons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>();
   }
