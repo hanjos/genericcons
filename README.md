@@ -4,6 +4,7 @@ Generic Cons
 Who said Java generics can't accept an open-ended number of type variables? 
 
 Instead of trying to write something like
+
 ```java
 // doesn't compile!
 Function <?, ?> func = new Function <Integer, String, String, String, String>() {
