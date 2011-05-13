@@ -37,10 +37,16 @@ Function <?, ?> func = new Function <Integer, Cons<String, Cons<String, Cons<Str
 and be happy!
 
 
-That's actually more work!
---------------------------
+That's a lot of work!
+---------------------
 
-Hey, I never said the solution was pretty :)
+Hey, I never said the solution was pretty. Or useful :)
+
+
+How?
+----
+
+Some [type token][1] chicanery and good ol' [cons][2] for inspiration.
 
 
 Why?
@@ -48,3 +54,5 @@ Why?
 
 It occurred to me one day, and I haven't contributed to Java's grand tradition of gross overengineering for quite some time, so there you go :P
 
+[1]: http://gafter.blogspot.com/2006/12/super-type-tokens.html
+[2]: http://en.wikipedia.org/wiki/Cons
