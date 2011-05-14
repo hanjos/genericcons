@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Cons<First, Rest> {
+public abstract class Cons<First, Rest> {
   private List<? extends Type<?>> types;
   
   public Cons() {

@@ -113,6 +113,13 @@ public class ConsTest {
   }
   
   @Test
+  public void selfEquality() {
+    Cons<String, Number> cons = new Cons<String, Number>() { /**/ };
+    
+    assertEquals(cons, cons);
+  }
+  
+  @Test
   public void simpleInequality() {
     Cons<String, Number> string_number = new Cons<String, Number>() { /**/ };
     Cons<String, Integer> string_integer = new Cons<String, Integer>() { /**/ };
@@ -136,6 +143,13 @@ public class ConsTest {
       new Cons<String, Cons<List<Number>, Cons<Object, Map<String, Integer>>>>() { /**/ };
       
     assertEquals(cons1, cons2);
+  }
+  
+  @Test
+  public void hashCodeEquality() {
+    assertEquals(
+        new Cons<String, Number>() { /**/ }.hashCode(), 
+        new Cons<String, Number>() { /**/ }.hashCode());
   }
   
   @Test
