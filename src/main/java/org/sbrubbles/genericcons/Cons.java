@@ -12,7 +12,7 @@ public abstract class Cons<First, Rest> {
   private List<? extends Type<?>> types;
   
   public Cons() {
-    types = Collections.unmodifiableList(detectTypes());
+    this.types = Collections.unmodifiableList(detectTypes());
   }
 
   private List<? extends Type<?>> detectTypes() {
@@ -43,7 +43,6 @@ public abstract class Cons<First, Rest> {
     ParameterizedType cons = (ParameterizedType) type;
     
     java.lang.reflect.Type[] actualTypes = cons.getActualTypeArguments();
-    assert actualTypes.length == 2;
     
     result.add(convertToFullType(actualTypes[0]));
     result.addAll(getTypesFrom(actualTypes[1]));
@@ -74,7 +73,7 @@ public abstract class Cons<First, Rest> {
       return false;
     
     final Cons<?, ?> other = (Cons<?, ?>) obj;
-    return (this.types.equals(other.types));
+    return this.types.equals(other.types);
   }
   
   @Override
