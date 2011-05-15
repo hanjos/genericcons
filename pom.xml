@@ -5,11 +5,20 @@
   <groupId>org.sbrubbles</groupId>
   <artifactId>genericcons</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <inceptionYear>2011</inceptionYear>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <developers>
+    <developer>
+      <id>hanjos</id>
+      <name>Humberto Anjos</name>
+      <email>h.anjos@acm.org</email>
+    </developer>
+  </developers>
+  
   <build>
     <plugins>
       <plugin>
