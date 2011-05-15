@@ -8,8 +8,8 @@ import java.util.List;
 public class UnexpectedTypeException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
-  private Type actual;
-  private List<Type> expected;
+  private final Type actual;
+  private final List<Type> expected;
   
   private static String buildMessage(Type actual, Type... expected) {
     StringBuilder result = new StringBuilder("Got ").append(actual).append(", expected ");

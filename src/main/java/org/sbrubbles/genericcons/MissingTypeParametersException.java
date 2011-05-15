@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 public class MissingTypeParametersException extends RuntimeException {
   private static final long serialVersionUID = 1L;
 
-  private Type baseType;
+  private final Type baseType;
 
   private static String buildMessage(Type type) {
     return "Type parameters missing in " + type;
