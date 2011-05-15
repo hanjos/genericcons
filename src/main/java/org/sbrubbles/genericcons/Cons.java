@@ -8,14 +8,56 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Captures and represents an open-ended list of types. This class is built to 
+ * be instantiated with anonymous subclasses, using Neal Gafter's 
+ * <a href='http://gafter.blogspot.com/2006/12/super-type-tokens.html'>super 
+ * type tokens</a> idea, like below:
+ *
+ * <pre>
+ * Cons&lt;String, Cons&lt;Object[], Serializable&gt;&gt; cons =
+ *   new Cons&lt;String, Cons&lt;Object[], Serializable&gt;&gt;() {}; 
+ * // has to be an anonymous subclass!
+ *
+ * org.junit.Assert.assertArrayEquals(
+ *   new Object[] { 
+ *     org.javaruntype.type.Types.STRING, 
+ *     org.javaruntype.type.Types.ARRAY_OF_OBJECT, 
+ *     org.javaruntype.type.Types.SERIALIZABLE },
+ *   cons.getTypes().toArray());
+ * </pre>
+ * 
+ * Instances of this class are immutable. Named subclasses will throw an 
+ * exception during instantiation.
+ * 
+ * @param <First> The first type.
+ * @param <Rest> The last type, or a Cons holding the rest of the types.
+ * 
+ * @author Humberto Anjos
+ */
 public abstract class Cons<First, Rest> {
   private List<? extends Type<?>> types;
   
-  public Cons() {
+  /**
+   * Detects and stores the types given at instantiation, which will be 
+   * accessible at {@link #getTypes()}. Only works if it's called from an 
+   * anonymous subclass.
+   * 
+   * @throws MissingTypeParametersException if the constructor can't find the 
+   * type parameters.
+   * @throws UnexpectedTypeException if this is not called from an anonymous 
+   * subclass.
+   * @throws InvalidTypeException if one of the types cannot be stored.
+   */
+  public Cons() 
+  throws MissingTypeParametersException, UnexpectedTypeException, 
+  InvalidTypeException {
     this.types = Collections.unmodifiableList(detectTypes());
   }
 
-  private List<? extends Type<?>> detectTypes() {
+  private List<? extends Type<?>> detectTypes()
+  throws MissingTypeParametersException, UnexpectedTypeException, 
+  InvalidTypeException {
     java.lang.reflect.Type superclass = this.getClass().getGenericSuperclass();
     
     if(! (superclass instanceof ParameterizedType))
@@ -28,13 +70,15 @@ public abstract class Cons<First, Rest> {
     return getTypesFrom(cons);
   }
 
-  private List<? extends Type<?>> getTypesFrom(java.lang.reflect.Type type) {
+  private List<? extends Type<?>> getTypesFrom(java.lang.reflect.Type type)
+  throws InvalidTypeException {
     assert type != null;
     
     List<Type<?>> result = new ArrayList<Type<?>>();
     
     // end of recursion, add it and return
-    if(! (type instanceof ParameterizedType) || ((ParameterizedType) type).getRawType() != Cons.class) {
+    if(! (type instanceof ParameterizedType) 
+    || ((ParameterizedType) type).getRawType() != Cons.class) {
       result.add(convertToFullType(type));
       return result;
     }
@@ -50,7 +94,8 @@ public abstract class Cons<First, Rest> {
     return result;
   }
 
-  private Type<?> convertToFullType(java.lang.reflect.Type type) throws InvalidTypeException {
+  private Type<?> convertToFullType(java.lang.reflect.Type type) 
+  throws InvalidTypeException {
     try {
       return Types.forJavaLangReflectType(type);
     } catch (Throwable t) {
@@ -58,6 +103,11 @@ public abstract class Cons<First, Rest> {
     }
   }
 
+  /**
+   * Returns the types detected at instantiation.
+   * 
+   * @return the types detected at instantiation.
+   */
   public final List<? extends Type<?>> getTypes() {
     return types;
   }
