@@ -112,6 +112,10 @@ public abstract class Cons<First, Rest> {
     return types;
   }
   
+  /**
+   * Checks for equality between Cons instances. Two Cons instances are equal 
+   * if their list of types is equal.
+   */
   @Override
   public final boolean equals(Object obj) {
     if(this == obj)
@@ -126,11 +130,17 @@ public abstract class Cons<First, Rest> {
     return this.types.equals(other.types);
   }
   
+  /**
+   * Returns the hash code for this instance.
+   */
   @Override
   public final int hashCode() {
     return this.types.hashCode();
   }
   
+  /**
+   * Returns a string representation of this instance.
+   */
   @Override
   public final String toString() {
     String typesStr = this.types.toString();
