@@ -1,3 +1,8 @@
+Documentation
+-------------
+
+[v0.1 API documentation][v0.1]
+
 Generic Cons
 ------------
 
@@ -7,7 +12,7 @@ Instead of trying to write something like
 
 ```java
 // doesn't compile!
-Function <?, ?> func = new Function <Integer, String, String, String, String>() {
+Function<?, ?> func = new Function<Integer, String, String, String, String>() {
   public Integer execute(String a, String b, String c, String d) {
     return Math.max(a.length(), b.length(), c.length(), d.length());
   }
@@ -18,7 +23,7 @@ and raging at your compiler in vain and frustration, write
 
 ```java
 // works like a charm! Or should, haven't tested it
-Function <?, ?> func = new Function <Integer, Cons<String, Cons<String, Cons<String, String>>>>() {
+Function<?, ?> func = new Function<Integer, Cons<String, Cons<String, Cons<String, String>>>>() {
   {
     super(Integer.class, new Cons<String, Cons<String, Cons<String, String>>>() {});
   }
@@ -56,3 +61,4 @@ It occurred to me one day, and I haven't contributed to Java's grand tradition o
 
 [1]: http://gafter.blogspot.com/2006/12/super-type-tokens.html
 [2]: http://en.wikipedia.org/wiki/Cons
+[v0.1]: http://hanjos.github.com/genericcons/docs/0.1/apidocs/index.html
