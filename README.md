@@ -23,11 +23,11 @@ and raging at your compiler in vain and frustration, write
 
 ```java
 // works like a charm! Or should, haven't tested it
-Function<?, ?> func = new Function<Integer, Cons<String, Cons<String, Cons<String, String>>>>() {
-  {
-    super(Integer.class, new Cons<String, Cons<String, Cons<String, String>>>() {});
+Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>>() {
+  { // the no-arg constructor
+    this.types = C.extractTypesFromSuperclass(this.getClass(), 1);
   }
-
+  
   public Integer execute(Object... objects) {
     String a = (String) objects[0];
     String b = (String) objects[1];
