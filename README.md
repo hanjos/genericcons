@@ -22,7 +22,7 @@ Function<?, ?> func = new Function<Integer, String, String, String, String>() {
 and raging at your compiler in vain and frustration, write
 
 ```java
-// works like a charm! Or should, haven't tested it
+// works like a charm! Or should, haven't tested it :P
 Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>>() {
   { // the no-arg constructor
     this.types = C.extractTypesFromSuperclass(this.getClass(), 1);
