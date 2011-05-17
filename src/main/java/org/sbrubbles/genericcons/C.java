@@ -9,8 +9,8 @@ import org.javaruntype.type.Types;
 
 /**
  * Captures and represents an open-ended list of types. This class isn't 
- * supposed to be instantiated; it is used to construct the list in the type
- * declaration, like below:
+ * supposed to be instantiated or subclassed; it's used to build the 
+ * list in the type declaration, like below:
  * 
  * <pre>
  * Function&lt;?, ?&gt; f = new Function&lt;String, C&lt;Object, C&lt;Number, C&lt;String, Integer&gt;&gt;&gt;&gt;() {
@@ -20,12 +20,15 @@ import org.javaruntype.type.Types;
  * };
  * </pre>
  * 
+ * It was supposed to be {@code Cons} (hence the {@code C}), but using only
+ * one letter kept type arguments (slightly) more readable.
+ * 
  * @author Humberto Anjos
  * @param <First> The first type.
  * @param <Rest> The last type, or a C holding the rest of the types.
  */
 public final class C<First, Rest> {
-  // prevents instantiation
+  // preventing instantiation
   private C() { /* empty block */ }
   
   /**
@@ -34,7 +37,7 @@ public final class C<First, Rest> {
    * 
    * @param baseClass the class whose generic superclass holds the list of 
    * type arguments. 
-   * @param parameterIndex where in the given base class' generic superclass's 
+   * @param parameterIndex where in the given base class' generic superclass' 
    * type argument list is the desired list of types.
    * @return a list of the types found. 
    * @throws TypeParametersNotFoundException if no type parameters are found. 
