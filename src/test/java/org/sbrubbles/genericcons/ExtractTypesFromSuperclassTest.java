@@ -2,9 +2,11 @@ package org.sbrubbles.genericcons;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.Serializable;
+import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +24,19 @@ public class ExtractTypesFromSuperclassTest {
     assertArrayEquals(
         new Object[] { Types.STRING }, 
         C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+  }
+
+  @Test
+  public <T> void oneNonConsParameterWithTypeVariable() {
+    JustOneParameter<T> cons = new JustOneParameter<T>() { /**/ };
+
+    try {
+      C.extractTypesFromSuperclass(cons.getClass(), 0);
+      fail();
+    } catch (InvalidTypeException e) {
+      assertTrue(e.getType() instanceof TypeVariable);
+      assertEquals("T", ((TypeVariable<?>) e.getType()).getName());
+    }
   }
 
   @Test
@@ -97,6 +112,27 @@ public class ExtractTypesFromSuperclassTest {
             Types.MAP_OF_STRING_INTEGER }, 
         C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
   }
+  
+  @Test
+  public void sonOfParameterizedType() {
+    JustOneParameter<String> cons = new SonOfJustOneParameter();
+
+    assertArrayEquals(
+        new Object[] { Types.STRING }, 
+        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+  }
+
+  @Test
+  public void grandsonOfParameterizedType() {
+    JustOneParameter<String> cons = new SonOfJustOneParameter() { /**/ };
+    
+    try {
+      C.extractTypesFromSuperclass(cons.getClass(), 0);
+      fail();
+    } catch (TypeParametersNotFoundException e) {
+      assertEquals(cons.getClass(), e.getBaseType());
+    }
+  }
 
   @Test(expected = IllegalArgumentException.class)
   public void nullBaseClass() {
@@ -123,17 +159,6 @@ public class ExtractTypesFromSuperclassTest {
       fail();
     } catch (TypeParametersNotFoundException e) {
       assertEquals(String.class, e.getBaseType());
-    }
-  }
-
-  @Test
-  public void grandsonOfParameterizedType() {
-    JustOneParameter<String> o = new SonOfJustOneParameter() { /**/ };
-    try {
-      C.extractTypesFromSuperclass(o.getClass(), 0);
-      fail();
-    } catch (TypeParametersNotFoundException e) {
-      assertEquals(o.getClass(), e.getBaseType());
     }
   }
 }
