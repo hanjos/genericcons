@@ -6,3 +6,8 @@ class which is used in the type declaration, and the static `extractTypesFromSup
 class and the index of the parameter type, returns a list with all the types expressed.
 
 * Cons and UnexpectedTypeException no longer exist.
+
+0.1
+---
+
+* First release!
