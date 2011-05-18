@@ -1,6 +1,7 @@
 Documentation
 -------------
 
+[v0.2 API documentation][v0.2]
 [v0.1 API documentation][v0.1]
 
 Generic Cons
@@ -62,3 +63,4 @@ It occurred to me one day, and I haven't contributed to Java's grand tradition o
 [1]: http://gafter.blogspot.com/2006/12/super-type-tokens.html
 [2]: http://en.wikipedia.org/wiki/Cons
 [v0.1]: http://hanjos.github.com/genericcons/docs/0.1/apidocs/index.html
+[v0.2]: http://hanjos.github.com/genericcons/docs/0.2/apidocs/index.html
