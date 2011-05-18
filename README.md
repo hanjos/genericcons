@@ -1,8 +1,8 @@
 Documentation
 -------------
 
-[v0.2 API documentation][v0.2]
-[v0.1 API documentation][v0.1]
+* [v0.2 API documentation][v0.2]
+* [v0.1 API documentation][v0.1]
 
 Generic Cons
 ------------
