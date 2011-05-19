@@ -30,6 +30,9 @@ Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>
   }
   
   public Integer execute(Object... objects) {
+    if(! C.matches(this.types, objects)) // the given objects don't match!
+  	  return -1;
+  	    
     String a = (String) objects[0];
     String b = (String) objects[1];
     String c = (String) objects[2];
