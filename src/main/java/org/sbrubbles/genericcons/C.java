@@ -2,6 +2,7 @@ package org.sbrubbles.genericcons;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.javaruntype.type.Type;
@@ -73,7 +74,7 @@ public final class C<First, Rest> {
    * @throws IllegalArgumentException if one of the arguments is null.
    * @throws TypeMatchingException if a problem occurs while checking an object's compatibility.
    */
-  public static boolean matches(List<? extends Type<?>> types, Object... objects) 
+  public static boolean matchesVarargs(List<? extends Type<?>> types, Object... objects) 
   throws IllegalArgumentException, TypeMatchingException {
     if(types == null)
       throw new IllegalArgumentException("types cannot be null!");
@@ -85,20 +86,52 @@ public final class C<First, Rest> {
       return false;
     
     for(int i = 0; i < objects.length; i++) {
-      Object object = objects[i];
-      Type<?> type = types.get(i);
-      
-      if(type == null)
-        throw new TypeMatchingException(null, object);
-      
-      if(object == null) // null matches anything
-        continue;
-      
-      if(! type.getRawClass().isAssignableFrom(object.getClass())) // mismatch found
+      if(! matches(types.get(i), objects[i]))
         return false;
     }
     
     return true;
+  }
+  
+  /**
+   * Checks if the given objects are compatible with the types in {@code types}.
+   * 
+   * @param types a list of full types.
+   * @param objects the given objects to match.
+   * @return if the given objects have the same type.
+   * @throws IllegalArgumentException if one of the arguments is null.
+   * @throws TypeMatchingException if a problem occurs while checking an object's compatibility.
+   */
+  public static boolean matches(List<? extends Type<?>> types, Iterable<?> objects) 
+  throws IllegalArgumentException, TypeMatchingException {
+    if(types == null)
+      throw new IllegalArgumentException("types cannot be null!");
+    
+    if(objects == null)
+      throw new IllegalArgumentException("objects cannot be null");
+    
+    Iterator<?> iterator = objects.iterator();
+    
+    for(Type<?> type : types) {
+      if(! iterator.hasNext() // the amount of objects and types doesn't match
+      || ! matches(type, iterator.next())) // mismatch
+        return false;
+    }
+    
+    if(iterator.hasNext())
+      return false; // the amount of objects and types doesn't match 
+    
+    return true;
+  }
+
+  private static boolean matches(Type<?> type, Object object) {
+    if(type == null)
+      throw new TypeMatchingException(null, object);
+    
+    if(object == null)
+      return true;
+    
+    return type.getRawClass().isAssignableFrom(object.getClass());
   }
   
   private static List<? extends Type<?>> extractTypesFromCons(java.lang.reflect.Type type)

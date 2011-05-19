@@ -13,38 +13,38 @@ import org.javaruntype.type.Type;
 import org.javaruntype.type.Types;
 import org.junit.Test;
 
-public class MatchesTest {
+public class MatchesVarargsTest {
   @Test(expected = IllegalArgumentException.class)
   public void nullTypesArgument() {
-    C.matches(null, new Object());
+    C.matchesVarargs(null, new Object());
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void nullObjectsArgument() {
-    C.matches(new ArrayList<Type<?>>(), (Object[]) null);
+    C.matchesVarargs(new ArrayList<Type<?>>(), (Object[]) null);
   }
   
   @Test
   public void emptyTypeListAgainstEmptyObjectList() {
-    assertTrue(C.matches(new ArrayList<Type<?>>()));
+    assertTrue(C.matchesVarargs(new ArrayList<Type<?>>()));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void listSizeMismatch() {
-    assertFalse(C.matches(Arrays.asList(Types.STRING), "", ""));
+    assertFalse(C.matchesVarargs(Arrays.asList(Types.STRING), "", ""));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void sameTypeSingleArgumentMatch() {
-    assertTrue(C.matches(Arrays.asList(Types.STRING), ""));
+    assertTrue(C.matchesVarargs(Arrays.asList(Types.STRING), ""));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void sameTypesMultipleArgumentsMatch() {
-    assertTrue(C.matches(
+    assertTrue(C.matchesVarargs(
         Arrays.asList(Types.STRING, Types.DOUBLE, Types.OBJECT), 
         "", new Double(1.0), new Object()));
   }
@@ -52,7 +52,7 @@ public class MatchesTest {
   @SuppressWarnings("unchecked")
   @Test
   public void nullObjectsMultipleArgumentsMatch() {
-    assertTrue(C.matches(
+    assertTrue(C.matchesVarargs(
         Arrays.asList(Types.STRING, Types.DOUBLE, Types.OBJECT), 
         null, new Double(1.0), null));
   }
@@ -61,7 +61,7 @@ public class MatchesTest {
   @Test
   public void nullTypesMultipleArgumentsMatch() {
     try {
-      C.matches(
+      C.matchesVarargs(
           Arrays.asList(Types.STRING, null, Types.OBJECT), 
           null, new Double(1.0), null);
       fail();
@@ -74,7 +74,7 @@ public class MatchesTest {
   @SuppressWarnings("unchecked")
   @Test
   public void subtypeSingleArgumentMatch() {
-    assertTrue(C.matches(
+    assertTrue(C.matchesVarargs(
         Arrays.asList(Types.SERIALIZABLE), 
         new ArrayList<Object>()));
   }
@@ -82,7 +82,7 @@ public class MatchesTest {
   @SuppressWarnings("unchecked")
   @Test
   public void subtypeSingleArgumentMismatch() {
-    assertFalse(C.matches(
+    assertFalse(C.matchesVarargs(
         Arrays.asList(Types.SERIALIZABLE), 
         new Object()));
   }
@@ -90,7 +90,7 @@ public class MatchesTest {
   @SuppressWarnings("unchecked")
   @Test
   public void subtypeMultipleArgumentsMatch() {
-    assertTrue(C.matches(
+    assertTrue(C.matchesVarargs(
         Arrays.asList(Types.SERIALIZABLE, Types.OBJECT, Types.NUMBER), 
         new ArrayList<Object>(), "", 1.0));
   }
@@ -98,7 +98,7 @@ public class MatchesTest {
   @SuppressWarnings("unchecked")
   @Test
   public void subtypeMultipleArgumentsMismatch() {
-    assertFalse(C.matches(
+    assertFalse(C.matchesVarargs(
         Arrays.asList(Types.SERIALIZABLE, Types.OBJECT, Types.NUMBER), 
         new ArrayList<Object>(), "", false));
   }
