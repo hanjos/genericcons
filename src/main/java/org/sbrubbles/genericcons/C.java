@@ -40,13 +40,14 @@ public final class C<First, Rest> {
    * @param parameterIndex where in the given base class' generic superclass' 
    * type argument list is the desired list of types.
    * @return a list of the types found. 
+   * @throws IllegalArgumentException if the given base class is null.
    * @throws TypeParametersNotFoundException if no type parameters are found. 
-   * @throws InvalidTypeException if there is a problem converting the standard
+   * @throws TypeConversionException if there is a problem converting the standard
    * Java {@linkplain java.lang.reflect.Type type} to a {@linkplain Type fuller
    * representation}. 
    */
   public static List<? extends Type<?>> extractTypesFromSuperclass(Class<?> baseClass, int parameterIndex)
-  throws TypeParametersNotFoundException, InvalidTypeException {
+  throws IllegalArgumentException, TypeParametersNotFoundException, TypeConversionException {
     if(baseClass == null)
       throw new IllegalArgumentException("The base class cannot be null!");
     
@@ -62,11 +63,46 @@ public final class C<First, Rest> {
       throw new TypeParametersNotFoundException(baseClass, e);
     }
   }
-
-  // TODO match a list of types against a list of objects
+ 
+  /**
+   * Checks if the given objects are compatible with the types in {@code types}.
+   * 
+   * @param types a list of full types.
+   * @param objects the given objects to match.
+   * @return if the given objects have the same type.
+   * @throws IllegalArgumentException if one of the arguments is null.
+   * @throws TypeMatchingException if a problem occurs while checking an object's compatibility.
+   */
+  public static boolean matches(List<? extends Type<?>> types, Object... objects) 
+  throws IllegalArgumentException, TypeMatchingException {
+    if(types == null)
+      throw new IllegalArgumentException("types cannot be null!");
+    
+    if(objects == null)
+      throw new IllegalArgumentException("objects cannot be null");
+    
+    if(types.size() != objects.length)
+      return false;
+    
+    for(int i = 0; i < objects.length; i++) {
+      Object object = objects[i];
+      Type<?> type = types.get(i);
+      
+      if(type == null)
+        throw new TypeMatchingException(null, object);
+      
+      if(object == null) // null matches anything
+        continue;
+      
+      if(! type.getRawClass().isAssignableFrom(object.getClass())) // mismatch found
+        return false;
+    }
+    
+    return true;
+  }
   
   private static List<? extends Type<?>> extractTypesFromCons(java.lang.reflect.Type type)
-  throws InvalidTypeException {
+  throws TypeConversionException {
     assert type != null;
     
     List<Type<?>> result = new ArrayList<Type<?>>();
@@ -89,11 +125,11 @@ public final class C<First, Rest> {
   }
 
   private static Type<?> convertToFullType(java.lang.reflect.Type type) 
-  throws InvalidTypeException {
+  throws TypeConversionException {
     try {
       return Types.forJavaLangReflectType(type);
     } catch (Throwable t) {
-      throw new InvalidTypeException(type, t);
+      throw new TypeConversionException(type, t);
     }
   }
 }

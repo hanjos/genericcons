@@ -1,7 +1,9 @@
 0.3-SNAPSHOT
 ------------
 
-* Nothing yet...
+* Added a `matches` method to `C`.
+* Renamed `InvalidTypeException` to `TypeConversionException`.
+* Assorted doc fixes.
 
 0.2
 ---

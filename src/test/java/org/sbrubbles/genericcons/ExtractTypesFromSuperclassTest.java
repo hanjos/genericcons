@@ -33,7 +33,7 @@ public class ExtractTypesFromSuperclassTest {
     try {
       C.extractTypesFromSuperclass(cons.getClass(), 0);
       fail();
-    } catch (InvalidTypeException e) {
+    } catch (TypeConversionException e) {
       assertTrue(e.getType() instanceof TypeVariable);
       assertEquals("T", ((TypeVariable<?>) e.getType()).getName());
     }
