@@ -18,16 +18,7 @@ public class TypeConversionException extends RuntimeException {
   }
 
   /**
-   * Instantiates a new exception with an unknown cause.
-   * 
-   * @param type the type which could not be converted.
-   */
-  public TypeConversionException(Type type) {
-    this(type, null);
-  }
-
-  /**
-   * Instantiates a new exception with an known cause.
+   * Instantiates a new exception.
    * 
    * @param type the type which could not be converted.
    * @param cause the throwable which caused the problem.

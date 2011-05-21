@@ -72,10 +72,9 @@ public final class C<First, Rest> {
    * @param objects the given objects to match.
    * @return if the given objects have the same type.
    * @throws IllegalArgumentException if one of the arguments is null.
-   * @throws TypeMatchingException if a problem occurs while checking an object's compatibility.
    */
   public static boolean matchesVarargs(List<? extends Type<?>> types, Object... objects) 
-  throws IllegalArgumentException, TypeMatchingException {
+  throws IllegalArgumentException {
     if(types == null)
       throw new IllegalArgumentException("types cannot be null!");
     
@@ -86,7 +85,7 @@ public final class C<First, Rest> {
       return false;
     
     for(int i = 0; i < objects.length; i++) {
-      if(! matches(types.get(i), objects[i]))
+      if(! matchesType(types.get(i), objects[i]))
         return false;
     }
     
@@ -100,10 +99,9 @@ public final class C<First, Rest> {
    * @param objects the given objects to match.
    * @return if the given objects have the same type.
    * @throws IllegalArgumentException if one of the arguments is null.
-   * @throws TypeMatchingException if a problem occurs while checking an object's compatibility.
    */
   public static boolean matches(List<? extends Type<?>> types, Iterable<?> objects) 
-  throws IllegalArgumentException, TypeMatchingException {
+  throws IllegalArgumentException {
     if(types == null)
       throw new IllegalArgumentException("types cannot be null!");
     
@@ -114,7 +112,7 @@ public final class C<First, Rest> {
     
     for(Type<?> type : types) {
       if(! iterator.hasNext() // the amount of objects and types doesn't match
-      || ! matches(type, iterator.next())) // mismatch
+      || ! matchesType(type, iterator.next())) // mismatch
         return false;
     }
     
@@ -124,11 +122,18 @@ public final class C<First, Rest> {
     return true;
   }
 
-  private static boolean matches(Type<?> type, Object object) {
-    if(type == null)
-      throw new TypeMatchingException(null, object);
+  /**
+   * Checks if the object's runtime type is compatible with the given type.
+   * 
+   * @param type a type. 
+   * @param object an object.
+   * @return if the object's runtime type is compatible with the given type. 
+   */
+  public static boolean matchesType(Type<?> type, Object object) {
+    if(type == null) // nothing matches a null type
+      return false;
     
-    if(object == null)
+    if(object == null) // everything matches a null object
       return true;
     
     return type.getRawClass().isAssignableFrom(object.getClass());

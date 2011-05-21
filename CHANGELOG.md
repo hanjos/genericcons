@@ -1,8 +1,10 @@
 0.3-SNAPSHOT
 ------------
 
-* Added a `matches` method to `C`.
+* Added matching methods to `C`.
 * Renamed `InvalidTypeException` to `TypeConversionException`.
+* Removed `TypeConversionException`'s 1-argument constructor.
+* `TypeMatchingException` no longer exists.
 * Assorted doc fixes.
 
 0.2

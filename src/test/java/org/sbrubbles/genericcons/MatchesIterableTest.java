@@ -1,10 +1,7 @@
 package org.sbrubbles.genericcons;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,15 +57,9 @@ public class MatchesIterableTest {
   @SuppressWarnings("unchecked")
   @Test
   public void nullTypesMultipleArgumentsMatch() {
-    try {
-      C.matches(
-          Arrays.asList(Types.STRING, null, Types.OBJECT), 
-          Arrays.asList(null, new Double(1.0), null));
-      fail();
-    } catch (TypeMatchingException e) {
-      assertNull(e.getFullType());
-      assertEquals(new Double(1.0), e.getObject());
-    }
+    assertFalse(C.matches(
+        Arrays.asList(Types.STRING, null, Types.OBJECT), 
+        Arrays.asList(null, new Double(1.0), null)));
   }
   
   @SuppressWarnings("unchecked")
