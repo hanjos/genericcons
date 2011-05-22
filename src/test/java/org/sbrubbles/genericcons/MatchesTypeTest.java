@@ -1,27 +1,27 @@
 package org.sbrubbles.genericcons;
 
-import java.util.ArrayList;
-
-import org.javaruntype.type.Types;
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import org.junit.Test;
 
 public class MatchesTypeTest {
   @Test
   public void typeMatch() {
-    assertTrue(C.matchesType(Types.STRING, ""));
+    assertTrue(C.matchesType(String.class, ""));
   }
   
   @Test
   public void subtypeMatch() {
-    assertTrue(C.matchesType(Types.SERIALIZABLE, new ArrayList<Object>()));
+    assertTrue(C.matchesType(Serializable.class, new ArrayList<Object>()));
   }
   
   @Test
   public void typeMismatch() {
-    assertFalse(C.matchesType(Types.STRING, new Object()));
+    assertFalse(C.matchesType(String.class, new Object()));
   }
   
   @Test
@@ -31,6 +31,6 @@ public class MatchesTypeTest {
 
   @Test
   public void nullObjectMismatch() {
-    assertTrue(C.matchesType(Types.STRING, null));
+    assertTrue(C.matchesType(String.class, null));
   }
 }

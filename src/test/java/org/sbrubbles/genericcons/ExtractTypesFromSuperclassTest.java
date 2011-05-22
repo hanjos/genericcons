@@ -2,19 +2,18 @@ package org.sbrubbles.genericcons;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.Serializable;
-import java.lang.reflect.TypeVariable;
 import java.util.List;
 import java.util.Map;
 
-import org.javaruntype.type.Types;
 import org.junit.Test;
 import org.sbrubbles.genericcons.fixtures.JustOneParameter;
 import org.sbrubbles.genericcons.fixtures.JustThreeParameters;
 import org.sbrubbles.genericcons.fixtures.SonOfJustOneParameter;
+
+import com.googlecode.gentyref.TypeToken;
 
 public class ExtractTypesFromSuperclassTest {
   @Test
@@ -22,7 +21,7 @@ public class ExtractTypesFromSuperclassTest {
     JustOneParameter<String> cons = new JustOneParameter<String>() { /**/ };
 
     assertArrayEquals(
-        new Object[] { Types.STRING }, 
+        new Object[] { String.class }, 
         C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
   }
 
@@ -30,13 +29,9 @@ public class ExtractTypesFromSuperclassTest {
   public <T> void oneNonConsParameterWithTypeVariable() {
     JustOneParameter<T> cons = new JustOneParameter<T>() { /**/ };
 
-    try {
-      C.extractTypesFromSuperclass(cons.getClass(), 0);
-      fail();
-    } catch (TypeConversionException e) {
-      assertTrue(e.getType() instanceof TypeVariable);
-      assertEquals("T", ((TypeVariable<?>) e.getType()).getName());
-    }
+    assertArrayEquals(
+        new Object[] { new TypeToken<T>() { /**/ }.getType() },
+        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -45,7 +40,7 @@ public class ExtractTypesFromSuperclassTest {
       new JustOneParameter<C<String, Number>>() { /**/};
 
     assertArrayEquals(
-        new Object[] { Types.STRING, Types.NUMBER }, 
+        new Object[] { String.class, Number.class }, 
         C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
   }
 
@@ -56,11 +51,11 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { 
-            Types.STRING, 
-            Types.NUMBER, 
-            Types.OBJECT, 
-            Types.ARRAY_OF_OBJECT,
-            Types.SERIALIZABLE }, 
+            String.class, 
+            Number.class, 
+            Object.class, 
+            new TypeToken<Object[]>() { /**/ }.getType(),
+            Serializable.class }, 
         C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
   }
 
@@ -70,7 +65,7 @@ public class ExtractTypesFromSuperclassTest {
       new JustThreeParameters<Number, String, C<Serializable, Serializable>>() { /**/ };
 
     assertArrayEquals(
-        new Object[] { Types.STRING }, 
+        new Object[] { String.class }, 
         C.extractTypesFromSuperclass(cons.getClass(), 1).toArray());
   }
 
@@ -80,7 +75,7 @@ public class ExtractTypesFromSuperclassTest {
       new JustThreeParameters<Number, String, C<Serializable, Serializable>>() { /**/ };
 
     assertArrayEquals(
-        new Object[] { Types.SERIALIZABLE, Types.SERIALIZABLE },
+        new Object[] { Serializable.class, Serializable.class },
         C.extractTypesFromSuperclass(cons.getClass(), 2).toArray());
   }
 
@@ -91,11 +86,11 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { 
-            Types.STRING, 
-            Types.NUMBER, 
-            Types.OBJECT, 
-            Types.ARRAY_OF_OBJECT,
-            Types.SERIALIZABLE }, 
+            String.class, 
+            Number.class, 
+            Object.class, 
+            new TypeToken<Object[]>() { /**/ }.getType(),
+            Serializable.class }, 
         C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
   }
 
@@ -106,10 +101,10 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { 
-            Types.STRING, 
-            Types.LIST_OF_NUMBER, 
-            Types.OBJECT, 
-            Types.MAP_OF_STRING_INTEGER }, 
+            String.class, 
+            new TypeToken<List<Number>>() { /**/ }.getType(), 
+            Object.class, 
+            new TypeToken<Map<String, Integer>>() { /**/ }.getType() }, 
         C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
   }
   
@@ -118,7 +113,7 @@ public class ExtractTypesFromSuperclassTest {
     JustOneParameter<String> cons = new SonOfJustOneParameter();
 
     assertArrayEquals(
-        new Object[] { Types.STRING }, 
+        new Object[] { String.class }, 
         C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
   }
 

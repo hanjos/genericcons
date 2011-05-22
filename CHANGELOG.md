@@ -1,10 +1,9 @@
 0.3-SNAPSHOT
 ------------
 
+* Using `gentyref` instead of `javaruntype` for type manipulation.
 * Added matching methods to `C`.
-* Renamed `InvalidTypeException` to `TypeConversionException`.
-* Removed `TypeConversionException`'s 1-argument constructor.
-* `TypeMatchingException` no longer exists.
+* `TypeMatchingException` and `InvalidTypeException` no longer exist.
 * Assorted doc fixes.
 
 0.2

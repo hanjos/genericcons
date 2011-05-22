@@ -1,12 +1,12 @@
 package org.sbrubbles.genericcons;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.javaruntype.type.Type;
-import org.javaruntype.type.Types;
+import com.googlecode.gentyref.GenericTypeReflector;
 
 /**
  * Captures and represents an open-ended list of types. This class isn't 
@@ -42,17 +42,14 @@ public final class C<First, Rest> {
    * type argument list is the desired list of types.
    * @return a list of the types found. 
    * @throws IllegalArgumentException if the given base class is null.
-   * @throws TypeParametersNotFoundException if no type parameters are found. 
-   * @throws TypeConversionException if there is a problem converting the standard
-   * Java {@linkplain java.lang.reflect.Type type} to a {@linkplain Type fuller
-   * representation}. 
+   * @throws TypeParametersNotFoundException if no type parameters are found.
    */
-  public static List<? extends Type<?>> extractTypesFromSuperclass(Class<?> baseClass, int parameterIndex)
-  throws IllegalArgumentException, TypeParametersNotFoundException, TypeConversionException {
+  public static List<? extends Type> extractTypesFromSuperclass(Class<?> baseClass, int parameterIndex)
+  throws IllegalArgumentException, TypeParametersNotFoundException {
     if(baseClass == null)
       throw new IllegalArgumentException("The base class cannot be null!");
     
-    java.lang.reflect.Type superclass = baseClass.getGenericSuperclass();
+    Type superclass = baseClass.getGenericSuperclass();
     
     if(! (superclass instanceof ParameterizedType))
       throw new TypeParametersNotFoundException(baseClass);
@@ -73,7 +70,7 @@ public final class C<First, Rest> {
    * @return if the given objects have the same type.
    * @throws IllegalArgumentException if one of the arguments is null.
    */
-  public static boolean matchesVarargs(List<? extends Type<?>> types, Object... objects) 
+  public static boolean matchesVarargs(List<? extends Type> types, Object... objects) 
   throws IllegalArgumentException {
     if(types == null)
       throw new IllegalArgumentException("types cannot be null!");
@@ -100,7 +97,7 @@ public final class C<First, Rest> {
    * @return if the given objects have the same type.
    * @throws IllegalArgumentException if one of the arguments is null.
    */
-  public static boolean matches(List<? extends Type<?>> types, Iterable<?> objects) 
+  public static boolean matches(List<? extends Type> types, Iterable<?> objects) 
   throws IllegalArgumentException {
     if(types == null)
       throw new IllegalArgumentException("types cannot be null!");
@@ -110,7 +107,7 @@ public final class C<First, Rest> {
     
     Iterator<?> iterator = objects.iterator();
     
-    for(Type<?> type : types) {
+    for(Type type : types) {
       if(! iterator.hasNext() // the amount of objects and types doesn't match
       || ! matchesType(type, iterator.next())) // mismatch
         return false;
@@ -129,26 +126,25 @@ public final class C<First, Rest> {
    * @param object an object.
    * @return if the object's runtime type is compatible with the given type. 
    */
-  public static boolean matchesType(Type<?> type, Object object) {
+  public static boolean matchesType(Type type, Object object) {
     if(type == null) // nothing matches a null type
       return false;
     
     if(object == null) // everything matches a null object
       return true;
     
-    return type.getRawClass().isAssignableFrom(object.getClass());
+    return GenericTypeReflector.isSuperType(type, object.getClass());
   }
   
-  private static List<? extends Type<?>> extractTypesFromCons(java.lang.reflect.Type type)
-  throws TypeConversionException {
+  private static List<? extends Type> extractTypesFromCons(java.lang.reflect.Type type) {
     assert type != null;
     
-    List<Type<?>> result = new ArrayList<Type<?>>();
+    List<Type> result = new ArrayList<Type>();
     
     // end of recursion, add it and return
     if(! (type instanceof ParameterizedType) 
     || ((ParameterizedType) type).getRawType() != C.class) {
-      result.add(convertToFullType(type));
+      result.add(type);
       return result;
     }
     
@@ -156,18 +152,9 @@ public final class C<First, Rest> {
     ParameterizedType cons = (ParameterizedType) type;
     java.lang.reflect.Type[] actualTypes = cons.getActualTypeArguments();
     
-    result.add(convertToFullType(actualTypes[0]));
+    result.add(actualTypes[0]);
     result.addAll(extractTypesFromCons(actualTypes[1]));
     
     return result;
-  }
-
-  private static Type<?> convertToFullType(java.lang.reflect.Type type) 
-  throws TypeConversionException {
-    try {
-      return Types.forJavaLangReflectType(type);
-    } catch (Throwable t) {
-      throw new TypeConversionException(type, t);
-    }
   }
 }

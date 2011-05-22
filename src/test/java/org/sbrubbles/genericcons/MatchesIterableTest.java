@@ -3,11 +3,11 @@ package org.sbrubbles.genericcons;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.javaruntype.type.Type;
-import org.javaruntype.type.Types;
 import org.junit.Test;
 
 public class MatchesIterableTest {
@@ -18,31 +18,31 @@ public class MatchesIterableTest {
   
   @Test(expected = IllegalArgumentException.class)
   public void nullObjectsArgument() {
-    C.matches(new ArrayList<Type<?>>(), null);
+    C.matches(new ArrayList<Type>(), null);
   }
   
   @Test
   public void emptyTypeListAgainstEmptyObjectList() {
-    assertTrue(C.matches(new ArrayList<Type<?>>(), new ArrayList<Object>()));
+    assertTrue(C.matches(new ArrayList<Type>(), new ArrayList<Object>()));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void listSizeMismatch() {
-    assertFalse(C.matches(Arrays.asList(Types.STRING), Arrays.asList("", "")));
+    assertFalse(C.matches(Arrays.asList(String.class), Arrays.asList("", "")));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void sameTypeSingleArgumentMatch() {
-    assertTrue(C.matches(Arrays.asList(Types.STRING), Arrays.asList("")));
+    assertTrue(C.matches(Arrays.asList(String.class), Arrays.asList("")));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void sameTypesMultipleArgumentsMatch() {
     assertTrue(C.matches(
-        Arrays.asList(Types.STRING, Types.DOUBLE, Types.OBJECT), 
+        Arrays.asList(String.class, Double.class, Object.class), 
         Arrays.asList("", new Double(1.0), new Object())));
   }
   
@@ -50,7 +50,7 @@ public class MatchesIterableTest {
   @Test
   public void nullObjectsMultipleArgumentsMatch() {
     assertTrue(C.matches(
-        Arrays.asList(Types.STRING, Types.DOUBLE, Types.OBJECT), 
+        Arrays.asList(String.class, Double.class, Object.class), 
         Arrays.asList(null, new Double(1.0), null)));
   }
   
@@ -58,7 +58,7 @@ public class MatchesIterableTest {
   @Test
   public void nullTypesMultipleArgumentsMatch() {
     assertFalse(C.matches(
-        Arrays.asList(Types.STRING, null, Types.OBJECT), 
+        Arrays.asList(String.class, null, Object.class), 
         Arrays.asList(null, new Double(1.0), null)));
   }
   
@@ -66,7 +66,7 @@ public class MatchesIterableTest {
   @Test
   public void subtypeSingleArgumentMatch() {
     assertTrue(C.matches(
-        Arrays.asList(Types.SERIALIZABLE), 
+        Arrays.asList(Serializable.class), 
         Arrays.asList(new ArrayList<Object>())));
   }
   
@@ -74,7 +74,7 @@ public class MatchesIterableTest {
   @Test
   public void subtypeSingleArgumentMismatch() {
     assertFalse(C.matches(
-        Arrays.asList(Types.SERIALIZABLE), 
+        Arrays.asList(Serializable.class), 
         Arrays.asList(new Object())));
   }
   
@@ -82,7 +82,7 @@ public class MatchesIterableTest {
   @Test
   public void subtypeMultipleArgumentsMatch() {
     assertTrue(C.matches(
-        Arrays.asList(Types.SERIALIZABLE, Types.OBJECT, Types.NUMBER), 
+        Arrays.asList(Serializable.class, Object.class, Number.class), 
         Arrays.asList(new ArrayList<Object>(), "", 1.0)));
   }
   
@@ -90,7 +90,7 @@ public class MatchesIterableTest {
   @Test
   public void subtypeMultipleArgumentsMismatch() {
     assertFalse(C.matches(
-        Arrays.asList(Types.SERIALIZABLE, Types.OBJECT, Types.NUMBER), 
+        Arrays.asList(Serializable.class, Object.class, Number.class), 
         Arrays.asList(new ArrayList<Object>(), "", false)));
   }
   
@@ -98,7 +98,7 @@ public class MatchesIterableTest {
   @Test
   public void tooManyArgumentsMismatch() {
     assertFalse(C.matches(
-        Arrays.asList(Types.SERIALIZABLE, Types.OBJECT, Types.BOOLEAN), 
+        Arrays.asList(Serializable.class, Object.class, Boolean.class), 
         Arrays.asList(new ArrayList<Object>(), "", false, 1.0)));
   }
   
@@ -106,7 +106,7 @@ public class MatchesIterableTest {
   @Test
   public void tooFewArgumentsMismatch() {
     assertFalse(C.matches(
-        Arrays.asList(Types.SERIALIZABLE, Types.OBJECT, Types.BOOLEAN), 
+        Arrays.asList(Serializable.class, Object.class, Boolean.class), 
         Arrays.asList(new ArrayList<Object>(), "")));
   }
 }
