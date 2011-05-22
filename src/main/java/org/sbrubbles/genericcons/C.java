@@ -3,6 +3,7 @@ package org.sbrubbles.genericcons;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import com.googlecode.gentyref.GenericTypeReflector;
  * };
  * </pre>
  * 
- * It was supposed to be {@code Cons} (hence the {@code C}), but using only
+ * It was supposed to be called {@code Cons} (hence the {@code C}), but using only
  * one letter kept type arguments (slightly) more readable.
  * 
  * @author Humberto Anjos
@@ -37,7 +38,7 @@ public final class C<First, Rest> {
    * 
    * @author Humberto Anjos
    */
-  public static interface TypesChecker {
+  public static interface TypeChecker {
     /**
      * Checks if the given objects are compatible with the types held by this instance.
      * 
@@ -60,9 +61,16 @@ public final class C<First, Rest> {
   /**
    * Holds a list of types for checking.
    */
-  private static class TypeListChecker implements TypesChecker {
+  private static class TypeListChecker implements TypeChecker {
     private final List<? extends Type> types;
 
+    public TypeListChecker(Type... types) throws IllegalArgumentException {
+      if(types == null)
+        throw new IllegalArgumentException("types cannot be null!");
+      
+      this.types = Arrays.asList(types);
+    }
+    
     public TypeListChecker(List<? extends Type> types) throws IllegalArgumentException {
       if(types == null)
         throw new IllegalArgumentException("types cannot be null!");
@@ -94,8 +102,18 @@ public final class C<First, Rest> {
    * @return a type checker.
    * @throws IllegalArgumentException if {@code types} is null. 
    */
-  public static TypesChecker check(List<? extends Type> types) 
-  throws IllegalArgumentException {
+  public static TypeChecker check(List<? extends Type> types) throws IllegalArgumentException {
+    return new TypeListChecker(types);
+  }
+  
+  /**
+   * Returns an object uses the given types for type checking.
+   * 
+   * @param types the types used for checking.
+   * @return a type checker.
+   * @throws IllegalArgumentException if {@code types} is null. 
+   */
+  public static TypeChecker check(Type... types) throws IllegalArgumentException {
     return new TypeListChecker(types);
   }
   

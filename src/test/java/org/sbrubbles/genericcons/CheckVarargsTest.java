@@ -7,18 +7,34 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
 public class CheckVarargsTest {
   @Test(expected = IllegalArgumentException.class)
-  public void nullTypesArgument() {
-    C.check(null).onVarargs(new Object());
+  public void nullTypesVarargs() {
+    C.check((Type[]) null).onVarargs(new Object());
   }
   
   @Test(expected = IllegalArgumentException.class)
-  public void nullObjectsArgument() {
+  public void nullTypesListArgument() {
+    C.check((List<Type>) null).onVarargs(new Object());
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void nullObjectsArgumentWithTypeArray() {
+    C.check().onVarargs((Object[]) null);
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void nullObjectsArgumentWithListOfTypes() {
     C.check(new ArrayList<Type>()).onVarargs((Object[]) null);
+  }
+  
+  @Test
+  public void emptyTypeArrayAgainstEmptyObjectList() {
+    assertTrue(C.check().onVarargs());
   }
   
   @Test
