@@ -33,6 +33,73 @@ public final class C<First, Rest> {
   private C() { /* empty block */ }
   
   /**
+   * A helper interface for the type checking API. Instances will hold the types to be used for checking. 
+   * 
+   * @author Humberto Anjos
+   */
+  public static interface TypesChecker {
+    /**
+     * Checks if the given objects are compatible with the types held by this instance.
+     * 
+     * @param objects the given objects to check.
+     * @return if the given objects are type-compatible with the types held by this instance.
+     * @throws IllegalArgumentException if {@code objects} is null.
+     */
+    boolean onVarargs(Object... objects) throws IllegalArgumentException;
+    
+    /**
+     * Checks if the given objects are compatible with the types held by this instance.
+     * 
+     * @param objects the given objects to check.
+     * @return if the given objects are type-compatible with the types held by this instance.
+     * @throws IllegalArgumentException if {@code objects} is null.
+     */
+    boolean onIterable(Iterable<?> objects) throws IllegalArgumentException;
+  }
+  
+  /**
+   * Holds a list of types for checking.
+   */
+  private static class TypeListChecker implements TypesChecker {
+    private final List<? extends Type> types;
+
+    public TypeListChecker(List<? extends Type> types) throws IllegalArgumentException {
+      if(types == null)
+        throw new IllegalArgumentException("types cannot be null!");
+      
+      this.types = types;
+    }
+    
+    @Override
+    public boolean onVarargs(Object... objects) throws IllegalArgumentException {
+      if(objects == null)
+        throw new IllegalArgumentException("objects cannot be null");
+      
+      return checkVarargs(types, objects);
+    }
+
+    @Override
+    public boolean onIterable(Iterable<?> objects) throws IllegalArgumentException {
+      if(objects == null)
+        throw new IllegalArgumentException("objects cannot be null");
+      
+      return checkIterable(types, objects);
+    }    
+  }
+  
+  /**
+   * Returns an object uses the given types for type checking.
+   * 
+   * @param types the types used for checking.
+   * @return a type checker.
+   * @throws IllegalArgumentException if {@code types} is null. 
+   */
+  public static TypesChecker check(List<? extends Type> types) 
+  throws IllegalArgumentException {
+    return new TypeListChecker(types);
+  }
+  
+  /**
    * Searches the given base class' superclass for the list of types indexed by
    * {@code parameterIndex}.
    * 
@@ -62,21 +129,9 @@ public final class C<First, Rest> {
     }
   }
  
-  /**
-   * Checks if the given objects are compatible with the types in {@code types}.
-   * 
-   * @param types a list of full types.
-   * @param objects the given objects to match.
-   * @return if the given objects have the same type.
-   * @throws IllegalArgumentException if one of the arguments is null.
-   */
-  public static boolean checkVarargs(List<? extends Type> types, Object... objects) 
-  throws IllegalArgumentException {
-    if(types == null)
-      throw new IllegalArgumentException("types cannot be null!");
-    
-    if(objects == null)
-      throw new IllegalArgumentException("objects cannot be null");
+  private static boolean checkVarargs(List<? extends Type> types, Object... objects) {
+    assert types != null;
+    assert objects != null;
     
     if(types.size() != objects.length) // the number of objects and types doesn't match
       return false;
@@ -89,21 +144,9 @@ public final class C<First, Rest> {
     return true;
   }
   
-  /**
-   * Checks if the given objects are compatible with the types in {@code types}.
-   * 
-   * @param types a list of full types.
-   * @param objects the given objects to match.
-   * @return if the given objects have the same type.
-   * @throws IllegalArgumentException if one of the arguments is null.
-   */
-  public static boolean check(List<? extends Type> types, Iterable<?> objects) 
-  throws IllegalArgumentException {
-    if(types == null)
-      throw new IllegalArgumentException("types cannot be null!");
-    
-    if(objects == null)
-      throw new IllegalArgumentException("objects cannot be null");
+  private static boolean checkIterable(List<? extends Type> types, Iterable<?> objects) {
+    assert types != null;
+    assert objects != null;
     
     Iterator<?> iterator = objects.iterator();
     
@@ -130,13 +173,13 @@ public final class C<First, Rest> {
     if(type == null) // nothing matches a null type
       return false;
     
-    if(object == null) // everything matches a null object
+    if(object == null) // everything else matches a null object
       return true;
     
     return GenericTypeReflector.isSuperType(type, object.getClass());
   }
   
-  private static List<? extends Type> extractTypesFromCons(java.lang.reflect.Type type) {
+  private static List<? extends Type> extractTypesFromCons(Type type) {
     assert type != null;
     
     List<Type> result = new ArrayList<Type>();

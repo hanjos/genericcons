@@ -30,7 +30,7 @@ Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>
   }
   
   public Integer execute(Object... objects) {
-    if(! C.checkVarargs(this.types, objects)) // the given objects don't match!
+    if(! C.check(this.types).onVarargs(objects)) // the given objects don't match!
   	  return -1;
   	    
     String a = (String) objects[0];
