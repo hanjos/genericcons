@@ -2,7 +2,7 @@
 ------------
 
 * Using `gentyref` instead of `javaruntype` for type manipulation.
-* Added matching methods to `C`.
+* Added type checking methods to `C`.
 * `TypeMatchingException` and `InvalidTypeException` no longer exist.
 * Assorted doc fixes.
 

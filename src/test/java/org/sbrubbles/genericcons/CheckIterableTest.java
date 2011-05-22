@@ -10,87 +10,103 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-public class MatchesVarargsTest {
+public class CheckIterableTest {
   @Test(expected = IllegalArgumentException.class)
   public void nullTypesArgument() {
-    C.matchesVarargs(null, new Object());
+    C.check(null, Arrays.asList(new Object()));
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void nullObjectsArgument() {
-    C.matchesVarargs(new ArrayList<Type>(), (Object[]) null);
+    C.check(new ArrayList<Type>(), null);
   }
   
   @Test
   public void emptyTypeListAgainstEmptyObjectList() {
-    assertTrue(C.matchesVarargs(new ArrayList<Type>()));
+    assertTrue(C.check(new ArrayList<Type>(), new ArrayList<Object>()));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void listSizeMismatch() {
-    assertFalse(C.matchesVarargs(Arrays.asList(String.class), "", ""));
+    assertFalse(C.check(Arrays.asList(String.class), Arrays.asList("", "")));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void sameTypeSingleArgumentMatch() {
-    assertTrue(C.matchesVarargs(Arrays.asList(String.class), ""));
+    assertTrue(C.check(Arrays.asList(String.class), Arrays.asList("")));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void sameTypesMultipleArgumentsMatch() {
-    assertTrue(C.matchesVarargs(
+    assertTrue(C.check(
         Arrays.asList(String.class, Double.class, Object.class), 
-        "", new Double(1.0), new Object()));
+        Arrays.asList("", new Double(1.0), new Object())));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void nullObjectsMultipleArgumentsMatch() {
-    assertTrue(C.matchesVarargs(
+    assertTrue(C.check(
         Arrays.asList(String.class, Double.class, Object.class), 
-        null, new Double(1.0), null));
+        Arrays.asList(null, new Double(1.0), null)));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void nullTypesMultipleArgumentsMatch() {
-    assertFalse(C.matchesVarargs(
+    assertFalse(C.check(
         Arrays.asList(String.class, null, Object.class), 
-        null, new Double(1.0), null));
+        Arrays.asList(null, new Double(1.0), null)));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void subtypeSingleArgumentMatch() {
-    assertTrue(C.matchesVarargs(
+    assertTrue(C.check(
         Arrays.asList(Serializable.class), 
-        new ArrayList<Object>()));
+        Arrays.asList(new ArrayList<Object>())));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void subtypeSingleArgumentMismatch() {
-    assertFalse(C.matchesVarargs(
+    assertFalse(C.check(
         Arrays.asList(Serializable.class), 
-        new Object()));
+        Arrays.asList(new Object())));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void subtypeMultipleArgumentsMatch() {
-    assertTrue(C.matchesVarargs(
+    assertTrue(C.check(
         Arrays.asList(Serializable.class, Object.class, Number.class), 
-        new ArrayList<Object>(), "", 1.0));
+        Arrays.asList(new ArrayList<Object>(), "", 1.0)));
   }
   
   @SuppressWarnings("unchecked")
   @Test
   public void subtypeMultipleArgumentsMismatch() {
-    assertFalse(C.matchesVarargs(
+    assertFalse(C.check(
         Arrays.asList(Serializable.class, Object.class, Number.class), 
-        new ArrayList<Object>(), "", false));
+        Arrays.asList(new ArrayList<Object>(), "", false)));
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
+  public void tooManyArgumentsMismatch() {
+    assertFalse(C.check(
+        Arrays.asList(Serializable.class, Object.class, Boolean.class), 
+        Arrays.asList(new ArrayList<Object>(), "", false, 1.0)));
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
+  public void tooFewArgumentsMismatch() {
+    assertFalse(C.check(
+        Arrays.asList(Serializable.class, Object.class, Boolean.class), 
+        Arrays.asList(new ArrayList<Object>(), "")));
   }
 }

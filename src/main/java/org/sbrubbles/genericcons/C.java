@@ -70,7 +70,7 @@ public final class C<First, Rest> {
    * @return if the given objects have the same type.
    * @throws IllegalArgumentException if one of the arguments is null.
    */
-  public static boolean matchesVarargs(List<? extends Type> types, Object... objects) 
+  public static boolean checkVarargs(List<? extends Type> types, Object... objects) 
   throws IllegalArgumentException {
     if(types == null)
       throw new IllegalArgumentException("types cannot be null!");
@@ -82,7 +82,7 @@ public final class C<First, Rest> {
       return false;
     
     for(int i = 0; i < objects.length; i++) {
-      if(! matchesType(types.get(i), objects[i]))
+      if(! checkType(types.get(i), objects[i]))
         return false;
     }
     
@@ -97,7 +97,7 @@ public final class C<First, Rest> {
    * @return if the given objects have the same type.
    * @throws IllegalArgumentException if one of the arguments is null.
    */
-  public static boolean matches(List<? extends Type> types, Iterable<?> objects) 
+  public static boolean check(List<? extends Type> types, Iterable<?> objects) 
   throws IllegalArgumentException {
     if(types == null)
       throw new IllegalArgumentException("types cannot be null!");
@@ -109,7 +109,7 @@ public final class C<First, Rest> {
     
     for(Type type : types) {
       if(! iterator.hasNext() // the number of objects and types doesn't match
-      || ! matchesType(type, iterator.next())) // mismatch
+      || ! checkType(type, iterator.next())) // mismatch
         return false;
     }
     
@@ -126,7 +126,7 @@ public final class C<First, Rest> {
    * @param object an object.
    * @return if the object's runtime type is compatible with the given type. 
    */
-  public static boolean matchesType(Type type, Object object) {
+  public static boolean checkType(Type type, Object object) {
     if(type == null) // nothing matches a null type
       return false;
     
