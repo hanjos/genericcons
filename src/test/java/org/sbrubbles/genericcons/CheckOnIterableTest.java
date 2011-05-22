@@ -7,21 +7,10 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Test;
 
-public class CheckIterableTest {
-  @Test(expected = IllegalArgumentException.class)
-  public void nullTypesVarargs() {
-    C.check((Type[]) null).onIterable(Arrays.asList(new Object()));
-  }
-  
-  @Test(expected = IllegalArgumentException.class)
-  public void nullTypesListArgument() {
-    C.check((List<Type>) null).onIterable(Arrays.asList(new Object()));
-  }
-  
+public class CheckOnIterableTest {
   @Test(expected = IllegalArgumentException.class)
   public void nullObjectsArgumentWithTypeArray() {
     C.check().onIterable(null);
