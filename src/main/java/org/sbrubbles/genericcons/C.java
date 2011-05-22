@@ -78,7 +78,7 @@ public final class C<First, Rest> {
     if(objects == null)
       throw new IllegalArgumentException("objects cannot be null");
     
-    if(types.size() != objects.length)
+    if(types.size() != objects.length) // the number of objects and types doesn't match
       return false;
     
     for(int i = 0; i < objects.length; i++) {
@@ -108,13 +108,13 @@ public final class C<First, Rest> {
     Iterator<?> iterator = objects.iterator();
     
     for(Type type : types) {
-      if(! iterator.hasNext() // the amount of objects and types doesn't match
+      if(! iterator.hasNext() // the number of objects and types doesn't match
       || ! matchesType(type, iterator.next())) // mismatch
         return false;
     }
     
     if(iterator.hasNext())
-      return false; // the amount of objects and types doesn't match 
+      return false; // the number of objects and types doesn't match 
     
     return true;
   }

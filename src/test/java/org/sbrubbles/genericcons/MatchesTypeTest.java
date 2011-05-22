@@ -30,7 +30,7 @@ public class MatchesTypeTest {
   }
 
   @Test
-  public void nullObjectMismatch() {
+  public void nullObjectMatch() {
     assertTrue(C.matchesType(String.class, null));
   }
 }
