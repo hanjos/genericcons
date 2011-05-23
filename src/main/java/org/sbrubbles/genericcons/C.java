@@ -96,7 +96,7 @@ public final class C<First, Rest> {
   }
   
   /**
-   * Returns an object uses the given types for type checking.
+   * Returns an object which uses the given types for type checking.
    * 
    * @param types the types used for checking.
    * @return a type checker.
@@ -107,7 +107,7 @@ public final class C<First, Rest> {
   }
   
   /**
-   * Returns an object uses the given types for type checking.
+   * Returns an object which uses the given types for type checking.
    * 
    * @param types the types used for checking.
    * @return a type checker.
