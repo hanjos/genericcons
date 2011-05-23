@@ -4,7 +4,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import com.googlecode.gentyref.GenericTypeReflector;
@@ -55,7 +54,7 @@ public final class C<First, Rest> {
      * @return if the given objects are type-compatible with the types held by this instance.
      * @throws IllegalArgumentException if {@code objects} is null.
      */
-    boolean onIterable(Iterable<?> objects) throws IllegalArgumentException;
+    boolean onList(List<?> objects) throws IllegalArgumentException;
   }
   
   /**
@@ -83,15 +82,15 @@ public final class C<First, Rest> {
       if(objects == null)
         throw new IllegalArgumentException("objects cannot be null");
       
-      return checkVarargs(types, objects);
+      return checkList(types, Arrays.asList(objects));
     }
 
     @Override
-    public boolean onIterable(Iterable<?> objects) throws IllegalArgumentException {
+    public boolean onList(List<?> objects) throws IllegalArgumentException {
       if(objects == null)
         throw new IllegalArgumentException("objects cannot be null");
       
-      return checkIterable(types, objects);
+      return checkList(types, objects);
     }    
   }
   
@@ -139,47 +138,13 @@ public final class C<First, Rest> {
     if(! (superclass instanceof ParameterizedType))
       throw new TypeParametersNotFoundException(baseClass);
     
-    ParameterizedType cons = (ParameterizedType) superclass;
     try {
-      return extractTypesFromCons(cons.getActualTypeArguments()[parameterIndex]);
+      return extractTypesFromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
     } catch (IndexOutOfBoundsException e) {
       throw new TypeParametersNotFoundException(baseClass, e);
     }
   }
  
-  private static boolean checkVarargs(List<? extends Type> types, Object... objects) {
-    assert types != null;
-    assert objects != null;
-    
-    if(types.size() != objects.length) // the number of objects and types doesn't match
-      return false;
-    
-    for(int i = 0; i < objects.length; i++) {
-      if(! checkType(types.get(i), objects[i]))
-        return false;
-    }
-    
-    return true;
-  }
-  
-  private static boolean checkIterable(List<? extends Type> types, Iterable<?> objects) {
-    assert types != null;
-    assert objects != null;
-    
-    Iterator<?> iterator = objects.iterator();
-    
-    for(Type type : types) {
-      if(! iterator.hasNext() // the number of objects and types doesn't match
-      || ! checkType(type, iterator.next())) // mismatch
-        return false;
-    }
-    
-    if(iterator.hasNext())
-      return false; // the number of objects and types doesn't match 
-    
-    return true;
-  }
-
   /**
    * Checks if the object's runtime type is compatible with the given type.
    * 
@@ -197,6 +162,22 @@ public final class C<First, Rest> {
     return GenericTypeReflector.isSuperType(type, object.getClass());
   }
   
+  private static boolean checkList(List<? extends Type> types, List<?> objects) {
+    assert types != null;
+    assert objects != null;
+    
+    if(types.size() != objects.size()) // the number of objects and types doesn't match
+      return false;
+    
+    final int length = objects.size();
+    for(int i = 0; i < length; i++) {
+      if(! checkType(types.get(i), objects.get(i)))
+        return false;
+    }
+    
+    return true;
+  }
+
   private static List<? extends Type> extractTypesFromCons(Type type) {
     assert type != null;
     
