@@ -110,6 +110,19 @@ public final class C<First, Rest> {
    * Searches the given base class' superclass for the list of types indexed by
    * {@code parameterIndex}.
    * 
+   * Examples:
+   * 
+   * <table>
+   *  <tr><td><b>Generic Superclass</b></td><td><b>Index</b></td><td><b>Output</b></td></tr>
+   *  <tr><td>Map&lt;String, Integer&gt;</td><td>0</td><td>[String]</td></tr>
+   *  <tr><td>Map&lt;String, Integer&gt;</td><td>1</td><td>[Integer]</td></tr>
+   *  <tr><td>Map&lt;String, C&lt;Number, Integer&gt;&gt;</td><td>1</td><td>[Number, Integer]</td></tr>
+   *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>0</td><td>[String]</td></tr>
+   *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>1</td><td>[Object, Number, Integer]</td></tr>
+   *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>2</td><td>error: TypeParametersNotFoundException!</td></tr>
+   *  <tr><td>Object</td><td>0</td><td>error: TypeParametersNotFoundException!</td></tr>
+   * </table>
+   * 
    * @param baseClass the class whose generic superclass holds the list of 
    * type arguments. 
    * @param parameterIndex where in the given base class' generic superclass' 
@@ -162,9 +175,7 @@ public final class C<First, Rest> {
       return result;
     }
     
-    // recurse
-    ParameterizedType cons = (ParameterizedType) type;
-    java.lang.reflect.Type[] actualTypes = cons.getActualTypeArguments();
+    Type[] actualTypes = ((ParameterizedType) type).getActualTypeArguments();
     
     result.add(actualTypes[0]);
     result.addAll(extractTypesFromCons(actualTypes[1]));
