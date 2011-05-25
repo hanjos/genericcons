@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import com.googlecode.gentyref.GenericTypeReflector;
 
 /**
- * Provides a namespace for general utility methods. Is not intended to be instantiated or inherited from.
+ * Provides a namespace for general utility methods. It's not intended to be instantiated or inherited from.
  * 
  * @author Humberto Anjos
  */
@@ -13,13 +13,14 @@ public final class Utils {
   private Utils() { /* preventing instantiation */ }
   
   /**
-   * Checks if the object's runtime type is compatible with the given type.
+   * Checks if the object's runtime type is compatible with the given type. Null types match nothing, and null objects
+   * are compatible with any given type.
    * 
    * @param type a type. 
    * @param object an object.
    * @return if the object's runtime type is compatible with the given type. 
    */
-  public static boolean checkType(Type type, Object object) {
+  public static boolean check(Type type, Object object) {
     if(type == null) // nothing matches a null type
       return false;
     

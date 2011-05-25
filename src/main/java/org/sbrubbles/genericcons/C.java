@@ -1,6 +1,5 @@
 package org.sbrubbles.genericcons;
 
-import static org.sbrubbles.genericcons.Utils.checkType;
 import static org.sbrubbles.genericcons.Utils.nonNull;
 
 import java.lang.reflect.ParameterizedType;
@@ -156,7 +155,7 @@ public final class C<First, Rest> {
     
     for(Type type : types) {
       if(! iterator.hasNext() // the amount of types and objects doesn't match
-      || ! checkType(type, iterator.next()))
+      || ! Utils.check(type, iterator.next()))
         return false;
     }
     

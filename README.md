@@ -13,7 +13,7 @@ Instead of trying to write something like
 
 ```java
 // doesn't compile!
-Function<?, ?> func = new Function<Integer, String, String, String, String>() {
+Function<?, ?...> func = new Function<Integer, String, String, String, String>() {
   public Integer execute(String a, String b, String c, String d) {
     return Math.max(a.length(), b.length(), c.length(), d.length());
   }
