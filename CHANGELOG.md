@@ -1,5 +1,5 @@
-0.3-SNAPSHOT
-------------
+0.3
+---
 
 * Using `gentyref` instead of `javaruntype` for type manipulation.
 * Added type checking methods to `C`.
