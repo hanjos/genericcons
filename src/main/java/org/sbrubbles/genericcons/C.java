@@ -1,12 +1,15 @@
 package org.sbrubbles.genericcons;
 
+import static org.sbrubbles.genericcons.Utils.checkType;
+import static org.sbrubbles.genericcons.Utils.nonNull;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
-import com.googlecode.gentyref.GenericTypeReflector;
 
 /**
  * Captures and represents an open-ended list of types. This class isn't 
@@ -29,8 +32,7 @@ import com.googlecode.gentyref.GenericTypeReflector;
  * @param <Rest> The last type, or a C holding the rest of the types.
  */
 public final class C<First, Rest> {
-  // preventing instantiation
-  private C() { /* empty block */ }
+  private C() { /* preventing instantiation */ }
   
   /**
    * A helper interface for the type checking API. Instances will hold the types to be used for checking. 
@@ -54,43 +56,31 @@ public final class C<First, Rest> {
      * @return if the given objects are type-compatible with the types held by this instance.
      * @throws IllegalArgumentException if {@code objects} is null.
      */
-    boolean onList(List<?> objects) throws IllegalArgumentException;
+    boolean onIterable(Iterable<?> objects) throws IllegalArgumentException;
   }
   
   /**
-   * Holds a list of types for checking.
+   * Holds an iterable of types for checking.
    */
-  private static class TypeListChecker implements TypeChecker {
-    private final List<? extends Type> types;
+  private static class TypeCheckerImpl implements TypeChecker {
+    private final Iterable<? extends Type> types;
 
-    public TypeListChecker(Type... types) throws IllegalArgumentException {
-      if(types == null)
-        throw new IllegalArgumentException("types cannot be null!");
-      
-      this.types = Arrays.asList(types);
+    public TypeCheckerImpl(Type... types) throws IllegalArgumentException {
+      this(Arrays.asList(nonNull(types)));
     }
     
-    public TypeListChecker(List<? extends Type> types) throws IllegalArgumentException {
-      if(types == null)
-        throw new IllegalArgumentException("types cannot be null!");
-      
-      this.types = types;
+    public TypeCheckerImpl(Iterable<? extends Type> types) throws IllegalArgumentException {
+      this.types = nonNull(types);
     }
     
     @Override
     public boolean onVarargs(Object... objects) throws IllegalArgumentException {
-      if(objects == null)
-        throw new IllegalArgumentException("objects cannot be null");
-      
-      return checkList(types, Arrays.asList(objects));
+      return checkIterable(types, Arrays.asList(nonNull(objects)));
     }
 
     @Override
-    public boolean onList(List<?> objects) throws IllegalArgumentException {
-      if(objects == null)
-        throw new IllegalArgumentException("objects cannot be null");
-      
-      return checkList(types, objects);
+    public boolean onIterable(Iterable<?> objects) throws IllegalArgumentException {
+      return checkIterable(types, nonNull(objects));
     }    
   }
   
@@ -101,8 +91,8 @@ public final class C<First, Rest> {
    * @return a type checker.
    * @throws IllegalArgumentException if {@code types} is null. 
    */
-  public static TypeChecker check(List<? extends Type> types) throws IllegalArgumentException {
-    return new TypeListChecker(types);
+  public static TypeChecker check(Iterable<? extends Type> types) throws IllegalArgumentException {
+    return new TypeCheckerImpl(types);
   }
   
   /**
@@ -113,7 +103,7 @@ public final class C<First, Rest> {
    * @throws IllegalArgumentException if {@code types} is null. 
    */
   public static TypeChecker check(Type... types) throws IllegalArgumentException {
-    return new TypeListChecker(types);
+    return new TypeCheckerImpl(types);
   }
   
   /**
@@ -145,37 +135,19 @@ public final class C<First, Rest> {
     }
   }
  
-  /**
-   * Checks if the object's runtime type is compatible with the given type.
-   * 
-   * @param type a type. 
-   * @param object an object.
-   * @return if the object's runtime type is compatible with the given type. 
-   */
-  public static boolean checkType(Type type, Object object) {
-    if(type == null) // nothing matches a null type
-      return false;
-    
-    if(object == null) // everything else matches a null object
-      return true;
-    
-    return GenericTypeReflector.isSuperType(type, object.getClass());
-  }
-  
-  private static boolean checkList(List<? extends Type> types, List<?> objects) {
+  private static boolean checkIterable(Iterable<? extends Type> types, Iterable<?> objects) {
     assert types != null;
     assert objects != null;
     
-    if(types.size() != objects.size()) // the number of objects and types doesn't match
-      return false;
+    Iterator<?> iterator = objects.iterator();
     
-    final int length = objects.size();
-    for(int i = 0; i < length; i++) {
-      if(! checkType(types.get(i), objects.get(i)))
+    for(Type type : types) {
+      if(! iterator.hasNext() // the amount of types and objects doesn't match
+      || ! checkType(type, iterator.next()))
         return false;
     }
     
-    return true;
+    return ! iterator.hasNext(); // the amount of types and objects must match
   }
 
   private static List<? extends Type> extractTypesFromCons(Type type) {
