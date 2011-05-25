@@ -1,3 +1,8 @@
+0.4-SNAPSHOT
+------------
+
+* Nothing here yet!
+
 0.3
 ---
 
