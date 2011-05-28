@@ -9,11 +9,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-
 /**
  * Captures and represents an open-ended list of types. This class isn't 
- * supposed to be instantiated or subclassed; it's used to build the 
- * list in the type declaration, like below:
+ * supposed to be instantiated or subclassed; it's used to build the list in 
+ * the type declaration, like below:
  * 
  * <pre>
  * Function&lt;?, ?&gt; f = new Function&lt;String, C&lt;Object, C&lt;Number, C&lt;String, Integer&gt;&gt;&gt;&gt;() {
@@ -146,24 +145,28 @@ public final class C<First, Rest> {
       throw new TypeParametersNotFoundException(baseClass, e);
     }
   }
- 
-  private static boolean checkIterable(Iterable<? extends Type> types, Iterable<?> objects) {
-    assert types != null;
-    assert objects != null;
-    
-    Iterator<?> iterator = objects.iterator();
-    
-    for(Type type : types) {
-      if(! iterator.hasNext() // the amount of types and objects doesn't match
-      || ! Utils.check(type, iterator.next()))
-        return false;
-    }
-    
-    return ! iterator.hasNext(); // the amount of types and objects must match
-  }
 
-  private static List<? extends Type> extractTypesFromCons(Type type) {
-    assert type != null;
+  /**
+   * Reads the given type as a cons type and returns the list of types represented therein.
+   * 
+   * Examples:
+   * <table>
+   * <tr><td><b>Input</b></td><td><b>Output</b></td></tr>
+   * <tr><td>String</td><td>[String]</td></tr>
+   * <tr><td>C&lt;String, Number&gt;</td><td>[String, Number]</td></tr>
+   * <tr><td>C&lt;String, C&lt;Number, Object&gt;&gt;</td><td>[String, Number, Object]</td></tr>
+   * <tr><td>C&lt;String, C&lt;Number, C&lt;Object, List&lt;Double&gt;&gt;&gt;</td><td>[String, Number, Object, List&lt;Double&gt;]</td></tr>
+   * <tr><td>null</td><td>error: IllegalArgumentException!</td></tr>
+   * </table>
+   * 
+   * @param type a type.
+   * @return a list of the types represented by the given type.
+   * @throws IllegalArgumentException if the given type is null. 
+   */
+  public static List<? extends Type> extractTypesFromCons(Type type) 
+  throws IllegalArgumentException {
+    if(type == null)
+      throw new IllegalArgumentException("The type cannot be null!");
     
     List<Type> result = new ArrayList<Type>();
     
@@ -180,5 +183,20 @@ public final class C<First, Rest> {
     result.addAll(extractTypesFromCons(actualTypes[1]));
     
     return result;
+  }
+ 
+  private static boolean checkIterable(Iterable<? extends Type> types, Iterable<?> objects) {
+    assert types != null;
+    assert objects != null;
+    
+    Iterator<?> iterator = objects.iterator();
+    
+    for(Type type : types) {
+      if(! iterator.hasNext() // the amount of types and objects doesn't match
+      || ! Utils.check(type, iterator.next()))
+        return false;
+    }
+    
+    return ! iterator.hasNext(); // the amount of types and objects must match
   }
 }

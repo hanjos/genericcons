@@ -1,7 +1,7 @@
 0.4-SNAPSHOT
 ------------
 
-* Nothing here yet!
+* Made `C.extractTypesFromCons` public. 
 
 0.3
 ---
