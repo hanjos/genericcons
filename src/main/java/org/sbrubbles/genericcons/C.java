@@ -22,8 +22,8 @@ import java.util.List;
  * };
  * </pre>
  * 
- * It was supposed to be called {@code Cons} (hence the {@code C}), but using only
- * one letter kept type arguments (slightly) more readable.
+ * This list-like structure, similar to Lisp's {@code cons}, is named a <i>cons type</i> (hence the {@code C}), 
+ * but using only one letter kept the whole structure (slightly) more readable.
  * 
  * @author Humberto Anjos
  * @param <First> The first type.
@@ -147,7 +147,7 @@ public final class C<First, Rest> {
   }
 
   /**
-   * Reads the given type as a cons type and returns the list of types represented therein.
+   * Reads the given type as a cons structure and returns the list of types represented therein.
    * 
    * Examples:
    * <table>
