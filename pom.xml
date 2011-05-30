@@ -87,7 +87,7 @@
         <configuration>
           <links>
             <link>http://download.oracle.com/javase/6/docs/api/</link>
-            <link>http://www.javaruntype.org/apidocs/</link>
+            <link>http://gentyref.googlecode.com/svn/tags/1.1.0/docs/apidocs/</link>
           </links>
           <version>true</version>
           <show>protected</show>
