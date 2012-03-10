@@ -2,6 +2,7 @@
 ------------
 
 * Made `C.extractTypesFromCons` public. 
+* Using Travis CI.
 
 0.3
 ---
