@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.googlecode.gentyref.TypeToken;
+import com.coekie.gentyref.TypeToken;
 
 public class ExtractTypesFromConsTest {
   private static final Type CONS_4_TYPES = new TypeToken<C<String, C<Number, C<Object, List<Double>>>>>() { /**/ }.getType();

@@ -13,7 +13,7 @@ import org.sbrubbles.genericcons.fixtures.JustOneParameter;
 import org.sbrubbles.genericcons.fixtures.JustThreeParameters;
 import org.sbrubbles.genericcons.fixtures.SonOfJustOneParameter;
 
-import com.googlecode.gentyref.TypeToken;
+import com.coekie.gentyref.TypeToken;
 
 public class ExtractTypesFromSuperclassTest {
   @Test

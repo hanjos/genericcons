@@ -2,7 +2,7 @@ package org.sbrubbles.genericcons;
 
 import java.lang.reflect.Type;
 
-import com.googlecode.gentyref.GenericTypeReflector;
+import com.coekie.gentyref.GenericTypeReflector;
 
 /**
  * Provides a namespace for general utility methods. It's not intended to be instantiated or inherited from.
