@@ -32,11 +32,11 @@ and raging at your compiler in vain and frustration, write
 // works like a charm! Or should, haven't tested it :P
 Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>>() {
   { // the no-arg constructor
-    this.types = C.extractTypesFromSuperclass(this.getClass(), 1);
+    this.types = Types.fromSuperclass(this.getClass(), 1);
   }
   
   public Integer execute(Object... objects) {
-    if(! C.check(this.types).onVarargs(objects)) // the given objects don't match!
+    if(! Types.check(this.types, Arrays.asList(objects))) // the given objects don't match!
   	  return -1;
   	    
     String a = (String) objects[0];

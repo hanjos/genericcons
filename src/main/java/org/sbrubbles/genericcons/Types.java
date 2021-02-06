@@ -1,36 +1,71 @@
 package org.sbrubbles.genericcons;
 
+import com.coekie.gentyref.GenericTypeReflector;
+import com.coekie.gentyref.TypeToken;
+
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import com.coekie.gentyref.GenericTypeReflector;
-
 /**
- * Provides a namespace for general utility methods. It's not intended to be instantiated or inherited from.
+ * A namespace for general type utilities, such as {@linkplain #fromSuperclass(Class, int) cons extraction} and
+ * {@linkplain #check(Iterable, Iterable) type checking}.
+ *
+ * It's not intended to be instantiated or inherited from.
  * 
  * @author Humberto Anjos
+ * @see C
  */
 public final class Types {
   private Types() { /* preventing instantiation */ }
   
   /**
-   * Checks if the object's runtime type is compatible with the given type. Null types match nothing, and null objects
-   * are compatible with any given type.
-   * 
+   * Checks if the object's runtime type is compatible with the given type. Null types match nothing.
+   *
+   * Neither will primitive types (such as {@code int.class}), since Java's autoboxing will convert {@code object} to
+   * the equivalent reference type (such as {@code Integer}).
+   *
    * @param type a type. 
    * @param object an object.
    * @return if the object's runtime type is compatible with the given type. 
    */
   public static boolean check(Type type, Object object) {
-    if(type == null) // nothing matches a null type
+    if(type == null) { // nothing matches a null type
       return false;
-    
-    if(object == null) // everything else matches a null object
-      return true;
-    
+    }
+
+    if(object == null) { // reference types match with null
+      return Types.isReference(type);
+    }
+
     return GenericTypeReflector.isSuperType(type, object.getClass());
+  }
+
+  /**
+   * Checks if the given objects are compatible with the types held by this instance.
+   *
+   * @param types the given types to check against.
+   * @param objects the given objects to check.
+   * @return if the given objects are compatible with the given types.
+   */
+  public static boolean check(Iterable<? extends Type> types, Iterable<? extends Object> objects) {
+    if(types == null || objects == null) {
+      return false; // empty iterator never checks true
+    }
+
+    Iterator<?> objectsIterator = objects.iterator();
+
+    for(Type type : types) {
+      if(! objectsIterator.hasNext() // the amount of types and objects doesn't match
+        || ! Types.check(type, objectsIterator.next())) {
+        return false;
+      }
+    }
+
+    return ! objectsIterator.hasNext(); // the amount of types and objects must match
   }
 
   /**
@@ -47,7 +82,7 @@ public final class Types {
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>1</td><td>[Object, Number, Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>2</td><td>error: TypeParametersNotFoundException!</td></tr>
-   *  <tr><td>Object</td><td>0</td><td>error: TypeParametersNotFoundException!</td></tr>
+   *  <tr><td>Object</td><td>0</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
    * @param baseClass the class whose generic superclass holds the list of
@@ -55,11 +90,10 @@ public final class Types {
    * @param parameterIndex where in the given base class' generic superclass'
    * type argument list is the desired list of types.
    * @return a list of the types found.
-   * @throws IllegalArgumentException if the given base class is null.
-   * @throws TypeParametersNotFoundException if no type parameters are found.
+   * @throws IllegalArgumentException if the given base class is null or no type parameters are found.
    */
-  public static List<? extends Type> extractFromSuperclass(Class<?> baseClass, int parameterIndex)
-  throws IllegalArgumentException, TypeParametersNotFoundException {
+  public static List<? extends Type> fromSuperclass(Class<?> baseClass, int parameterIndex)
+  throws IllegalArgumentException {
     if(baseClass == null) {
       throw new IllegalArgumentException("The base class cannot be null!");
     }
@@ -67,13 +101,13 @@ public final class Types {
     Type superclass = baseClass.getGenericSuperclass();
 
     if(! (superclass instanceof ParameterizedType)) {
-      throw new TypeParametersNotFoundException(baseClass);
+      throw new IllegalArgumentException("No type parameters in " + baseClass.getCanonicalName());
     }
 
     try {
-      return extractFromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
+      return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
     } catch (IndexOutOfBoundsException e) {
-      throw new TypeParametersNotFoundException(baseClass, e);
+      throw new IllegalArgumentException("Error extracting type parameters in " + baseClass.getCanonicalName(), e);
     }
   }
 
@@ -94,7 +128,7 @@ public final class Types {
    * @return a list of the types represented by the given type.
    * @throws IllegalArgumentException if the given type is null.
    */
-  public static List<? extends Type> extractFromCons(Type type)
+  public static List<? extends Type> fromCons(Type type)
   throws IllegalArgumentException {
     if(type == null) {
       throw new IllegalArgumentException("The type cannot be null!");
@@ -112,8 +146,27 @@ public final class Types {
     Type[] actualTypes = ((ParameterizedType) type).getActualTypeArguments();
 
     result.add(actualTypes[0]);
-    result.addAll(extractFromCons(actualTypes[1]));
+    result.addAll(fromCons(actualTypes[1]));
 
     return result;
+  }
+
+
+  private static boolean isPrimitive(Type type) {
+    return type == boolean.class
+      || type == byte.class
+      || type == char.class
+      || type == double.class
+      || type == float.class
+      || type == int.class
+      || type == long.class
+      || type == short.class;
+  }
+
+  private static boolean isReference(Type type) {
+    return type != null &&
+      ! Types.isPrimitive(type) &&
+      ((type instanceof Class) ||
+        (type instanceof ParameterizedType));
   }
 }

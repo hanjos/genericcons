@@ -15,14 +15,14 @@ import org.sbrubbles.genericcons.fixtures.SonOfJustOneParameter;
 
 import com.coekie.gentyref.TypeToken;
 
-public class ExtractTypesFromSuperclassTest {
+public class TypesFromSuperclassTest {
   @Test
   public void oneNonConsParameter() {
     JustOneParameter<String> cons = new JustOneParameter<String>() { /**/ };
 
     assertArrayEquals(
         new Object[] { String.class }, 
-        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
+        Types.fromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -31,7 +31,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { new TypeToken<T>() { /**/ }.getType() },
-        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
+        Types.fromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -41,7 +41,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { String.class, Number.class }, 
-        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
+        Types.fromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -56,7 +56,7 @@ public class ExtractTypesFromSuperclassTest {
             Object.class, 
             new TypeToken<Object[]>() { /**/ }.getType(),
             Serializable.class }, 
-        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
+        Types.fromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -66,7 +66,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { String.class }, 
-        Types.extractFromSuperclass(cons.getClass(), 1).toArray());
+        Types.fromSuperclass(cons.getClass(), 1).toArray());
   }
 
   @Test
@@ -76,7 +76,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { Serializable.class, Serializable.class },
-        Types.extractFromSuperclass(cons.getClass(), 2).toArray());
+        Types.fromSuperclass(cons.getClass(), 2).toArray());
   }
 
   @Test
@@ -91,7 +91,7 @@ public class ExtractTypesFromSuperclassTest {
             Object.class, 
             new TypeToken<Object[]>() { /**/ }.getType(),
             Serializable.class }, 
-        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
+        Types.fromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -105,7 +105,7 @@ public class ExtractTypesFromSuperclassTest {
             new TypeToken<List<Number>>() { /**/ }.getType(), 
             Object.class, 
             new TypeToken<Map<String, Integer>>() { /**/ }.getType() }, 
-        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
+        Types.fromSuperclass(cons.getClass(), 0).toArray());
   }
   
   @Test
@@ -114,46 +114,30 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { String.class }, 
-        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
+        Types.fromSuperclass(cons.getClass(), 0).toArray());
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void grandsonOfParameterizedType() {
     JustOneParameter<String> cons = new SonOfJustOneParameter() { /**/ };
     
-    try {
-      Types.extractFromSuperclass(cons.getClass(), 0);
-      fail();
-    } catch (TypeParametersNotFoundException e) {
-      assertEquals(cons.getClass(), e.getBaseType());
-    }
+    Types.fromSuperclass(cons.getClass(), 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void nullBaseClass() {
-    Types.extractFromSuperclass(null, 0);
+    Types.fromSuperclass(null, 0);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void invalidIndex() {
     JustOneParameter<String> cons = new JustOneParameter<String>() { /**/ };
 
-    try {
-      Types.extractFromSuperclass(cons.getClass(), -1);
-      fail();
-    } catch (TypeParametersNotFoundException e) {
-      assertEquals(cons.getClass(), e.getBaseType());
-      assertEquals(ArrayIndexOutOfBoundsException.class, e.getCause().getClass());
-    }
+    Types.fromSuperclass(cons.getClass(), -1);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void nonParameterizedSuperclass() {
-    try {
-      Types.extractFromSuperclass(String.class, 0);
-      fail();
-    } catch (TypeParametersNotFoundException e) {
-      assertEquals(String.class, e.getBaseType());
-    }
+    Types.fromSuperclass(String.class, 0);
   }
 }
