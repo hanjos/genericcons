@@ -18,32 +18,32 @@ public class ExtractTypesFromConsTest {
   public void extractFromParameterlessType() {
     assertArrayEquals(
         new Object[] { String.class },
-        C.extractTypesFromCons(String.class).toArray());
+        Types.extractFromCons(String.class).toArray());
   }
   
   @Test
   public void extractFromSingleParameteredType() {
     assertArrayEquals(
         new Object[] { LIST_OF_DOUBLE_TYPE },
-        C.extractTypesFromCons(LIST_OF_DOUBLE_TYPE).toArray());
+        Types.extractFromCons(LIST_OF_DOUBLE_TYPE).toArray());
   }
   
   @Test
   public void extractFromTwoValuedConsType() {
     assertArrayEquals(
         new Object[] { String.class, Object.class },
-        C.extractTypesFromCons(CONS_STRING_OBJECT_TYPE).toArray());
+        Types.extractFromCons(CONS_STRING_OBJECT_TYPE).toArray());
   }
   
   @Test
   public void extractFromFourValuedConsType() {
     assertArrayEquals(
         new Object[] { String.class, Number.class, Object.class, LIST_OF_DOUBLE_TYPE },
-        C.extractTypesFromCons(CONS_4_TYPES).toArray());
+        Types.extractFromCons(CONS_4_TYPES).toArray());
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void extractFromNull() {
-    C.extractTypesFromCons(null);
+    Types.extractFromCons(null);
   }
 }

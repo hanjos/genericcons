@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class CheckTest {
+public class CTypesTest {
   @Test(expected = IllegalArgumentException.class)
   public void nullTypeArray() {
-    C.check((Type[]) null);
+    C.types((Type[]) null);
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void nullTypeList() {
-    C.check((List<Type>) null);
+    C.types((List<Type>) null);
   }
 }

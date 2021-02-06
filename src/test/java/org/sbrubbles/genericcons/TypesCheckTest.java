@@ -8,29 +8,29 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-public class UtilsCheckTest {
+public class TypesCheckTest {
   @Test
   public void typeMatch() {
-    assertTrue(Utils.check(String.class, ""));
+    assertTrue(Types.check(String.class, ""));
   }
   
   @Test
   public void subtypeMatch() {
-    assertTrue(Utils.check(Serializable.class, new ArrayList<Object>()));
+    assertTrue(Types.check(Serializable.class, new ArrayList<Object>()));
   }
   
   @Test
   public void typeMismatch() {
-    assertFalse(Utils.check(String.class, new Object()));
+    assertFalse(Types.check(String.class, new Object()));
   }
   
   @Test
   public void nullTypeMismatch() {
-    assertFalse(Utils.check(null, ""));
+    assertFalse(Types.check(null, ""));
   }
 
   @Test
   public void nullObjectMatch() {
-    assertTrue(Utils.check(String.class, null));
+    assertTrue(Types.check(String.class, null));
   }
 }

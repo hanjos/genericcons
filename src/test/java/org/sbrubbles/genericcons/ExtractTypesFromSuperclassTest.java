@@ -22,7 +22,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { String.class }, 
-        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -31,7 +31,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { new TypeToken<T>() { /**/ }.getType() },
-        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -41,7 +41,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { String.class, Number.class }, 
-        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -56,7 +56,7 @@ public class ExtractTypesFromSuperclassTest {
             Object.class, 
             new TypeToken<Object[]>() { /**/ }.getType(),
             Serializable.class }, 
-        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -66,7 +66,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { String.class }, 
-        C.extractTypesFromSuperclass(cons.getClass(), 1).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 1).toArray());
   }
 
   @Test
@@ -76,7 +76,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { Serializable.class, Serializable.class },
-        C.extractTypesFromSuperclass(cons.getClass(), 2).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 2).toArray());
   }
 
   @Test
@@ -91,7 +91,7 @@ public class ExtractTypesFromSuperclassTest {
             Object.class, 
             new TypeToken<Object[]>() { /**/ }.getType(),
             Serializable.class }, 
-        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -105,7 +105,7 @@ public class ExtractTypesFromSuperclassTest {
             new TypeToken<List<Number>>() { /**/ }.getType(), 
             Object.class, 
             new TypeToken<Map<String, Integer>>() { /**/ }.getType() }, 
-        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
   }
   
   @Test
@@ -114,7 +114,7 @@ public class ExtractTypesFromSuperclassTest {
 
     assertArrayEquals(
         new Object[] { String.class }, 
-        C.extractTypesFromSuperclass(cons.getClass(), 0).toArray());
+        Types.extractFromSuperclass(cons.getClass(), 0).toArray());
   }
 
   @Test
@@ -122,7 +122,7 @@ public class ExtractTypesFromSuperclassTest {
     JustOneParameter<String> cons = new SonOfJustOneParameter() { /**/ };
     
     try {
-      C.extractTypesFromSuperclass(cons.getClass(), 0);
+      Types.extractFromSuperclass(cons.getClass(), 0);
       fail();
     } catch (TypeParametersNotFoundException e) {
       assertEquals(cons.getClass(), e.getBaseType());
@@ -131,7 +131,7 @@ public class ExtractTypesFromSuperclassTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void nullBaseClass() {
-    C.extractTypesFromSuperclass(null, 0);
+    Types.extractFromSuperclass(null, 0);
   }
 
   @Test
@@ -139,7 +139,7 @@ public class ExtractTypesFromSuperclassTest {
     JustOneParameter<String> cons = new JustOneParameter<String>() { /**/ };
 
     try {
-      C.extractTypesFromSuperclass(cons.getClass(), -1);
+      Types.extractFromSuperclass(cons.getClass(), -1);
       fail();
     } catch (TypeParametersNotFoundException e) {
       assertEquals(cons.getClass(), e.getBaseType());
@@ -150,7 +150,7 @@ public class ExtractTypesFromSuperclassTest {
   @Test
   public void nonParameterizedSuperclass() {
     try {
-      C.extractTypesFromSuperclass(String.class, 0);
+      Types.extractFromSuperclass(String.class, 0);
       fail();
     } catch (TypeParametersNotFoundException e) {
       assertEquals(String.class, e.getBaseType());
