@@ -10,9 +10,8 @@ import java.util.List;
 
 /**
  * A namespace for general type utilities, such as {@linkplain #fromSuperclass(Class, int) cons extraction} and
- * {@linkplain #check(Iterable, Iterable) type checking}.
- * <p>
- * It's not intended to be instantiated or inherited from.
+ * {@linkplain #check(Iterable, Iterable) type checking}. This class is not intended to be instantiated or
+ * inherited from.
  *
  * @author Humberto Anjos
  * @see C
@@ -67,13 +66,17 @@ public final class Types {
   }
 
   /**
-   * Searches the given base class' superclass for the list of types indexed by
+   * Java's erasure puts several limitations on capturing type data.
+   * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Type tokens</a> are a way around that, but
+   * require that type captures be made from a subclass before the information is gone.
+   * <p>
+   * Therefore, this method searches {@code baseClass}'s superclass for the list of {@linkplain Type types} indexed by
    * {@code parameterIndex}.
    * <p>
    * Examples:
    *
    * <table>
-   *  <tr><td><b>Generic Superclass</b></td><td><b>Index</b></td><td><b>Output</b></td></tr>
+   *  <tr><th>Generic Superclass</th><th>Index</th><th>Output</th></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>1</td><td>[Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Number, Integer&gt;&gt;</td><td>1</td><td>[Number, Integer]</td></tr>

@@ -1,11 +1,11 @@
 0.4-SNAPSHOT
 ------------
 
-* Using GitHub Actions as CI.
+* Using GitHub as CI and Package Repo.
 * Assorted IntelliJ inspection fixes.
 * Moved all functionality to `Types`, so `C` is only a marker class.
 * Removed all custom exceptions.  
-* Updated dependencies.
+* Updated dependencies to Java 8.
 
 0.3
 ---
