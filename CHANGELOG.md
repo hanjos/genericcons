@@ -1,5 +1,5 @@
-0.4-SNAPSHOT
-------------
+0.4
+---
 
 * Using GitHub as CI and Package Repo.
 * Assorted IntelliJ inspection fixes.
