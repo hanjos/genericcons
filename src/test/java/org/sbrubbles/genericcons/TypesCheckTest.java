@@ -7,15 +7,16 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 
 public class TypesCheckTest {
   private final Iterable<Type> emptyTypeList = new ArrayList<>();
-  private final Iterable<Type> singleTypeList = Arrays.asList(String.class);
+  private final Iterable<Type> singleTypeList = Collections.singletonList(String.class);
 
   private final Iterable<Object> emptyObjectList = new ArrayList<>();
-  private final Iterable<Object> singleObjectList = Arrays.asList("foo");
+  private final Iterable<Object> singleObjectList = Collections.singletonList("foo");
 
   @Test
   public void nullInputMismatch() {
@@ -43,77 +44,68 @@ public class TypesCheckTest {
     assertTrue(Types.check(singleTypeList, singleObjectList));
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void sameTypesMultipleArgumentsMatch() {
     assertTrue(Types.check(
       Arrays.asList(String.class, Double.class, Object.class),
-      Arrays.asList("", new Double(1.0), new Object()))
+      Arrays.asList("", 1.0, new Object()))
     );
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void nullObjectsMultipleArgumentsMatch() {
     assertTrue(Types.check(
         Arrays.asList(String.class, Double.class, Object.class),
-        Arrays.asList(null, new Double(1.0), null)));
+        Arrays.asList(null, 1.0, null)));
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void nullTypesMultipleArgumentsMismatch() {
     assertFalse(Types.check(
         Arrays.asList(String.class, null, Object.class),
-        Arrays.asList(null, new Double(1.0), null)));
+        Arrays.asList(null, 1.0, null)));
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void subtypeSingleArgumentMatch() {
     assertTrue(Types.check(
-        Arrays.asList(Serializable.class),
-        Arrays.asList(new ArrayList<Object>())));
+      Collections.singletonList(Serializable.class),
+      Collections.singletonList(new ArrayList<>())));
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void subtypeSingleArgumentMismatch() {
     assertFalse(Types.check(
-        Arrays.asList(Serializable.class),
-        Arrays.asList(new Object())));
+      Collections.singletonList(Serializable.class),
+      Collections.singletonList(new Object())));
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void subtypeMultipleArgumentsMatch() {
     assertTrue(Types.check(
         Arrays.asList(Serializable.class, Object.class, Number.class),
-        Arrays.asList(new ArrayList<Object>(), "", 1.0)));
+        Arrays.asList(new ArrayList<>(), "", 1.0)));
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void subtypeMultipleArgumentsMismatch() {
     assertFalse(Types.check(
         Arrays.asList(Serializable.class, Object.class, Number.class),
-        Arrays.asList(new ArrayList<Object>(), "", false)));
+        Arrays.asList(new ArrayList<>(), "", false)));
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void tooManyArgumentsMismatch() {
     assertFalse(Types.check(
         Arrays.asList(Serializable.class, Object.class, Boolean.class),
-        Arrays.asList(new ArrayList<Object>(), "", false, 1.0)));
+        Arrays.asList(new ArrayList<>(), "", false, 1.0)));
   }
   
-  @SuppressWarnings("unchecked")
   @Test
   public void tooFewArgumentsMismatch() {
     assertFalse(Types.check(
         Arrays.asList(Serializable.class, Object.class, Boolean.class),
-        Arrays.asList(new ArrayList<Object>(), "")));
+        Arrays.asList(new ArrayList<>(), "")));
   }
 
   @Test
@@ -123,7 +115,7 @@ public class TypesCheckTest {
 
   @Test
   public void singleSubtypeMatch() {
-    assertTrue(Types.check(Serializable.class, new ArrayList<Object>()));
+    assertTrue(Types.check(Serializable.class, new ArrayList<>()));
   }
 
   @Test
@@ -150,7 +142,7 @@ public class TypesCheckTest {
   @Test
   public void autoboxTypesMatch() {
     assertTrue(Types.check(Integer.class, 1));
-    assertTrue(Types.check(Long.class, 1l));
+    assertTrue(Types.check(Long.class, 1L));
     assertTrue(Types.check(Boolean.class, false));
     assertTrue(Types.check(Float.class, 1f));
   }

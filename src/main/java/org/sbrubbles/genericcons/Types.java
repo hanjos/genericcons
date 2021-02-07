@@ -1,9 +1,7 @@
 package org.sbrubbles.genericcons;
 
 import com.coekie.gentyref.GenericTypeReflector;
-import com.coekie.gentyref.TypeToken;
 
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -13,31 +11,31 @@ import java.util.List;
 /**
  * A namespace for general type utilities, such as {@linkplain #fromSuperclass(Class, int) cons extraction} and
  * {@linkplain #check(Iterable, Iterable) type checking}.
- *
+ * <p>
  * It's not intended to be instantiated or inherited from.
- * 
+ *
  * @author Humberto Anjos
  * @see C
  */
 public final class Types {
   private Types() { /* preventing instantiation */ }
-  
+
   /**
    * Checks if the object's runtime type is compatible with the given type. Null types match nothing.
-   *
+   * <p>
    * Neither will primitive types (such as {@code int.class}), since Java's autoboxing will convert {@code object} to
    * the equivalent reference type (such as {@code Integer}).
    *
-   * @param type a type. 
+   * @param type   a type.
    * @param object an object.
-   * @return if the object's runtime type is compatible with the given type. 
+   * @return if the object's runtime type is compatible with the given type.
    */
   public static boolean check(Type type, Object object) {
-    if(type == null) { // nothing matches a null type
+    if (type == null) { // nothing matches a null type
       return false;
     }
 
-    if(object == null) { // reference types match with null
+    if (object == null) { // reference types match with null
       return Types.isReference(type);
     }
 
@@ -47,31 +45,31 @@ public final class Types {
   /**
    * Checks if the given objects are compatible with the types held by this instance.
    *
-   * @param types the given types to check against.
+   * @param types   the given types to check against.
    * @param objects the given objects to check.
    * @return if the given objects are compatible with the given types.
    */
-  public static boolean check(Iterable<? extends Type> types, Iterable<? extends Object> objects) {
-    if(types == null || objects == null) {
+  public static boolean check(Iterable<? extends Type> types, Iterable<?> objects) {
+    if (types == null || objects == null) {
       return false; // empty iterator never checks true
     }
 
     Iterator<?> objectsIterator = objects.iterator();
 
-    for(Type type : types) {
-      if(! objectsIterator.hasNext() // the amount of types and objects doesn't match
-        || ! Types.check(type, objectsIterator.next())) {
+    for (Type type : types) {
+      if (!objectsIterator.hasNext() || // the amount of types and objects doesn't match
+        !Types.check(type, objectsIterator.next())) {
         return false;
       }
     }
 
-    return ! objectsIterator.hasNext(); // the amount of types and objects must match
+    return !objectsIterator.hasNext(); // the amount of types and objects must match
   }
 
   /**
    * Searches the given base class' superclass for the list of types indexed by
    * {@code parameterIndex}.
-   *
+   * <p>
    * Examples:
    *
    * <table>
@@ -85,22 +83,22 @@ public final class Types {
    *  <tr><td>Object</td><td>0</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
-   * @param baseClass the class whose generic superclass holds the list of
-   * type arguments.
+   * @param baseClass      the class whose generic superclass holds the list of
+   *                       type arguments.
    * @param parameterIndex where in the given base class' generic superclass'
-   * type argument list is the desired list of types.
+   *                       type argument list is the desired list of types.
    * @return a list of the types found.
    * @throws IllegalArgumentException if the given base class is null or no type parameters are found.
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int parameterIndex)
-  throws IllegalArgumentException {
-    if(baseClass == null) {
+    throws IllegalArgumentException {
+    if (baseClass == null) {
       throw new IllegalArgumentException("The base class cannot be null!");
     }
 
     Type superclass = baseClass.getGenericSuperclass();
 
-    if(! (superclass instanceof ParameterizedType)) {
+    if (!(superclass instanceof ParameterizedType)) {
       throw new IllegalArgumentException("No type parameters in " + baseClass.getCanonicalName());
     }
 
@@ -113,7 +111,7 @@ public final class Types {
 
   /**
    * Reads the given type as a cons structure and returns the list of types represented therein.
-   *
+   * <p>
    * Examples:
    * <table>
    * <tr><td><b>Input</b></td><td><b>Output</b></td></tr>
@@ -129,16 +127,16 @@ public final class Types {
    * @throws IllegalArgumentException if the given type is null.
    */
   public static List<? extends Type> fromCons(Type type)
-  throws IllegalArgumentException {
-    if(type == null) {
+    throws IllegalArgumentException {
+    if (type == null) {
       throw new IllegalArgumentException("The type cannot be null!");
     }
 
-    List<Type> result = new ArrayList<Type>();
+    List<Type> result = new ArrayList<>();
 
     // end of recursion, add it and return
-    if(! (type instanceof ParameterizedType)
-    || ((ParameterizedType) type).getRawType() != C.class) {
+    if (!(type instanceof ParameterizedType)
+      || ((ParameterizedType) type).getRawType() != C.class) {
       result.add(type);
       return result;
     }
@@ -150,7 +148,6 @@ public final class Types {
 
     return result;
   }
-
 
   private static boolean isPrimitive(Type type) {
     return type == boolean.class
@@ -165,7 +162,7 @@ public final class Types {
 
   private static boolean isReference(Type type) {
     return type != null &&
-      ! Types.isPrimitive(type) &&
+      !Types.isPrimitive(type) &&
       ((type instanceof Class) ||
         (type instanceof ParameterizedType));
   }

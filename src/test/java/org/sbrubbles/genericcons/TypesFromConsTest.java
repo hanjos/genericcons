@@ -22,7 +22,7 @@ public class TypesFromConsTest {
   }
   
   @Test
-  public void extractFromSingleParameteredType() {
+  public void extractFromSingleParameterizedType() {
     assertArrayEquals(
         new Object[] { LIST_OF_DOUBLE_TYPE },
         Types.fromCons(LIST_OF_DOUBLE_TYPE).toArray());

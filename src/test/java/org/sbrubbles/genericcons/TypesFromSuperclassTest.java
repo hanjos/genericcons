@@ -1,19 +1,16 @@
 package org.sbrubbles.genericcons;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
+import com.coekie.gentyref.TypeToken;
 import org.junit.Test;
 import org.sbrubbles.genericcons.fixtures.JustOneParameter;
 import org.sbrubbles.genericcons.fixtures.JustThreeParameters;
 import org.sbrubbles.genericcons.fixtures.SonOfJustOneParameter;
 
-import com.coekie.gentyref.TypeToken;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertArrayEquals;
 
 public class TypesFromSuperclassTest {
   @Test

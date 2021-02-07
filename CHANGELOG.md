@@ -1,8 +1,11 @@
 0.4-SNAPSHOT
 ------------
 
-* Made `C.extractTypesFromCons` public. 
 * Using Travis CI.
+* Moved all functionality to `Types`, so `C` is only a marker class.
+* Removed all custom exceptions.  
+* Updated dependencies.
+* Assorted IntelliJ inspection fixes.
 
 0.3
 ---
