@@ -1,8 +1,5 @@
 ![CI](https://github.com/hanjos/genericcons/workflows/CI/badge.svg) [![Javadocs](https://img.shields.io/static/v1?label=Javadocs&message=0.4&color=informational&logo=read-the-docs)][v0.4] [![Maven package](https://img.shields.io/static/v1?label=Maven&message=0.4&color=orange&logo=apache-maven)](https://github.com/hanjos/genericcons/packages/611536)
 
-Generic Cons
-------------
-
 Who said Java generics can't accept an open-ended number of type variables? 
 
 Instead of trying to write something like
