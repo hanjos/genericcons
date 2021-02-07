@@ -1,11 +1,11 @@
 0.4-SNAPSHOT
 ------------
 
-* Using Travis CI.
+* Using GitHub Actions as CI.
+* Assorted IntelliJ inspection fixes.
 * Moved all functionality to `Types`, so `C` is only a marker class.
 * Removed all custom exceptions.  
 * Updated dependencies.
-* Assorted IntelliJ inspection fixes.
 
 0.3
 ---
