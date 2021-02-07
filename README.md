@@ -1,7 +1,7 @@
 Status
 ------
 
-* Travis-CI: [![Build Status](https://secure.travis-ci.org/hanjos/genericcons.png?branch=master)](http://travis-ci.org/hanjos/genericcons)
+* ![CI](https://github.com/hanjos/genericcons/workflows/CI/badge.svg)
 
 Documentation
 -------------
