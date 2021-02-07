@@ -72,7 +72,7 @@ public final class Types {
    * <p>
    * Examples:
    *
-   * <table>
+   * <table summary="">
    *  <tr><td><b>Generic Superclass</b></td><td><b>Index</b></td><td><b>Output</b></td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>1</td><td>[Integer]</td></tr>
@@ -113,7 +113,7 @@ public final class Types {
    * Reads the given type as a cons structure and returns the list of types represented therein.
    * <p>
    * Examples:
-   * <table>
+   * <table summary="">
    * <tr><td><b>Input</b></td><td><b>Output</b></td></tr>
    * <tr><td>String</td><td>[String]</td></tr>
    * <tr><td>C&lt;String, Number&gt;</td><td>[String, Number]</td></tr>
