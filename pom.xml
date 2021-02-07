@@ -75,7 +75,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.7</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -87,10 +87,10 @@
         <configuration>
           <links>
             <link>https://docs.oracle.com/javase/8/docs/api/</link>
-            <link>https://javadoc.io/doc/com.coekie.gentyref/gentyref/${gentyref.version}/index.html</link>
           </links>
           <version>true</version>
           <show>protected</show>
+          <doclint>none</doclint>
         </configuration>
       </plugin>
     </plugins>

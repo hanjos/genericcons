@@ -72,14 +72,14 @@ public final class Types {
    * <p>
    * Examples:
    *
-   * <table summary="">
+   * <table>
    *  <tr><td><b>Generic Superclass</b></td><td><b>Index</b></td><td><b>Output</b></td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>1</td><td>[Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Number, Integer&gt;&gt;</td><td>1</td><td>[Number, Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>1</td><td>[Object, Number, Integer]</td></tr>
-   *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>2</td><td>error: TypeParametersNotFoundException!</td></tr>
+   *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td>2</td><td>error: IllegalArgumentException!</td></tr>
    *  <tr><td>Object</td><td>0</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
@@ -110,16 +110,16 @@ public final class Types {
   }
 
   /**
-   * Reads the given type as a cons structure and returns the list of types represented therein.
+   * Reads the given type as a {@linkplain C cons structure} and returns the list of types represented therein.
    * <p>
    * Examples:
-   * <table summary="">
-   * <tr><td><b>Input</b></td><td><b>Output</b></td></tr>
-   * <tr><td>String</td><td>[String]</td></tr>
-   * <tr><td>C&lt;String, Number&gt;</td><td>[String, Number]</td></tr>
-   * <tr><td>C&lt;String, C&lt;Number, Object&gt;&gt;</td><td>[String, Number, Object]</td></tr>
-   * <tr><td>C&lt;String, C&lt;Number, C&lt;Object, List&lt;Double&gt;&gt;&gt;</td><td>[String, Number, Object, List&lt;Double&gt;]</td></tr>
-   * <tr><td>null</td><td>error: IllegalArgumentException!</td></tr>
+   * <table>
+   *   <tr><td><b>Input</b></td><td><b>Output</b></td></tr>
+   *   <tr><td>String</td><td>[String]</td></tr>
+   *   <tr><td>C&lt;String, Number&gt;</td><td>[String, Number]</td></tr>
+   *   <tr><td>C&lt;String, C&lt;Number, Object&gt;&gt;</td><td>[String, Number, Object]</td></tr>
+   *   <tr><td>C&lt;String, C&lt;Number, C&lt;Object, List&lt;Double&gt;&gt;&gt;</td><td>[String, Number, Object, List&lt;Double&gt;]</td></tr>
+   *   <tr><td>null</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
    * @param type a type.

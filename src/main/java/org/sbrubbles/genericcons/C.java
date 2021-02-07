@@ -4,7 +4,7 @@ package org.sbrubbles.genericcons;
  * Captures and represents an open-ended list of types. This class isn't 
  * supposed to be instantiated or subclassed; it's used to indicate a list in
  * the type declaration, like below:
- * 
+ * <p>
  * <pre>
  * Function&lt;?, ?&gt; f = new Function&lt;String, C&lt;Object, C&lt;Number, C&lt;String, Integer&gt;&gt;&gt;&gt;() {
  *   { // the no-arg constructor
@@ -12,7 +12,7 @@ package org.sbrubbles.genericcons;
  *   }
  * };
  * </pre>
- * 
+ * <p>
  * This list-like structure, similar to Lisp's {@code cons}, is named a <i>cons type</i> (hence the {@code C}), 
  * but using only one letter kept the whole structure more readable.
  * 
