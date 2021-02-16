@@ -1,6 +1,9 @@
 0.5-SNAPSHOT
 ------------
 * Types.fromCons was removed from the public API.
+* Types.check now takes Lists instead of Iterables. Although technically this
+  is less general, ordered sequences were implicitly expected anyway,
+  so using Lists makes that requirement explicit.
 
 0.4
 ---

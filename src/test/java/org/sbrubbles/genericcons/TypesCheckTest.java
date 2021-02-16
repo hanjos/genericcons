@@ -8,15 +8,16 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Test;
 
 public class TypesCheckTest {
-  private final Iterable<Type> emptyTypeList = new ArrayList<>();
-  private final Iterable<Type> singleTypeList = Collections.singletonList(String.class);
+  private final List<Type> emptyTypeList = new ArrayList<>();
+  private final List<Type> singleTypeList = Collections.singletonList(String.class);
 
-  private final Iterable<Object> emptyObjectList = new ArrayList<>();
-  private final Iterable<Object> singleObjectList = Collections.singletonList("foo");
+  private final List<Object> emptyObjectList = new ArrayList<>();
+  private final List<Object> singleObjectList = Collections.singletonList("foo");
 
   private final Number[] numberArray = new Number[] { 1 };
   private final Integer[] integerArray = new Integer[] { 1 };
@@ -26,9 +27,9 @@ public class TypesCheckTest {
   public void nullInputMismatch() {
     assertFalse(Types.check(emptyTypeList, null));
     assertFalse(Types.check(singleTypeList, null));
-    assertFalse(Types.check((Iterable<? extends Type>) null, emptyObjectList));
-    assertFalse(Types.check((Iterable<? extends Type>) null, singleObjectList));
-    assertFalse(Types.check((Iterable<? extends Type>) null, null));
+    assertFalse(Types.check((List<? extends Type>) null, emptyObjectList));
+    assertFalse(Types.check((List<? extends Type>) null, singleObjectList));
+    assertFalse(Types.check((List<? extends Type>) null, null));
   }
   
   @Test

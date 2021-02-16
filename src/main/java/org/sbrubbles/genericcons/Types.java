@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * A namespace for general type utilities, such as {@linkplain #fromSuperclass(Class, int) cons extraction} and
- * {@linkplain #check(Iterable, Iterable) type checking}. This class is not intended to be instantiated or
+ * {@linkplain #check(List, List) type checking}. This class is not intended to be instantiated or
  * inherited from.
  *
  * @author Humberto Anjos
@@ -43,13 +43,13 @@ public final class Types {
   }
 
   /**
-   * Checks if the given objects are compatible with the types held by this instance.
+   * Checks if the given objects are compatible with the given types.
    *
-   * @param types   the given types to check against.
-   * @param objects the given objects to check.
+   * @param types   the types to check against.
+   * @param objects the objects to check.
    * @return if the given objects are compatible with the given types.
    */
-  public static boolean check(Iterable<? extends Type> types, Iterable<?> objects) {
+  public static boolean check(List<? extends Type> types, List<?> objects) {
     if (types == null || objects == null) {
       return false; // empty iterator never checks true
     }
