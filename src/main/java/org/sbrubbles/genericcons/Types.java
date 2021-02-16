@@ -51,19 +51,21 @@ public final class Types {
    */
   public static boolean check(List<? extends Type> types, List<?> objects) {
     if (types == null || objects == null) {
-      return false; // empty iterator never checks true
+      return false; // null never checks true
     }
 
-    Iterator<?> objectsIterator = objects.iterator();
+    if(types.size() != objects.size()) { // different sizes never check true
+      return false;
+    }
 
-    for (Type type : types) {
-      if (!objectsIterator.hasNext() || // the amount of types and objects doesn't match
-        !Types.check(type, objectsIterator.next())) {
+    final int SIZE = types.size();
+    for(int i = 0; i < SIZE; i++) {
+      if(! Types.check(types.get(i), objects.get(i))) {
         return false;
       }
     }
 
-    return !objectsIterator.hasNext(); // the amount of types and objects must match
+    return true;
   }
 
   /**
