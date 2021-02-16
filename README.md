@@ -36,29 +36,33 @@ Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>
 };
 ```
 
-and be happy!
-
-
-That's a lot of work!
----------------------
+and be happy! 
 
 Hey, I never said the solution was pretty. Or useful :)
 
-
-How?
-----
+# How?
 
 Some [type token][1] chicanery and good ol' [cons][2] for inspiration.
 
-
-Why?
-----
+# Why?
 
 It occurred to me one day, and I haven't contributed to Java's grand tradition of gross overengineering for quite some time, so there you go :P
 
+# Usage?
+
+Basically, [Maven][apache-maven] and [GitHub Packages][github-packages]:
+
+1. Add https://maven.pkg.github.com/hanjos/genericcons as a repo in your `pom.xml`;
+1. Setup a [personal access token][pat] in your `settings.xml` with package reading rights;
+1. Add the dependency in your `pom.xml`. The versions available can be seen [here][packages].
+1. And you're good to go!
+
+Of course, one can always download the code and `mvn install`...
+
 [1]: http://gafter.blogspot.com/2006/12/super-type-tokens.html
 [2]: http://en.wikipedia.org/wiki/Cons
-[v0.1]: https://sbrubbles.org/genericcons/docs/0.1/apidocs/index.html
-[v0.2]: https://sbrubbles.org/genericcons/docs/0.2/apidocs/index.html
-[v0.3]: https://sbrubbles.org/genericcons/docs/0.3/apidocs/index.html
 [v0.4]: https://sbrubbles.org/genericcons/docs/0.4/apidocs/index.html
+[apache-maven]: https://maven.apache.org/
+[packages]: https://github.com/hanjos/genericcons/packages
+[pat]: https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages#authenticating-with-a-personal-access-token
+[github-packages]: https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages
