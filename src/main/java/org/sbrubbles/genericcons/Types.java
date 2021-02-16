@@ -69,15 +69,15 @@ public final class Types {
   /**
    * Java's erasure puts several limitations on capturing type data.
    * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Type tokens</a> are a way around that, but
-   * require that type captures be made from a subclass before the information is gone.
+   * require that type captures be made from a subclass.
    * <p>
-   * Therefore, this method searches {@code baseClass}'s superclass for the list of {@linkplain Type types} indexed by
-   * {@code parameterIndex}.
+   * Therefore, this method searches {@code baseClass}' superclass for the {@linkplain Type type} indexed by
+   * {@code parameterIndex}. A {@linkplain C cons type} is returned as a list of types.
    * <p>
    * Examples:
    *
    * <table>
-   *  <tr><th>Generic Superclass</th><th>Index</th><th>Output</th></tr>
+   *  <tr><th>Superclass</th><th>Index</th><th>Output</th></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>1</td><td>[Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Number, Integer&gt;&gt;</td><td>1</td><td>[Number, Integer]</td></tr>
@@ -87,15 +87,14 @@ public final class Types {
    *  <tr><td>Object</td><td>0</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
-   * @param baseClass      the class whose generic superclass holds the list of
-   *                       type arguments.
-   * @param parameterIndex where in the given base class' generic superclass'
-   *                       type argument list is the desired list of types.
-   * @return a list of the types found.
-   * @throws IllegalArgumentException if the given base class is null or no type parameters are found.
+   * @param baseClass      the class whose generic superclass holds the type arguments.
+   * @param parameterIndex where in {@code baseClass}' superclass' type argument list is the desired type.
+   * @return a list of the types found in {@code parameterIndex}.
+   * @throws IllegalArgumentException if {@code baseClass} is null or doesn`t have a generic superclass.
+   * @throws IndexOutOfBoundsException if no type parameters are found at {@code parameterIndex}.
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int parameterIndex)
-    throws IllegalArgumentException {
+    throws IllegalArgumentException, IndexOutOfBoundsException {
     if (baseClass == null) {
       throw new IllegalArgumentException("The base class cannot be null!");
     }
@@ -106,15 +105,11 @@ public final class Types {
       throw new IllegalArgumentException("No type parameters in " + baseClass.getCanonicalName());
     }
 
-    try {
-      return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
-    } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("Error extracting type parameters in " + baseClass.getCanonicalName(), e);
-    }
+    return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
   }
 
   /**
-   * Reads the given type as a {@linkplain C cons structure} and returns the list of types represented therein.
+   * Reads the given type as a {@linkplain C cons} and returns the list of types represented therein.
    * <p>
    * Examples:
    * <table>
@@ -127,7 +122,7 @@ public final class Types {
    * </table>
    *
    * @param type a type.
-   * @return a list of the types represented by the given type.
+   * @return the list of the types represented by the given type.
    * @throws IllegalArgumentException if the given type is null.
    */
    static List<? extends Type> fromCons(Type type)
