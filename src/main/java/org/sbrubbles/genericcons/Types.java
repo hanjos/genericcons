@@ -2,6 +2,7 @@ package org.sbrubbles.genericcons;
 
 import com.coekie.gentyref.GenericTypeReflector;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -129,7 +130,7 @@ public final class Types {
    * @return a list of the types represented by the given type.
    * @throws IllegalArgumentException if the given type is null.
    */
-  public static List<? extends Type> fromCons(Type type)
+   static List<? extends Type> fromCons(Type type)
     throws IllegalArgumentException {
     if (type == null) {
       throw new IllegalArgumentException("The type cannot be null!");
@@ -166,7 +167,6 @@ public final class Types {
   private static boolean isReference(Type type) {
     return type != null &&
       !Types.isPrimitive(type) &&
-      ((type instanceof Class) ||
-        (type instanceof ParameterizedType));
+      ((type instanceof Class) || (type instanceof ParameterizedType) || (type instanceof GenericArrayType));
   }
 }

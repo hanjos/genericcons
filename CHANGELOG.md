@@ -1,6 +1,6 @@
 0.5-SNAPSHOT
 ------------
-
+* Types.fromCons was removed from the public API.
 
 0.4
 ---

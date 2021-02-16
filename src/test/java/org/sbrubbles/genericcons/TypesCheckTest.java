@@ -18,6 +18,10 @@ public class TypesCheckTest {
   private final Iterable<Object> emptyObjectList = new ArrayList<>();
   private final Iterable<Object> singleObjectList = Collections.singletonList("foo");
 
+  private final Number[] numberArray = new Number[] { 1 };
+  private final Integer[] integerArray = new Integer[] { 1 };
+  private final String[] stringArray = new String[] { "" };
+
   @Test
   public void nullInputMismatch() {
     assertFalse(Types.check(emptyTypeList, null));
@@ -47,16 +51,16 @@ public class TypesCheckTest {
   @Test
   public void sameTypesMultipleArgumentsMatch() {
     assertTrue(Types.check(
-      Arrays.asList(String.class, Double.class, Object.class),
-      Arrays.asList("", 1.0, new Object()))
+      Arrays.asList(String.class, Double.class, Object.class, Number[].class),
+      Arrays.asList("", 1.0, new Object(), numberArray))
     );
   }
   
   @Test
   public void nullObjectsMultipleArgumentsMatch() {
     assertTrue(Types.check(
-        Arrays.asList(String.class, Double.class, Object.class),
-        Arrays.asList(null, 1.0, null)));
+        Arrays.asList(String.class, Double.class, Object.class, Number[].class),
+        Arrays.asList(null, 1.0, null, null)));
   }
   
   @Test
@@ -83,8 +87,8 @@ public class TypesCheckTest {
   @Test
   public void subtypeMultipleArgumentsMatch() {
     assertTrue(Types.check(
-        Arrays.asList(Serializable.class, Object.class, Number.class),
-        Arrays.asList(new ArrayList<>(), "", 1.0)));
+        Arrays.asList(Serializable.class, Object.class, Number.class, Number[].class),
+        Arrays.asList(new ArrayList<>(), "", 1.0, numberArray)));
   }
   
   @Test
@@ -132,6 +136,21 @@ public class TypesCheckTest {
   @Test
   public void singleNullObjectMatch() {
     assertTrue(Types.check(String.class, null));
+  }
+
+  @Test
+  public void singleArrayMatch() {
+    assertTrue(Types.check(Number[].class, numberArray));
+  }
+
+  @Test
+  public void singleArraySubtypeMatch() {
+    assertTrue(Types.check(Number[].class, integerArray));
+  }
+
+  @Test
+  public void singleArrayMismatch() {
+    assertFalse(Types.check(Number[].class, stringArray));
   }
 
   @Test
