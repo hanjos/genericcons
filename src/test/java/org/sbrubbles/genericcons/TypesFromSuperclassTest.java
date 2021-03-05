@@ -126,7 +126,7 @@ public class TypesFromSuperclassTest {
     Types.fromSuperclass(null, 0);
   }
 
-  @Test(expected = IndexOutOfBoundsException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void invalidIndex() {
     JustOneParameter<String> cons = new JustOneParameter<String>() { /**/ };
 

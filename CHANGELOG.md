@@ -1,9 +1,8 @@
 0.5-SNAPSHOT
 ------------
-* Types.fromCons was removed from the public API.
-* Types.check now takes Lists instead of Iterables. Although technically this
-  is less general, ordered sequences were implicitly expected anyway,
-  so using Lists makes that requirement explicit.
+* Types.fromSuperclass throws only IllegalArgumentExceptions.
+* Types.fromCons returns an empty list on null. 
+* Types.check now takes Lists instead of Iterables. Ordered sequences were implicitly expected anyway, so using Lists makes that requirement explicit.
 
 0.4
 ---
@@ -26,10 +25,7 @@
 0.2
 ---
 
-* Type tokens now work differently: instead of building a `Cons` instance to capture the type parameters, there is a `C` 
-class which is used in the type declaration, and the static `extractTypesFromSuperclass` method to, given the base 
-class and the index of the parameter type, returns a list with all the types expressed.
-
+* Type tokens now work differently: instead of building a `Cons` instance to capture the type parameters, there is a `C` class which is used in the type declaration, and the static `extractTypesFromSuperclass` method to, given the base class and the index of the parameter type, returns a list with all the types expressed.
 * `Cons` and `UnexpectedTypeException` no longer exist.
 
 0.1

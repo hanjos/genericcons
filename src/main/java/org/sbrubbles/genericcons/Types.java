@@ -6,6 +6,7 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,13 +55,13 @@ public final class Types {
       return false; // null never checks true
     }
 
-    if(types.size() != objects.size()) { // different sizes never check true
+    if (types.size() != objects.size()) { // different sizes never check true
       return false;
     }
 
     final int SIZE = types.size();
-    for(int i = 0; i < SIZE; i++) {
-      if(! Types.check(types.get(i), objects.get(i))) {
+    for (int i = 0; i < SIZE; i++) {
+      if (!Types.check(types.get(i), objects.get(i))) {
         return false;
       }
     }
@@ -71,15 +72,25 @@ public final class Types {
   /**
    * Java's erasure puts several limitations on capturing type data.
    * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Type tokens</a> are a way around that, but
-   * require that type captures be made from a subclass.
+   * require that type captures be made from a subclass, which holds the superclass' generic information.
    * <p>
    * Therefore, this method searches {@code baseClass}' superclass for the {@linkplain Type type} indexed by
-   * {@code parameterIndex}. A {@linkplain C cons type} is returned as a list of types.
+   * {@code parameterIndex}. A {@linkplain C cons type} is converted to a list of types.
+   * <p>
+   * Usage:
+   * <pre>
+   * // note that the instance in a is an anonymous subclass of A, not A itself!
+   * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;&gt;() { &#47;**&#47; };
+   *
+   * System.out.println(Types.fromSuperclass(a.getClass(), 0)); // prints "[String]"
+   * System.out.println(Types.fromSuperclass(a.getClass(), 1)); // prints "[List&lt;Double&gt;]"
+   * System.out.println(Types.fromSuperclass(a.getClass(), 2)); // throws an exception!
+   * </pre>
    * <p>
    * Examples:
    *
    * <table>
-   *  <tr><th>Superclass</th><th>Index</th><th>Output</th></tr>
+   *  <tr><th>Generic Superclass</th><th>Index</th><th>Output</th></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>1</td><td>[Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Number, Integer&gt;&gt;</td><td>1</td><td>[Number, Integer]</td></tr>
@@ -92,11 +103,10 @@ public final class Types {
    * @param baseClass      the class whose generic superclass holds the type arguments.
    * @param parameterIndex where in {@code baseClass}' superclass' type argument list is the desired type.
    * @return a list of the types found in {@code parameterIndex}.
-   * @throws IllegalArgumentException if {@code baseClass} is null or doesn`t have a generic superclass.
-   * @throws IndexOutOfBoundsException if no type parameters are found at {@code parameterIndex}.
+   * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int parameterIndex)
-    throws IllegalArgumentException, IndexOutOfBoundsException {
+    throws IllegalArgumentException {
     if (baseClass == null) {
       throw new IllegalArgumentException("The base class cannot be null!");
     }
@@ -107,30 +117,35 @@ public final class Types {
       throw new IllegalArgumentException("No type parameters in " + baseClass.getCanonicalName());
     }
 
-    return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
+    try {
+      return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
+    } catch (IndexOutOfBoundsException e) {
+      throw new IllegalArgumentException(
+        "No type parameters in " + baseClass.getCanonicalName() + " at index " + parameterIndex,
+        e);
+    }
   }
 
   /**
-   * Reads the given type as a {@linkplain C cons} and returns the list of types represented therein.
+   * Reads the given type as a {@linkplain C cons type} and returns the list of types represented therein.
+   * {@code null} returns the empty list, and a non-{@code C} type will return a one-element list.
    * <p>
    * Examples:
    * <table>
    *   <tr><td><b>Input</b></td><td><b>Output</b></td></tr>
+   *   <tr><td>null</td><td>[]</td></tr>
    *   <tr><td>String</td><td>[String]</td></tr>
    *   <tr><td>C&lt;String, Number&gt;</td><td>[String, Number]</td></tr>
    *   <tr><td>C&lt;String, C&lt;Number, Object&gt;&gt;</td><td>[String, Number, Object]</td></tr>
    *   <tr><td>C&lt;String, C&lt;Number, C&lt;Object, List&lt;Double&gt;&gt;&gt;</td><td>[String, Number, Object, List&lt;Double&gt;]</td></tr>
-   *   <tr><td>null</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
    * @param type a type.
    * @return the list of the types represented by the given type.
-   * @throws IllegalArgumentException if the given type is null.
    */
-   static List<? extends Type> fromCons(Type type)
-    throws IllegalArgumentException {
+  public static List<? extends Type> fromCons(Type type) {
     if (type == null) {
-      throw new IllegalArgumentException("The type cannot be null!");
+      return Collections.emptyList();
     }
 
     List<Type> result = new ArrayList<>();

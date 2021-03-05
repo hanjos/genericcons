@@ -1,6 +1,7 @@
 package org.sbrubbles.genericcons;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -42,8 +43,8 @@ public class TypesFromConsTest {
         Types.fromCons(CONS_4_TYPES).toArray());
   }
   
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void extractFromNull() {
-    Types.fromCons(null);
+    assertTrue(Types.fromCons(null).isEmpty());
   }
 }
