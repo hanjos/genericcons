@@ -1,22 +1,8 @@
 ![CI](https://github.com/hanjos/genericcons/workflows/CI/badge.svg) [![Javadocs](https://img.shields.io/static/v1?label=Javadocs&message=0.4&color=informational&logo=read-the-docs)][v0.4] [![Maven package](https://img.shields.io/static/v1?label=Maven&message=0.4&color=orange&logo=apache-maven)](https://github.com/hanjos/genericcons/packages/611536)
 
-Who said Java generics can't accept an open-ended number of type variables? 
-
-Instead of trying to write something like
+Who said Java generics can't accept an open-ended number of type variables? Just write something like
 
 ```java
-// doesn't compile!
-Function<?, ?...> func = new Function<Integer, String, String, String, String>() {
-  public Integer execute(String a, String b, String c, String d) {
-    return Math.max(a.length(), b.length(), c.length(), d.length());
-  }
-};
-```
-
-and raging at your compiler in vain and frustration, write
-
-```java
-// works like a charm! Or should, haven't tested it :P
 Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>>() {
   { // the no-arg constructor
     this.types = Types.fromSuperclass(this.getClass(), 1);
@@ -35,8 +21,6 @@ Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>
   }
 };
 ```
-
-and be happy! 
 
 Hey, I never said the solution was pretty. Or useful :)
 
