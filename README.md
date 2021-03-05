@@ -3,21 +3,18 @@
 Who said Java generics can't accept an open-ended number of type variables? Just write something like
 
 ```java
-Function<?, ?> f = new Function<Integer, C<String, C<String, C<String, String>>>>() {
-  { // the no-arg constructor
-    this.types = Types.fromSuperclass(this.getClass(), 1);
-  }
-  
+Function<?, ?> f = new Function<Integer, C<String, C<String, String>>>() {
   public Integer execute(Object... objects) {
-    if(! Types.check(this.types, Arrays.asList(objects))) // the given objects don't match!
+    List<? extends Type> types = Types.fromSuperclass(this.getClass(), 1);
+    if(! Types.check(types, Arrays.asList(objects))) { // the given objects don't match!
   	  return -1;
+    }
   	    
     String a = (String) objects[0];
     String b = (String) objects[1];
     String c = (String) objects[2];
-    String d = (String) objects[3];
 
-    return Math.max(a.length(), b.length(), c.length(), d.length());
+    return Math.max(a.length(), b.length(), c.length());
   }
 };
 ```
