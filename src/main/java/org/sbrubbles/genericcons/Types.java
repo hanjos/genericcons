@@ -22,10 +22,10 @@ public final class Types {
   private Types() { /* preventing instantiation */ }
 
   /**
-   * Checks if the object's runtime type is compatible with the given type. Null types match nothing.
+   * Checks if the object's runtime type is assignable to the given type.
    * <p>
-   * Neither will primitive types (such as {@code int.class}), since Java's autoboxing will convert {@code object} to
-   * the equivalent reference type (such as {@code Integer}).
+   * Null types match nothing, and neither will primitive types (such as {@code int.class}), since Java's autoboxing
+   * will convert {@code object} to the equivalent reference type (such as {@code Integer}).
    *
    * @param type   a type.
    * @param object an object.
@@ -92,7 +92,7 @@ public final class Types {
    * </pre>
    * <p>
    * Examples:
-   * <table width="100%">
+   * <table>
    *  <tr><th>Superclass</th><th>Index</th><th>Output</th></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>1</td><td>[Integer]</td></tr>
