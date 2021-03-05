@@ -94,6 +94,14 @@
           <stylesheetfile>prettier.css</stylesheetfile>
         </configuration>
       </plugin>
+
+      <!-- Getting pom info from the command line; useful for workflows -->
+      <!-- Thanks https://blog.soebes.de/blog/2018/06/09/help-plugin/ ! -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-help-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
     </plugins>
   </build>
 
