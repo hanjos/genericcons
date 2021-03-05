@@ -44,7 +44,7 @@ public final class Types {
   }
 
   /**
-   * Checks if the given objects are compatible with the given types.
+   * Checks if the given objects are assignable to the given types.
    *
    * @param types   the types to check against.
    * @param objects the objects to check.
@@ -71,7 +71,7 @@ public final class Types {
 
   /**
    * Searches {@code baseClass}' superclass for the {@linkplain Type type} indexed by {@code parameterIndex}.
-   * A {@linkplain C cons type} is converted to a list of types.
+   * A {@linkplain C cons type} is converted to {@linkplain #fromCons(Type) a list of types}.
    * <p>
    * Java's erasure puts several limitations on capturing type data.
    * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Type tokens</a> are a way around that, but
@@ -92,7 +92,7 @@ public final class Types {
    * </pre>
    * <p>
    * Examples:
-   * <table>
+   * <table width="100%">
    *  <tr><th>Superclass</th><th>Index</th><th>Output</th></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td>1</td><td>[Integer]</td></tr>
@@ -131,7 +131,7 @@ public final class Types {
 
   /**
    * Reads the given type as a {@linkplain C cons type} and returns the list of types represented therein.
-   * {@code null} returns the empty list, and a non-{@code C} type will return a one-element list.
+   * {@code null} returns the empty list, and a non-{@code C} type will be returned in a one-element list.
    * <p>
    * Examples:
    * <table>
