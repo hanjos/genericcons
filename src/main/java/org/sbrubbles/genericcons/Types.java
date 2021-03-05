@@ -80,10 +80,10 @@ public final class Types {
    * Usage:
    * <pre>
    * // note that the instance in a is an anonymous subclass of A, not A itself!
-   * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;&gt;() { &#47;**&#47; };
+   * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;String, List&lt;Double&gt;&gt;() { &#47;**&#47; };
    *
-   * System.out.println(Types.fromSuperclass(a.getClass(), 0)); // prints "[String]"
-   * System.out.println(Types.fromSuperclass(a.getClass(), 1)); // prints "[List&lt;Double&gt;]"
+   * System.out.println(Types.fromSuperclass(a.getClass(), 0)); // prints "[class java.lang.String]"
+   * System.out.println(Types.fromSuperclass(a.getClass(), 1)); // prints "[java.util.List&lt;java.lang.Double&gt;]"
    * System.out.println(Types.fromSuperclass(a.getClass(), 2)); // throws an exception!
    * </pre>
    * <p>
@@ -114,14 +114,14 @@ public final class Types {
     Type superclass = baseClass.getGenericSuperclass();
 
     if (!(superclass instanceof ParameterizedType)) {
-      throw new IllegalArgumentException("No type parameters in " + baseClass.getCanonicalName());
+      throw new IllegalArgumentException("No type parameters in " + baseClass.getName());
     }
 
     try {
       return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException(
-        "No type parameters in " + baseClass.getCanonicalName() + " at index " + parameterIndex,
+        "No type parameters in " + baseClass.getName() + " at index " + parameterIndex,
         e);
     }
   }
