@@ -22,7 +22,17 @@ jobs:
     
     - name: Generate Javadocs
       run: mvn javadoc:javadoc --file pom.xml
-      
+
+    - name: Tidy up javadocs
+      id: tidy
+      uses: cicirello/javadoc-cleanup@v1.2.0
+      with:
+        path-to-root: target/site/apidocs
+
+    - name: Log javadoc-cleanup output
+      run: |
+        echo "modified-count = ${{ steps.tidy.outputs.modified-count }}"
+
     - name: Copy Javadocs to the correct folder
       run: |
         VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
@@ -35,7 +45,7 @@ jobs:
         github_token: ${{ github.token }}
         publish_dir: ./docs
     
-    - name: Build with Maven
+    - name: Build package with Maven
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages
