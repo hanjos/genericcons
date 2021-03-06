@@ -17,23 +17,22 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        server-id: github # == project.distributionManagement.repository.id. How to extract it from pom.xml?
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     
     - name: Generate Javadocs
-      run: mvn javadoc:javadoc --file pom.xml
+      run: mvn -B javadoc:javadoc --file pom.xml
 
-    - name: Tidy up javadocs
-      id: tidy
+    - name: Tidy up Javadocs
       uses: cicirello/javadoc-cleanup@v1.2.0
       with:
         path-to-root: target/site/apidocs
 
-    - name: Log javadoc-cleanup output
+    - name: Log Javadoc-cleanup output
       run: |
         echo "modified-count = ${{ steps.tidy.outputs.modified-count }}"
 
-    - name: Copy Javadocs to the correct folder
+    - name: Copy Javadocs to the correct folder for deploy
       run: |
         VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         mkdir -p docs/$VERSION
