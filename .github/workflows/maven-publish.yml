@@ -20,14 +20,6 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
     
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
-
-    - name: Publish to GitHub Packages
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-    
     - name: Generate Javadocs
       run: mvn javadoc:javadoc --file pom.xml
       
@@ -37,15 +29,17 @@ jobs:
         mkdir -p docs/$VERSION
         cp -rf target/site/. docs/$VERSION
     
-    - name: Commit docs in GitHub Pages
-      run: |
-        git config user.email "actions@github.com"
-        git config user.name "GitHub Actions"
-        
-        git checkout gh-pages
-        git add docs
-        git commit -m "Docs for the new version."
-        git push origin gh-pages
-        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ github.token }}
+        publish_dir: ./docs
     
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Publish to GitHub Packages
+      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
     
