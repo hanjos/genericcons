@@ -914,17 +914,61 @@ table.striped > tbody > tr > th {
 /* using system fonts for sans serif, serif and monospace */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
 }
 
 div.block, .deprecationBlock, .contentContainer .description dl dd, .contentContainer .details dl dd,
 .serializedFormContainer dl dd {
-  font-family: Cambria, Times, Times New Roman, serif;
+  font-family: Georgia, Cambria, Times, Times New Roman, serif;
+  font-size: 1em;
 }
 
 pre, code, tt {
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1em;
 }
+
+h1 { font-size: 1.42em; }
+h2 { font-size: 1.28em; }
+h3 { font-size: 1.14em; }
+h4 { font-size: 1em; }
+h5 { font-size: 0.86em; }
+h6 { font-size: 0.71em; }
+
+sup { font-size: 0.6em; }
+
+.aboutLanguage, .bar { font-size: 0.71em; }
+
+.topNav, .bottomNav, .subNav { font-size: 0.8em; }
+
+.indexNav h1 { font-size: 0.9em; }
+
+.header ul li, .footer ul li { font-size: 0.9em; }
+
+.contentContainer .description dl dt, .contentContainer .details dl dt, .serializedFormContainer dl dt,
+.indexContainer {
+  font-size: 0.8em;
+}
+
+.indexContainer h2 { font-size: 0.9em; }
+
+td.colFirst, th.colFirst,
+td.colSecond, th.colSecond, td.colLast, th.colConstructorName, th.colDeprecatedItemName, th.colLast,
+.constantsSummary th, .packagesSummary th,
+.providesSummary th.colFirst, .providesSummary th.colLast, .providesSummary td.colFirst,
+.providesSummary td.colLast {
+  font-size: 0.9em;
+}
+
+h1.hidden { font-size: 0.71em; }
+
+.ui-widget, .ui-autocomplete-category { font-size: 1em; }
+
+.resultItem { font-size: 0.8em; }
+
+.searchTagDescResult { font-size: 0.8em; }
+.searchTagHolderResult { font-size: 0.86em; }
 
 .methodSignature {
   white-space: revert;
@@ -933,4 +977,8 @@ pre, code, tt {
 
 a:link, a:visited {
   color:#5486A6; /* lighten(nav color, 10%) */
+}
+
+ul.blockList li.blockList {
+  margin-bottom: 0;
 }

@@ -7,22 +7,19 @@
  * <p>
  * Basic usage:
  * <pre>
- * Function&lt;?, ?&gt; f = new Function&lt;Integer, C&lt;String, C&lt;String, C&lt;String, String&gt;&gt;&gt;&gt;() {
- *   { // the no-arg constructor
- *     this.types = Types.fromSuperclass(this.getClass(), 1);
- *   }
- *
+ * A&lt;?, ?&gt; f = new A&lt;Integer, C&lt;String, C&lt;String, String&gt;&gt;&gt;() {
  *   public Integer execute(Object... objects) {
- *     if(! Types.check(this.types, Arrays.asList(objects))) { // the given objects don't match!
- *   	 return -1;
+ *     List&lt;? extends Type&gt; types = Types.fromSuperclass(this.getClass(), 1);
+ *
+ *     if(! Types.check(types, Arrays.asList(objects))) {
+ *       return -1;
  *     }
  *
  *     String a = (String) objects[0];
  *     String b = (String) objects[1];
  *     String c = (String) objects[2];
- *     String d = (String) objects[3];
  *
- *     return Math.max(a.length(), b.length(), c.length(), d.length());
+ *     return Math.max(a.length(), b.length(), c.length());
  *   }
  * };
  * </pre>
