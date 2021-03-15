@@ -14,8 +14,8 @@ package org.sbrubbles.genericcons;
  * {@code Object}, {@code Number}, {@code String} and {@code Integer}. The {@link Types} class provides methods to
  * extract the types for later use.
  * <p>
- * This list-like structure is named a <i>cons type</i> (hence the {@code C}), due to its similarities to
- * Lisp's {@code cons}. Using only one letter for the class kept the whole structure more readable.
+ * This list-like structure is named a <i>cons</i> (hence the {@code C}), due to its similarities to Lisp's
+ * {@code cons}. Using only one letter kept the whole structure more readable (hey, it could be worse).
  * <p>
  * This class isn't supposed to be instantiated or subclassed, and has no fields or methods.
  * 

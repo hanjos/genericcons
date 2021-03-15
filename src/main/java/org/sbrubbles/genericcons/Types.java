@@ -44,7 +44,7 @@ public final class Types {
   }
 
   /**
-   * Checks if the given objects are assignable to the given types.
+   * Checks if the given objects are assignable to the given types, in the given order.
    *
    * @param types   the types to check against.
    * @param objects the objects to check.
@@ -71,20 +71,20 @@ public final class Types {
 
   /**
    * Searches {@code baseClass}' superclass for the {@linkplain Type type} indexed by {@code parameterIndex}.
-   * A {@linkplain C cons type} is converted to {@linkplain #fromCons(Type) a list of types}.
+   * A {@linkplain C cons} is converted to {@linkplain #fromCons(Type) a list of types}.
    * <p>
-   * Java's erasure puts several limitations on capturing type data.
+   * Erasure makes it tricky to capture type data.
    * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Type tokens</a> are a way around that, but
    * require that type captures be made from a direct subclass, which reflexively holds its superclass' generic
    * information.
    * <p>
-   * Note that this method doesn't search the given class' hierarchy; if the types aren't found in the
-   * given class' direct superclass, this method errors out.
+   * Note that this method doesn't search the given class' hierarchy; if the types aren't found in the direct
+   * superclass, this method errors out.
    * <p>
    * Usage:
    * <pre>
    * // note that the instance in a is an anonymous subclass of A, not A itself!
-   * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;String, List&lt;Double&gt;&gt;() { &#47;**&#47; };
+   * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;String, List&lt;Double&gt;&gt;() { &#47;* ... *&#47; };
    *
    * System.out.println(Types.fromSuperclass(a.getClass(), 0)); // prints "[class java.lang.String]"
    * System.out.println(Types.fromSuperclass(a.getClass(), 1)); // prints "[java.util.List&lt;java.lang.Double&gt;]"
@@ -130,7 +130,7 @@ public final class Types {
   }
 
   /**
-   * Reads the given type as a {@linkplain C cons type} and returns the list of types represented therein.
+   * Reads the given type as a {@linkplain C cons} and returns the list of types represented therein.
    * {@code null} returns the empty list, and a non-{@code C} type will be returned in a one-element list.
    * <p>
    * Examples:
