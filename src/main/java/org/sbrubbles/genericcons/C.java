@@ -3,12 +3,10 @@ package org.sbrubbles.genericcons;
 /**
  * A marker class, used to build and represent an open-ended list of types in a generic declaration.
  * Like below:
- *
+ * <p>
  * <pre>
  * Function&lt;?, ?&gt; f = new Function&lt;String, C&lt;Object, C&lt;Number, C&lt;String, Integer&gt;&gt;&gt;&gt;() {
- *   { // the no-arg constructor
- *     this.types = Types.fromSuperclass(this.getClass(), 1);
- *   }
+ *   // ...
  * };
  * </pre>
  * <p>
