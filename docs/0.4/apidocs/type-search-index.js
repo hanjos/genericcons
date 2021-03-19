@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"org.sbrubbles.genericcons","l":"C"},{"p":"org.sbrubbles.genericcons","l":"Types"}]
