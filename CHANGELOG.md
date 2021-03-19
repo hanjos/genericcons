@@ -1,9 +1,9 @@
-0.5-SNAPSHOT
-------------
-* Types.fromSuperclass throws only IllegalArgumentExceptions.
-* Types.fromCons returns an empty list on null. 
-* Types.check now takes Lists instead of Iterables. Ordered sequences were implicitly expected anyway, so using Lists makes that requirement explicit.
-* Some doc fixes and CSS adjustments to the generated Javadocs.
+0.5
+---
+* `Types.fromSuperclass` throws only `IllegalArgumentExceptions`.
+* `Types.fromCons` returns an empty list on null. 
+* `Types.check` now takes Lists instead of Iterables. Ordered sequences were implicitly expected anyway, so using Lists makes that requirement explicit.
+* CSS adjustments to the generated Javadocs.
 * Deploying a package also updates and publishes the new Javadocs.
 
 0.4
