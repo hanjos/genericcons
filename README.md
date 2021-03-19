@@ -42,7 +42,7 @@ Of course, one can always download the code and `mvn install`...
 
 [1]: http://gafter.blogspot.com/2006/12/super-type-tokens.html
 [2]: http://en.wikipedia.org/wiki/Cons
-[v0.5]: https://sbrubbles.org/genericcons/0.5/apidocs/index.html
+[v0.5]: https://sbrubbles.org/genericcons/docs/0.5/apidocs/index.html
 [apache-maven]: https://maven.apache.org/
 [packages]: https://github.com/hanjos/genericcons/packages
 [pat]: https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages#authenticating-with-a-personal-access-token
