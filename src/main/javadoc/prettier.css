@@ -915,7 +915,7 @@ table.striped > tbody > tr > th {
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 16px;
+  font-size: 14px;
 }
 
 div.block, .deprecationBlock, .contentContainer .description dl dd, .contentContainer .details dl dd,
@@ -938,7 +938,7 @@ h6 { font-size: 0.71em; }
 
 sup { font-size: 0.6em; }
 
-.aboutLanguage, .bar { font-size: 0.71em; }
+.aboutLanguage, .bar { font-size: 0.8em; }
 
 .topNav, .bottomNav, .subNav { font-size: 0.8em; }
 
