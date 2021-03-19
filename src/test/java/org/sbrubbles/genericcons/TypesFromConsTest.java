@@ -1,14 +1,13 @@
 package org.sbrubbles.genericcons;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertTrue;
+import com.coekie.gentyref.TypeToken;
+import org.junit.Test;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.coekie.gentyref.TypeToken;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TypesFromConsTest {
   private static final Type CONS_4_TYPES = new TypeToken<C<String, C<Number, C<Object, List<Double>>>>>() { /**/ }.getType();
