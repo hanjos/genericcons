@@ -69,7 +69,7 @@ public final class Types {
   }
 
   /**
-   * Searches {@code baseClass}' superclass for the {@linkplain Type type} indexed by {@code parameterIndex}.
+   * Searches {@code baseClass}' superclass for the {@linkplain Type type} indexed by, well, {@code index}.
    * A {@linkplain C cons} is converted to {@linkplain #fromCons(Type) a list of types}.
    * <p>
    * Erasure makes it tricky to capture type data.
@@ -82,7 +82,7 @@ public final class Types {
    * <p>
    * Usage:
    * <pre>
-   * // note that the instance in a is an anonymous subclass of A, not A itself!
+   * // note that the instance is an anonymous subclass of A, not A itself!
    * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;String, List&lt;Double&gt;&gt;() { &#47;* ... *&#47; };
    *
    * System.out.println(Types.fromSuperclass(a.getClass(), 0)); // prints "[class java.lang.String]"
@@ -102,12 +102,12 @@ public final class Types {
    *  <tr><td>Object</td><td>0</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
-   * @param baseClass      the class whose generic superclass holds the type arguments.
-   * @param parameterIndex where in {@code baseClass}' superclass' type argument list is the desired type.
+   * @param baseClass the class whose generic superclass holds the type arguments.
+   * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
    * @return a list of the types found in {@code parameterIndex}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
    */
-  public static List<? extends Type> fromSuperclass(Class<?> baseClass, int parameterIndex)
+  public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
     throws IllegalArgumentException {
     if (baseClass == null) {
       throw new IllegalArgumentException("The base class cannot be null!");
@@ -120,16 +120,17 @@ public final class Types {
     }
 
     try {
-      return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[parameterIndex]);
+      return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[index]);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException(
-        "No type parameters in " + baseClass.getName() + " at index " + parameterIndex,
+        "No type parameters in " + baseClass.getName() + " at index " + index,
         e);
     }
   }
 
   /**
    * Reads the given type as a {@linkplain C cons} and returns the list of types represented therein.
+   * <p>
    * {@code null} returns the empty list, and a non-{@code C} type will be returned in a one-element list.
    * <p>
    * Examples:
