@@ -1,3 +1,7 @@
+0.6
+---
+
+
 0.5
 ---
 * `Types.fromSuperclass` throws only `IllegalArgumentExceptions`.
