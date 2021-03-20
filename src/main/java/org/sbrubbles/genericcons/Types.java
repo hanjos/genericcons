@@ -104,21 +104,21 @@ public final class Types {
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
    * @see #fromCons(Type) 
-   * @see #hasGenericSuperclass(Class) 
+   * @see #genericSuperclassOf(Class)
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
     throws IllegalArgumentException {
-    if (hasGenericSuperclass(baseClass)) {
-      throw new IllegalArgumentException("No type parameters in " + baseClass.getName() + "'s superclass");
+    ParameterizedType superclass = genericSuperclassOf(baseClass);
+
+    if (superclass == null) {
+      throw new IllegalArgumentException("No type parameters in " + baseClass + "'s superclass");
     }
 
-    Type superclass = baseClass.getGenericSuperclass();
-
     try {
-      return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[index]);
+      return fromCons(superclass.getActualTypeArguments()[index]);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException(
-        "No type parameters in " + baseClass.getName() + " at index " + index,
+        "No type parameters in " + baseClass + " at index " + index,
         e);
     }
   }
@@ -164,14 +164,22 @@ public final class Types {
   }
 
   /**
-   * Checks if the given class has superclass with generic parameters {@linkplain #fromSuperclass(Class, int) to read}.
+   * Returns the generic superclass of {@code baseClass}, or {@code null} if there is none.
    * 
    * @param baseClass a class.
-   * @return {@code true} if {@code baseClass} has a parameterized type as a superclass.
+   * @return the generic superclass of {@code baseClass}, or {@code null} if there is none.
    * @see #fromSuperclass(Class, int) 
    */
-  public static boolean hasGenericSuperclass(Class<?> baseClass) {
-    return (baseClass != null) && (baseClass.getGenericSuperclass() instanceof ParameterizedType);
+  public static ParameterizedType genericSuperclassOf(Class<?> baseClass) {
+    if(baseClass == null) {
+      return null;
+    }
+
+    Type superclass = baseClass.getGenericSuperclass();
+
+    return (superclass instanceof ParameterizedType)
+        ? (ParameterizedType) superclass
+        : null;
   }
 
   private static boolean isPrimitive(Type type) {
