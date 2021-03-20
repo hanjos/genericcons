@@ -69,16 +69,13 @@ public final class Types {
   }
 
   /**
-   * Searches {@code baseClass}' superclass for the {@linkplain Type type} indexed by, well, {@code index}.
-   * A {@linkplain C cons} is converted to {@linkplain #fromCons(Type) a list of types}.
+   * Searches {@code baseClass}' immediate superclass for {@linkplain #fromCons(Type) the list of types} in, well,
+   * {@code index}.
    * <p>
-   * Erasure makes it tricky to capture type data.
+   * Erasure makes it tricky to capture type data in Java.
    * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Type tokens</a> are a way around that, but
-   * require that type captures be made from a direct subclass, which reflexively holds its superclass' generic
-   * information.
-   * <p>
-   * Note that this method doesn't search the given class' hierarchy; if the types aren't found in the direct
-   * superclass, this method errors out.
+   * require that type captures be made from a direct subclass. This method uses that same machinery to get to the
+   * types, and {@linkplain #fromCons(Type) cons} to decode any lists.
    * <p>
    * Usage:
    * <pre>
@@ -104,20 +101,18 @@ public final class Types {
    *
    * @param baseClass the class whose generic superclass holds the type arguments.
    * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
-   * @return a list of the types found in {@code parameterIndex}.
+   * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
+   * @see #fromCons(Type) 
+   * @see #hasGenericSuperclass(Class) 
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
     throws IllegalArgumentException {
-    if (baseClass == null) {
-      throw new IllegalArgumentException("The base class cannot be null!");
+    if (hasGenericSuperclass(baseClass)) {
+      throw new IllegalArgumentException("No type parameters in " + baseClass.getName() + "'s superclass");
     }
 
     Type superclass = baseClass.getGenericSuperclass();
-
-    if (!(superclass instanceof ParameterizedType)) {
-      throw new IllegalArgumentException("No type parameters in " + baseClass.getName());
-    }
 
     try {
       return fromCons(((ParameterizedType) superclass).getActualTypeArguments()[index]);
@@ -166,6 +161,17 @@ public final class Types {
     result.addAll(fromCons(actualTypes[1]));
 
     return result;
+  }
+
+  /**
+   * Checks if the given class has superclass with generic parameters {@linkplain #fromSuperclass(Class, int) to read}.
+   * 
+   * @param baseClass a class.
+   * @return {@code true} if {@code baseClass} has a parameterized type as a superclass.
+   * @see #fromSuperclass(Class, int) 
+   */
+  public static boolean hasGenericSuperclass(Class<?> baseClass) {
+    return (baseClass != null) && (baseClass.getGenericSuperclass() instanceof ParameterizedType);
   }
 
   private static boolean isPrimitive(Type type) {

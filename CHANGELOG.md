@@ -1,6 +1,8 @@
 0.6
 ---
-
+* New method `Types.hasGenericSuperclass`, which checks if `Types.fromSuperclass` would error out.
+* Fixing the Javadoc publishing workflow.
+* Assorted doc fixes.
 
 0.5
 ---
