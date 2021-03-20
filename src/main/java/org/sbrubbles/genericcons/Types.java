@@ -118,7 +118,7 @@ public final class Types {
       return fromCons(superclass.getActualTypeArguments()[index]);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException(
-        "No type parameters in " + baseClass + " at index " + index,
+        "No type parameters in " + superclass + " at index " + index,
         e);
     }
   }
