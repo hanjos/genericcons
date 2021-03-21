@@ -182,6 +182,28 @@ public final class Types {
         : null;
   }
 
+  /**
+   * Returns the generic interface of {@code baseClass} at the given index, or {@code null} if there is none.
+   *
+   * @param baseClass a class.
+   * @return the generic interface of {@code baseClass} at the given index, or {@code null} if there is none.
+   * @see #fromSuperclass(Class, int)
+   */
+  public static ParameterizedType genericInterfaceOf(Class<?> baseClass, int index) {
+    if(baseClass == null) {
+      return null;
+    }
+
+    Type[] supertypes = baseClass.getGenericInterfaces();
+    if(index < 0 || index >= supertypes.length) {
+      return null;
+    }
+
+    return (supertypes[index] instanceof ParameterizedType)
+      ? (ParameterizedType) supertypes[index]
+      : null;
+  }
+
   private static boolean isPrimitive(Type type) {
     return type == boolean.class
       || type == byte.class

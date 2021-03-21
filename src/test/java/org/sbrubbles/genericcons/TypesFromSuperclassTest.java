@@ -4,6 +4,7 @@ import com.coekie.gentyref.TypeFactory;
 import com.coekie.gentyref.TypeToken;
 import org.junit.Test;
 import org.sbrubbles.genericcons.fixtures.JustOneParameter;
+import org.sbrubbles.genericcons.fixtures.JustOneParameterInterface;
 import org.sbrubbles.genericcons.fixtures.JustThreeParameters;
 import org.sbrubbles.genericcons.fixtures.SonOfJustOneParameter;
 
@@ -188,6 +189,15 @@ public class TypesFromSuperclassTest {
     assertNull(Types.genericSuperclassOf(String.class));
 
     Types.fromSuperclass(String.class, 0);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void genericSuperclassOfDoesntWorkWithInterfaces() {
+    JustOneParameterInterface<String> cons = new JustOneParameterInterface<String>() { /**/ };
+
+    assertNull(Types.genericSuperclassOf(cons.getClass()));
+
+    Types.fromSuperclass(cons.getClass(), 0).toArray();
   }
 
   // doesn't work for length == 0, but close enough
