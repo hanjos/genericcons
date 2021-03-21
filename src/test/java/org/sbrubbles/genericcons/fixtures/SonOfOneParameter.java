@@ -1,5 +1,5 @@
 package org.sbrubbles.genericcons.fixtures;
 
-public class JustOneParameter<T> {
+public class SonOfOneParameter extends OneParameter<String> {
   // empty block
 }

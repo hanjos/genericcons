@@ -1,5 +1,5 @@
 package org.sbrubbles.genericcons.fixtures;
 
-public interface JustTwoParametersInterface<K, V> {
+public interface ITwoParameters<K, V> {
   // empty block
 }

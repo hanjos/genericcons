@@ -16,11 +16,11 @@ import static org.junit.Assert.*;
 public class TypesFromTest {
   @Test
   public void oneNonConsParameter() {
-    JustOneParameter<String> cons = new JustOneParameter<String>() { /**/ };
+    OneParameter<String> cons = new OneParameter<String>() { /**/ };
     Object[] expected = new Object[] { String.class };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameter.class, String.class),
+      TypeFactory.parameterizedClass(OneParameter.class, String.class),
       Types.genericSuperclassOf(cons.getClass()));
 
     assertArrayEquals(
@@ -34,12 +34,12 @@ public class TypesFromTest {
 
   @Test
   public <T> void oneNonConsParameterWithTypeVariable() {
-    JustOneParameter<T> cons = new JustOneParameter<T>() { /**/ };
+    OneParameter<T> cons = new OneParameter<T>() { /**/ };
     Type t = new TypeToken<T>() { /**/ }.getType();
     Object[] expected = { t };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameter.class, t),
+      TypeFactory.parameterizedClass(OneParameter.class, t),
       Types.genericSuperclassOf(cons.getClass()));
 
     assertArrayEquals(
@@ -53,13 +53,13 @@ public class TypesFromTest {
 
   @Test
   public void oneConsParameterWithTwoTypes() {
-    JustOneParameter<C<String, Number>> cons =
-      new JustOneParameter<C<String, Number>>() { /**/ };
+    OneParameter<C<String, Number>> cons =
+      new OneParameter<C<String, Number>>() { /**/ };
     Type typeList = encodeCons(String.class, Number.class);
     Object[] expected = { String.class, Number.class };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameter.class, typeList),
+      TypeFactory.parameterizedClass(OneParameter.class, typeList),
       Types.genericSuperclassOf(cons.getClass()));
 
     assertArrayEquals(
@@ -73,8 +73,8 @@ public class TypesFromTest {
 
   @Test
   public void oneConsParameterWithFiveTypes() {
-    JustOneParameter<C<String, C<Number, C<Object, C<Object[], Serializable>>>>> cons =
-      new JustOneParameter<C<String, C<Number, C<Object, C<Object[], Serializable>>>>>() { /**/ };
+    OneParameter<C<String, C<Number, C<Object, C<Object[], Serializable>>>>> cons =
+      new OneParameter<C<String, C<Number, C<Object, C<Object[], Serializable>>>>>() { /**/ };
     Type typeList = encodeCons(String.class, Number.class, Object.class, Object[].class, Serializable.class);
     Object[] expected = {
       String.class,
@@ -84,7 +84,7 @@ public class TypesFromTest {
       Serializable.class };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameter.class, typeList),
+      TypeFactory.parameterizedClass(OneParameter.class, typeList),
       Types.genericSuperclassOf(cons.getClass()));
 
     assertArrayEquals(
@@ -98,11 +98,11 @@ public class TypesFromTest {
 
   @Test
   public void threeParameters() {
-    JustThreeParameters<Number, String, C<Serializable, Serializable>> cons =
-      new JustThreeParameters<Number, String, C<Serializable, Serializable>>() { /**/ };
+    ThreeParameters<Number, String, C<Serializable, Serializable>> cons =
+      new ThreeParameters<Number, String, C<Serializable, Serializable>>() { /**/ };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustThreeParameters.class,
+      TypeFactory.parameterizedClass(ThreeParameters.class,
         Number.class,
         String.class,
         encodeCons(Serializable.class, Serializable.class)),
@@ -131,8 +131,8 @@ public class TypesFromTest {
 
   @Test
   public void threeParametersSelectingTheConsWithFiveTypes() {
-    JustThreeParameters<C<String, C<Number, C<Object, C<Object[], Serializable>>>>, String, String> cons =
-      new JustThreeParameters<C<String, C<Number, C<Object, C<Object[], Serializable>>>>, String, String>() { /**/ };
+    ThreeParameters<C<String, C<Number, C<Object, C<Object[], Serializable>>>>, String, String> cons =
+      new ThreeParameters<C<String, C<Number, C<Object, C<Object[], Serializable>>>>, String, String>() { /**/ };
     Object[] expected = {
       String.class,
       Number.class,
@@ -141,7 +141,7 @@ public class TypesFromTest {
       Serializable.class };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustThreeParameters.class,
+      TypeFactory.parameterizedClass(ThreeParameters.class,
         encodeCons(String.class, Number.class, Object.class, Object[].class, Serializable.class),
         String.class,
         String.class),
@@ -158,8 +158,8 @@ public class TypesFromTest {
 
   @Test
   public void oneParameterWithConsWithCompositeTypes() {
-    JustOneParameter<C<String, C<List<Number>, C<Object, Map<String, Integer>>>>> cons
-      = new JustOneParameter<C<String, C<List<Number>, C<Object, Map<String, Integer>>>>>() { /**/ };
+    OneParameter<C<String, C<List<Number>, C<Object, Map<String, Integer>>>>> cons
+      = new OneParameter<C<String, C<List<Number>, C<Object, Map<String, Integer>>>>>() { /**/ };
     Object[] expected = {
       String.class,
       listOf(Number.class),
@@ -167,7 +167,7 @@ public class TypesFromTest {
       mapOf(String.class, Integer.class) };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameter.class,
+      TypeFactory.parameterizedClass(OneParameter.class,
         encodeCons(String.class,
           listOf(Number.class),
           Object.class,
@@ -185,11 +185,11 @@ public class TypesFromTest {
 
   @Test
   public void sonOfParameterizedType() {
-    JustOneParameter<String> cons = new SonOfJustOneParameter();
+    OneParameter<String> cons = new SonOfOneParameter();
     Object[] expected = { String.class };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameter.class, String.class),
+      TypeFactory.parameterizedClass(OneParameter.class, String.class),
       Types.genericSuperclassOf(cons.getClass()));
 
     assertArrayEquals(
@@ -203,7 +203,7 @@ public class TypesFromTest {
 
   @Test
   public void grandsonOfParameterizedType() {
-    JustOneParameter<String> cons = new SonOfJustOneParameter() { /**/ };
+    OneParameter<String> cons = new SonOfOneParameter() { /**/ };
 
     assertNull(Types.genericSuperclassOf(cons.getClass()));
 
@@ -250,10 +250,10 @@ public class TypesFromTest {
 
   @Test
   public void invalidIndex() {
-    JustOneParameter<String> cons = new JustOneParameter<String>() { /**/ };
+    OneParameter<String> cons = new OneParameter<String>() { /**/ };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameter.class, String.class),
+      TypeFactory.parameterizedClass(OneParameter.class, String.class),
       Types.genericSuperclassOf(cons.getClass()));
 
     try {
@@ -280,7 +280,7 @@ public class TypesFromTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void noSelectorGiven() {
-    JustOneParameter<String> cons = new JustOneParameter<String>() { /**/ };
+    OneParameter<String> cons = new OneParameter<String>() { /**/ };
 
     Types.from(cons.getClass(), null, 0);
   }
@@ -306,7 +306,7 @@ public class TypesFromTest {
 
   @Test
   public void genericSuperclassOfDoesntWorkWithInterfaces() {
-    JustOneParameterInterface<String> cons = new JustOneParameterInterface<String>() { /**/ };
+    IOneParameter<String> cons = new IOneParameter<String>() { /**/ };
 
     assertNull(Types.genericSuperclassOf(cons.getClass()));
 
@@ -327,10 +327,10 @@ public class TypesFromTest {
 
   @Test
   public void genericInterfaceWorksWithInterfaces() {
-    JustOneParameterInterface<String> cons = new JustOneParameterInterface<String>() { /**/ };
+    IOneParameter<String> cons = new IOneParameter<String>() { /**/ };
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameterInterface.class, String.class),
+      TypeFactory.parameterizedClass(IOneParameter.class, String.class),
       Types.genericInterfaceOf(cons.getClass(), 0));
 
     assertArrayEquals(
@@ -340,7 +340,7 @@ public class TypesFromTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void genericInterfaceFailsIfNoInterfaceIsFoundAtIndex() {
-    JustOneParameterInterface<String> cons = new JustOneParameterInterface<String>() { /**/ };
+    IOneParameter<String> cons = new IOneParameter<String>() { /**/ };
 
     assertNull(Types.genericInterfaceOf(cons.getClass(), 1));
 
@@ -349,26 +349,26 @@ public class TypesFromTest {
 
   @Test
   public void gettingTheRightGenericSuperinterface() {
-    ClassWithMultipleInterface cons = new ClassWithMultipleInterface();
+    ClassWithMultipleInterfaces cons = new ClassWithMultipleInterfaces();
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameterInterface.class, String.class),
+      TypeFactory.parameterizedClass(IOneParameter.class, String.class),
       Types.genericInterfaceOf(cons.getClass(), 0));
     assertEquals(
-      TypeFactory.parameterizedClass(JustOneParameterInterface.class, String.class),
+      TypeFactory.parameterizedClass(IOneParameter.class, String.class),
       Types.genericInterfaceAt(0).genericSupertypeOf(cons.getClass()));
 
     assertEquals(
-      TypeFactory.parameterizedClass(JustTwoParametersInterface.class, Integer.class, listOf(Double.class)),
+      TypeFactory.parameterizedClass(ITwoParameters.class, Integer.class, listOf(Double.class)),
       Types.genericInterfaceOf(cons.getClass(), 1));
     assertEquals(
-      TypeFactory.parameterizedClass(JustTwoParametersInterface.class, Integer.class, listOf(Double.class)),
+      TypeFactory.parameterizedClass(ITwoParameters.class, Integer.class, listOf(Double.class)),
       Types.genericInterfaceAt(1).genericSupertypeOf(cons.getClass()));
   }
 
   @Test
   public void invalidIndexGenericSuperinterface() {
-    ClassWithMultipleInterface cons = new ClassWithMultipleInterface();
+    ClassWithMultipleInterfaces cons = new ClassWithMultipleInterfaces();
 
     assertNull(Types.genericInterfaceOf(cons.getClass(), -1));
     assertNull(Types.genericInterfaceAt(-1).genericSupertypeOf(cons.getClass()));

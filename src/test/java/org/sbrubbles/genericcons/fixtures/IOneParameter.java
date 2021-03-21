@@ -1,5 +1,5 @@
 package org.sbrubbles.genericcons.fixtures;
 
-public class JustThreeParameters<One, Two, Three> {
+public interface IOneParameter<T> {
   // empty block
 }
