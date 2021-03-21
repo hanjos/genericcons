@@ -1,6 +1,6 @@
 0.6
 ---
-* New method `Types.genericSuperclassOf`.
+* New general method `Types.from`, which helps support superinterfaces as well, and some assorted helper methods.
 * Fixing the Javadoc publishing workflow.
 * Assorted doc fixes.
 
