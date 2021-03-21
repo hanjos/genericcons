@@ -328,23 +328,33 @@ public class TypesFromTest {
   @Test
   public void genericInterfaceWorksWithInterfaces() {
     IOneParameter<String> cons = new IOneParameter<String>() { /**/ };
+    Object[] expected = { String.class };
 
     assertEquals(
       TypeFactory.parameterizedClass(IOneParameter.class, String.class),
       Types.genericInterfaceOf(cons.getClass(), 0));
 
     assertArrayEquals(
-      new Object[] { String.class },
+      expected,
       Types.from(cons.getClass(), Types.genericInterfaceAt(0), 0).toArray());
+
+    assertArrayEquals(
+      expected,
+      Types.fromInterface(cons.getClass(),0).toArray());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void genericInterfaceFailsIfNoInterfaceIsFoundAtIndex() {
     IOneParameter<String> cons = new IOneParameter<String>() { /**/ };
 
     assertNull(Types.genericInterfaceOf(cons.getClass(), 1));
 
-    Types.from(cons.getClass(), Types.genericInterfaceAt(1), 0);
+    try {
+      Types.from(cons.getClass(), Types.genericInterfaceAt(1), 0);
+      fail("Types.from with genericInterfaceAt should've thrown IllegalArgumentException");
+    } catch(IllegalArgumentException e) {
+      /* if we're here, we're good */
+    }
   }
 
   @Test
@@ -364,6 +374,32 @@ public class TypesFromTest {
     assertEquals(
       TypeFactory.parameterizedClass(ITwoParameters.class, Integer.class, listOf(Double.class)),
       Types.genericInterfaceAt(1).genericSupertypeOf(cons.getClass()));
+
+    assertEquals(
+      TypeFactory.parameterizedClass(Comparable.class, String.class),
+      Types.genericInterfaceOf(String.class, 1));
+    assertEquals(
+      TypeFactory.parameterizedClass(Comparable.class, String.class),
+      Types.genericInterfaceAt(1).genericSupertypeOf(String.class));
+  }
+
+  @Test
+  public void nonParameterizedInterface() {
+    assertNull(Types.genericInterfaceOf(String.class, 0));
+
+    try {
+      Types.from(String.class, Types.genericInterfaceAt(0), -1);
+      fail("Types.from with genericInterfaceAt should've thrown IllegalArgumentException");
+    } catch(IllegalArgumentException e) {
+      /* if we're here, we're good */
+    }
+
+    try {
+      Types.fromInterface(String.class, -1);
+      fail("Types.fromInterface should've thrown IllegalArgumentException");
+    } catch(IllegalArgumentException e) {
+      /* if we're here, we're good */
+    }
   }
 
   @Test

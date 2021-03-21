@@ -117,14 +117,14 @@ public final class Types {
    * <p>
    * Examples:
    * <table>
-   *  <tr><th>Generic supertype selected</th><th align="center">Index</th><th>Output</th></tr>
+   *  <tr><th>Generic supertype</th><th align="center">Index</th><th>Output</th></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td align="center">0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td align="center">1</td><td>[Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Number, Integer&gt;&gt;</td><td align="center">1</td><td>[Number, Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">1</td><td>[Object, Number, Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">2</td><td>error: IllegalArgumentException!</td></tr>
-   *  <tr><td>Object</td><td align="center">0</td><td>error: IllegalArgumentException!</td></tr>
+   *  <tr><td>none</td><td align="center">0</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
    * @param baseClass the class whose generic supertype holds the type arguments.
@@ -161,8 +161,8 @@ public final class Types {
   /**
    * Searches {@code baseClass}' superclass for {@linkplain #fromCons(Type) the list of types} in {@code index}.
    * <p>
-   * It's equivalent to calling {@link #from(Class, SupertypeSelector, int) from} using
-   * {@link #genericSuperclassOf(Class) genericSuperclassOf} as supertype selector, but a bit shorter.
+   * The same results can be obtained with {@link #from(Class, SupertypeSelector, int) from} and an
+   * {@linkplain #genericSuperclassOf(Class) appropriate selector}, but this method is shorter.
    *
    * @param baseClass the class whose generic superclass holds the type arguments.
    * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
@@ -172,6 +172,25 @@ public final class Types {
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
     throws IllegalArgumentException {
     return from(baseClass, Types::genericSuperclassOf, index);
+  }
+
+
+  /**
+   * Searches {@code baseClass}' first superinterface for {@linkplain #fromCons(Type) the list of types} in
+   * {@code index}.
+   * <p>
+   * The same results can be obtained with {@link #from(Class, SupertypeSelector, int) from} and an
+   * {@linkplain #genericInterfaceAt(int) appropriate selector}, but this method is shorter, especially from an
+   * anonymous subclass.
+   *
+   * @param baseClass the class whose generic superclass holds the type arguments.
+   * @param index     where in {@code baseClass}' first superinterface's type argument list is the desired type.
+   * @return a list of the types found in {@code index}.
+   * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
+   */
+  public static List<? extends Type> fromInterface(Class<?> baseClass, int index)
+    throws IllegalArgumentException {
+    return Types.from(baseClass, Types.genericInterfaceAt(0), index);
   }
 
   /**
@@ -215,12 +234,11 @@ public final class Types {
   }
 
   /**
-   * Returns the generic superclass of {@code baseClass}, or {@code null} if there is none. It's a valid
+   * Returns the generic superclass of {@code baseClass}, or {@code null} if there is none. Can be used as a
    * {@linkplain Types.SupertypeSelector supertype selector}.
    * 
    * @param baseClass a class.
    * @return the generic superclass of {@code baseClass}, or {@code null} if there is none.
-   * @see #fromSuperclass(Class, int)
    * @see Types.SupertypeSelector
    * @see #from(Class, SupertypeSelector, int)
    */
