@@ -3,7 +3,7 @@
 Who said Java generics can't accept an open-ended number of type variables? Just write something like
 
 ```java
-Function<?, ?> f = new Function<Integer, C<String, C<String, String>>>() {
+Fn<?, ?> f = new Fn<Integer, C<String, C<String, String>>>() {
   public Integer execute(Object... objects) {
     List<? extends Type> types = Types.fromSuperclass(this.getClass(), 1);
     
