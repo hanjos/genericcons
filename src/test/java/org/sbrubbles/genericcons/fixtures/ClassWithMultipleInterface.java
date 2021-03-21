@@ -1,5 +1,7 @@
 package org.sbrubbles.genericcons.fixtures;
 
-public class ClassWithMultipleInterface<A, B, C> implements JustOneParameterInterface<A>, JustTwoParametersInterface<B, C> {
+import java.util.List;
+
+public class ClassWithMultipleInterface implements JustOneParameterInterface<String>, JustTwoParametersInterface<Integer, List<Double>> {
   // empty block
 }

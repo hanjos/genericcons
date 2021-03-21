@@ -347,21 +347,28 @@ public class TypesFromTest {
     Types.from(cons.getClass(), Types.genericInterfaceAt(1), 0);
   }
 
+  @Test
   public void gettingTheRightGenericSuperinterface() {
-    ClassWithMultipleInterface<String, Integer, List<Double>> cons = new ClassWithMultipleInterface<>();
+    ClassWithMultipleInterface cons = new ClassWithMultipleInterface();
 
-    assertEquals(String.class, Types.genericInterfaceOf(cons.getClass(), 0));
-    assertEquals(String.class, Types.genericInterfaceAt(0).genericSupertypeOf(cons.getClass()));
+    assertEquals(
+      TypeFactory.parameterizedClass(JustOneParameterInterface.class, String.class),
+      Types.genericInterfaceOf(cons.getClass(), 0));
+    assertEquals(
+      TypeFactory.parameterizedClass(JustOneParameterInterface.class, String.class),
+      Types.genericInterfaceAt(0).genericSupertypeOf(cons.getClass()));
 
-    assertEquals(Integer.class, Types.genericInterfaceOf(cons.getClass(), 1));
-    assertEquals(Integer.class, Types.genericInterfaceAt(1).genericSupertypeOf(cons.getClass()));
-
-    assertEquals(listOf(Double.class), Types.genericInterfaceOf(cons.getClass(), 2));
-    assertEquals(listOf(Double.class), Types.genericInterfaceAt(2).genericSupertypeOf(cons.getClass()));
+    assertEquals(
+      TypeFactory.parameterizedClass(JustTwoParametersInterface.class, Integer.class, listOf(Double.class)),
+      Types.genericInterfaceOf(cons.getClass(), 1));
+    assertEquals(
+      TypeFactory.parameterizedClass(JustTwoParametersInterface.class, Integer.class, listOf(Double.class)),
+      Types.genericInterfaceAt(1).genericSupertypeOf(cons.getClass()));
   }
 
+  @Test
   public void invalidIndexGenericSuperinterface() {
-    ClassWithMultipleInterface<String, Integer, List<Double>> cons = new ClassWithMultipleInterface<>();
+    ClassWithMultipleInterface cons = new ClassWithMultipleInterface();
 
     assertNull(Types.genericInterfaceOf(cons.getClass(), -1));
     assertNull(Types.genericInterfaceAt(-1).genericSupertypeOf(cons.getClass()));
