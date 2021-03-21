@@ -3,10 +3,7 @@ package org.sbrubbles.genericcons;
 import com.coekie.gentyref.TypeFactory;
 import com.coekie.gentyref.TypeToken;
 import org.junit.Test;
-import org.sbrubbles.genericcons.fixtures.JustOneParameter;
-import org.sbrubbles.genericcons.fixtures.JustOneParameterInterface;
-import org.sbrubbles.genericcons.fixtures.JustThreeParameters;
-import org.sbrubbles.genericcons.fixtures.SonOfJustOneParameter;
+import org.sbrubbles.genericcons.fixtures.*;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -348,6 +345,29 @@ public class TypesFromTest {
     assertNull(Types.genericInterfaceOf(cons.getClass(), 1));
 
     Types.from(cons.getClass(), Types.genericInterfaceAt(1), 0);
+  }
+
+  public void gettingTheRightGenericSuperinterface() {
+    ClassWithMultipleInterface<String, Integer, List<Double>> cons = new ClassWithMultipleInterface<>();
+
+    assertEquals(String.class, Types.genericInterfaceOf(cons.getClass(), 0));
+    assertEquals(String.class, Types.genericInterfaceAt(0).genericSupertypeOf(cons.getClass()));
+
+    assertEquals(Integer.class, Types.genericInterfaceOf(cons.getClass(), 1));
+    assertEquals(Integer.class, Types.genericInterfaceAt(1).genericSupertypeOf(cons.getClass()));
+
+    assertEquals(listOf(Double.class), Types.genericInterfaceOf(cons.getClass(), 2));
+    assertEquals(listOf(Double.class), Types.genericInterfaceAt(2).genericSupertypeOf(cons.getClass()));
+  }
+
+  public void invalidIndexGenericSuperinterface() {
+    ClassWithMultipleInterface<String, Integer, List<Double>> cons = new ClassWithMultipleInterface<>();
+
+    assertNull(Types.genericInterfaceOf(cons.getClass(), -1));
+    assertNull(Types.genericInterfaceAt(-1).genericSupertypeOf(cons.getClass()));
+
+    assertNull(Types.genericInterfaceOf(cons.getClass(), 3));
+    assertNull(Types.genericInterfaceAt(3).genericSupertypeOf(cons.getClass()));
   }
 
   // doesn't work for length == 0, but close enough
