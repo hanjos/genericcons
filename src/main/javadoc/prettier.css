@@ -915,7 +915,7 @@ table.striped > tbody > tr > th {
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 14px;
+  font-size: 16px;
 }
 
 div.block, .deprecationBlock, .contentContainer .description dl dd, .contentContainer .details dl dd,
@@ -985,4 +985,24 @@ ul.blockList li.blockList {
 
 ul.blockList li.blockList ul.blockList, ul.blockList li.blockList ul.blockListLast { /* method docs */
   border: 1px solid #ededed;
+  margin-top: 0;
+  margin-bottom: 0;
 }
+
+table.memberSummary { /* a space between the method table and the "methods inherited" section */
+  margin-bottom: 1em;
+}
+
+section[role='region'] { /* a space between sections */
+  margin-bottom: 1em;
+}
+
+ul.blockList ul.blockList li.blockList h3 { /* method section titles */
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+ul.blockList ul.blockList ul.blockList li.blockList h3 { /* methods inherited */
+  margin-top: -1.16em;
+}
+
