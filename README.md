@@ -6,6 +6,7 @@ Who said Java generics can't accept an open-ended number of type variables? Just
 Function<?, ?> f = new Function<Integer, C<String, C<String, String>>>() {
   public Integer execute(Object... objects) {
     List<? extends Type> types = Types.fromSuperclass(this.getClass(), 1);
+    
     if(! Types.check(types, Arrays.asList(objects))) { // the given objects don't match!
   	  return -1;
     }
