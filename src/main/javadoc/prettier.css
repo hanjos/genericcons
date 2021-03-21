@@ -940,7 +940,7 @@ sup { font-size: 0.6em; }
 
 .aboutLanguage, .bar { font-size: 0.8em; }
 
-.topNav, .bottomNav, .subNav { font-size: 0.8em; }
+.topNav, .bottomNav, .subNav { font-size: 0.86em; }
 
 .indexNav h1 { font-size: 0.9em; }
 
@@ -981,4 +981,8 @@ a:link, a:visited {
 
 ul.blockList li.blockList {
   margin-bottom: 0;
+}
+
+ul.blockList li.blockList ul.blockList, ul.blockList li.blockList ul.blockListLast { /* method docs */
+  border: 1px solid #ededed;
 }
