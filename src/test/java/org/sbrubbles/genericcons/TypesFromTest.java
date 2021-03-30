@@ -25,7 +25,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 0).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 0).toArray());
 
     assertArrayEquals(
       expected,
@@ -44,7 +44,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 0).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 0).toArray());
 
     assertArrayEquals(
       expected,
@@ -64,7 +64,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 0).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 0).toArray());
 
     assertArrayEquals(
       expected,
@@ -89,7 +89,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 0).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 0).toArray());
 
     assertArrayEquals(
       expected,
@@ -112,7 +112,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected_1,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 1).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 1).toArray());
 
     assertArrayEquals(
       expected_1,
@@ -122,7 +122,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected_2,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 2).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 2).toArray());
 
     assertArrayEquals(
       expected_2,
@@ -149,7 +149,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 0).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 0).toArray());
 
     assertArrayEquals(
       expected,
@@ -176,7 +176,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 0).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 0).toArray());
 
     assertArrayEquals(
       expected,
@@ -194,7 +194,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected,
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 0).toArray());
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 0).toArray());
 
     assertArrayEquals(
       expected,
@@ -208,7 +208,7 @@ public class TypesFromTest {
     assertNull(Types.genericSuperclassOf(cons.getClass()));
 
     try {
-      Types.from(cons.getClass(), Types::genericSuperclassOf, 0);
+      Types.from(Types::genericSuperclassOf, cons.getClass(), 0);
       fail("Types.from should've thrown IllegalArgumentException");
     } catch(IllegalArgumentException e) {
       /* if we're here, we're good */
@@ -227,14 +227,14 @@ public class TypesFromTest {
     assertNull(Types.genericSuperclassOf(null));
 
     try {
-      Types.from(null, Types::genericSuperclassOf, 0);
+      Types.from(Types::genericSuperclassOf, null, 0);
       fail("Types.from with genericSuperclassOf should've thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       /* if we're here, we're good */
     }
 
     try {
-      Types.from(null, Types.genericInterfaceAt(0), 0);
+      Types.from(Types.genericInterfaceAt(0), null, 0);
       fail("Types.from with genericInterface should've thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       /* if we're here, we're good */
@@ -257,14 +257,14 @@ public class TypesFromTest {
       Types.genericSuperclassOf(cons.getClass()));
 
     try {
-      Types.from(cons.getClass(), Types::genericSuperclassOf, -1);
+      Types.from(Types::genericSuperclassOf, cons.getClass(), -1);
       fail("Types.from with genericSuperclassOf should've thrown IllegalArgumentException");
     } catch(IllegalArgumentException e) {
       /* if we're here, we're good */
     }
 
     try {
-      Types.from(cons.getClass(), Types.genericInterfaceAt(0), -1);
+      Types.from(Types.genericInterfaceAt(0), cons.getClass(), -1);
       fail("Types.from with genericInterface should've thrown IllegalArgumentException");
     } catch(IllegalArgumentException e) {
       /* if we're here, we're good */
@@ -282,7 +282,7 @@ public class TypesFromTest {
   public void noSelectorGiven() {
     OneParameter<String> cons = new OneParameter<String>() { /**/ };
 
-    Types.from(cons.getClass(), null, 0);
+    Types.from(null, cons.getClass(), 0);
   }
 
   @Test
@@ -290,7 +290,7 @@ public class TypesFromTest {
     assertNull(Types.genericSuperclassOf(String.class));
 
     try {
-      Types.from(String.class, Types::genericSuperclassOf,-1);
+      Types.from(Types::genericSuperclassOf, String.class, -1);
       fail("Types.from with genericSuperclassOf should've thrown IllegalArgumentException");
     } catch(IllegalArgumentException e) {
       /* if we're here, we're good */
@@ -311,7 +311,7 @@ public class TypesFromTest {
     assertNull(Types.genericSuperclassOf(cons.getClass()));
 
     try {
-      Types.from(cons.getClass(), Types::genericSuperclassOf, -1);
+      Types.from(Types::genericSuperclassOf, cons.getClass(), -1);
       fail("Types.from with genericSuperclassOf should've thrown IllegalArgumentException");
     } catch(IllegalArgumentException e) {
       /* if we're here, we're good */
@@ -336,7 +336,7 @@ public class TypesFromTest {
 
     assertArrayEquals(
       expected,
-      Types.from(cons.getClass(), Types.genericInterfaceAt(0), 0).toArray());
+      Types.from(Types.genericInterfaceAt(0), cons.getClass(), 0).toArray());
 
     assertArrayEquals(
       expected,
@@ -350,7 +350,7 @@ public class TypesFromTest {
     assertNull(Types.genericInterfaceOf(cons.getClass(), 1));
 
     try {
-      Types.from(cons.getClass(), Types.genericInterfaceAt(1), 0);
+      Types.from(Types.genericInterfaceAt(1), cons.getClass(), 0);
       fail("Types.from with genericInterfaceAt should've thrown IllegalArgumentException");
     } catch(IllegalArgumentException e) {
       /* if we're here, we're good */
@@ -388,7 +388,7 @@ public class TypesFromTest {
     assertNull(Types.genericInterfaceOf(String.class, 0));
 
     try {
-      Types.from(String.class, Types.genericInterfaceAt(0), -1);
+      Types.from(Types.genericInterfaceAt(0), String.class, -1);
       fail("Types.from with genericInterfaceAt should've thrown IllegalArgumentException");
     } catch(IllegalArgumentException e) {
       /* if we're here, we're good */
