@@ -1,3 +1,7 @@
+0.7
+---
+
+
 0.6
 ---
 * New general method `Types.from`, which helps support superinterfaces as well, and some assorted helper methods.
