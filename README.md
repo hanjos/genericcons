@@ -1,4 +1,4 @@
-![CI](https://github.com/hanjos/genericcons/workflows/CI/badge.svg) [![Javadocs](https://img.shields.io/static/v1?label=Javadocs&message=0.5&color=informational&logo=read-the-docs)][v0.6] [![Maven package](https://img.shields.io/static/v1?label=Maven&message=0.6&color=orange&logo=apache-maven)](https://github.com/hanjos/genericcons/packages/611536)
+![CI](https://github.com/hanjos/genericcons/workflows/CI/badge.svg) [![Javadocs](https://img.shields.io/static/v1?label=Javadocs&message=0.6&color=informational&logo=read-the-docs)][v0.6] [![Maven package](https://img.shields.io/static/v1?label=Maven&message=0.6&color=orange&logo=apache-maven)](https://github.com/hanjos/genericcons/packages/611536)
 
 Who said Java generics can't accept an open-ended number of type variables? Just write something like
 
