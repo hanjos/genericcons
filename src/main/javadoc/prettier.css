@@ -5,9 +5,9 @@
 
 /*
  * Javadoc style sheet
+@import url('resources/fonts/dejavu.css');
  */
 
-@import url('resources/fonts/dejavu.css');
 
 /*
  * Styles for individual HTML elements.
@@ -995,11 +995,6 @@ table.memberSummary { /* a space between the method table and the "methods inher
 
 section[role='region'] { /* a space between sections */
   margin-bottom: 1em;
-}
-
-ul.blockList ul.blockList li.blockList h3 { /* method section titles */
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 ul.blockList ul.blockList ul.blockList li.blockList h3 { /* methods inherited */
