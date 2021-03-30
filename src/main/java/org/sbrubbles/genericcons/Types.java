@@ -27,6 +27,12 @@ import java.util.List;
  * @see C
  */
 public final class Types {
+
+  /**
+   * A {@linkplain SupertypeSelector supertype selector} for the first generic interface implemented by the given class.
+   */
+  private static final SupertypeSelector FIRST_INTERFACE_SELECTOR = Types.genericInterfaceAt(0);
+
   private Types() { /* preventing instantiation */ }
 
   /**
@@ -190,7 +196,7 @@ public final class Types {
    */
   public static List<? extends Type> fromInterface(Class<?> baseClass, int index)
     throws IllegalArgumentException {
-    return Types.from(Types.genericInterfaceAt(0), baseClass, index);
+    return Types.from(FIRST_INTERFACE_SELECTOR, baseClass, index);
   }
 
   /**
