@@ -287,12 +287,11 @@ public final class Types {
   }
 
   /**
-   * Returns a {@linkplain Types.SupertypeSelector supertype selector} which fetches the generic superinterface of a
-   * given class at the given index.
+   * Returns a {@linkplain Types.SupertypeSelector supertype selector} which fetches the {@code index}-th generic
+   * superinterface of a given class.
    *
    * @param index which superinterface to return.
-   * @return a selector which returns the generic superinterface of a given class at {@code index}, or {@code null} if
-   * none is found.
+   * @return a selector which returns the {@code index}-th generic superinterface of a given class, if found.
    * @see Types.SupertypeSelector
    * @see #from(SupertypeSelector, Class, int)
    */
