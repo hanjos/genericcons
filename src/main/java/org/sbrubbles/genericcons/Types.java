@@ -152,13 +152,13 @@ public final class Types {
       throw new IllegalArgumentException("No selector given");
     }
 
-    ParameterizedType supertype = selector.genericSupertypeOf(baseClass).orElse(null);
-    if (supertype == null) {
+    Optional<ParameterizedType> supertype = selector.genericSupertypeOf(baseClass);
+    if (! supertype.isPresent()) {
       throw new IllegalArgumentException("No generic supertype found for " + baseClass);
     }
 
     try {
-      return fromCons(supertype.getActualTypeArguments()[index]);
+      return fromCons(supertype.get().getActualTypeArguments()[index]);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException(
         "No type parameters in " + supertype + " at index " + index,
