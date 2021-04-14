@@ -242,11 +242,11 @@ public final class Types {
   }
 
   /**
-   * Returns the generic superclass of {@code baseClass}, if found. Can be used as a
+   * Returns the generic superclass of {@code baseClass}, if there is one. This method can be used as a
    * {@linkplain Types.SupertypeSelector supertype selector}.
    *
    * @param baseClass a class.
-   * @return the generic superclass of {@code baseClass}, if found.
+   * @return the generic superclass of {@code baseClass}, if there is one.
    * @see Types.SupertypeSelector
    * @see #from(SupertypeSelector, Class, int)
    */
@@ -264,11 +264,11 @@ public final class Types {
   }
 
   /**
-   * Returns the generic interface of {@code baseClass} at the given index, if found.
+   * Returns the generic interface of {@code baseClass} at the given index, if there is one.
    *
    * @param baseClass a class.
    * @param index     which superinterface to return.
-   * @return the generic interface of {@code baseClass} at the given index, if found.
+   * @return the generic interface of {@code baseClass} at the given index, if there is one.
    */
   public static Optional<ParameterizedType> genericInterfaceOf(Class<?> baseClass, int index) {
     if (baseClass == null) {
@@ -291,7 +291,7 @@ public final class Types {
    * superinterface of a given class.
    *
    * @param index which superinterface to return.
-   * @return a selector which returns the {@code index}-th generic superinterface of a given class, if found.
+   * @return a selector which returns the {@code index}-th generic superinterface of a given class, if there is one.
    * @see Types.SupertypeSelector
    * @see #from(SupertypeSelector, Class, int)
    */
