@@ -179,7 +179,7 @@ public final class Types {
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
       throws IllegalArgumentException {
-    return from(baseClass1 -> genericSuperclassOf(baseClass1), baseClass, index);
+    return from(Types::genericSuperclassOf, baseClass, index);
   }
 
 
@@ -297,9 +297,7 @@ public final class Types {
    * @see #from(SupertypeSelector, Class, int)
    */
   public static SupertypeSelector genericInterfaceAt(final int index) {
-    return baseClass -> {
-      return genericInterfaceOf(baseClass, index);
-    };
+    return baseClass -> genericInterfaceOf(baseClass, index);
   }
 
   private static boolean isPrimitive(Type type) {

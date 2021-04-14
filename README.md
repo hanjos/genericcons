@@ -35,9 +35,9 @@ It occurred to me one day, and I haven't contributed to Java's grand tradition o
 Basically, [Maven][apache-maven] and [GitHub Packages][github-packages]:
 
 1. Add https://maven.pkg.github.com/hanjos/genericcons as a repo in your `pom.xml`;
-1. Setup a [personal access token][pat] in your `settings.xml` with package reading rights;
+1. Set up a [personal access token][pat] in your `settings.xml` with package reading rights;
 1. Add the dependency in your `pom.xml`. The versions available can be seen [here][packages].
-1. And you're good to go!
+1. You're good to go!
 
 Of course, one can always download the code and `mvn install`...
 
