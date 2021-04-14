@@ -978,31 +978,3 @@ h1.hidden { font-size: 0.71em; }
 a:link, a:visited {
   color:#5486A6; /* lighten(nav color, 10%) */
 }
-
-ul.blockList li.blockList {
-  margin-bottom: 0;
-}
-
-ul.blockList li.blockList ul.blockList, ul.blockList li.blockList ul.blockListLast { /* method docs */
-  border: 1px solid #ededed;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-table.memberSummary { /* a space between the method table and the "methods inherited" section */
-  margin-bottom: 1em;
-}
-
-section[role='region'] { /* a space between sections */
-  margin-bottom: 1em;
-}
-
-ul.blockList ul.blockList li.blockList h3 { /* method section titles */
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-ul.blockList ul.blockList ul.blockList li.blockList h3 { /* methods inherited */
-  margin-top: -1.16em;
-}
-
