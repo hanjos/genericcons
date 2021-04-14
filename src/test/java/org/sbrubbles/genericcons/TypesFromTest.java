@@ -21,7 +21,7 @@ public class TypesFromTest {
 
     assertEquals(
       TypeFactory.parameterizedClass(OneParameter.class, String.class),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     assertArrayEquals(
       expected,
@@ -40,7 +40,7 @@ public class TypesFromTest {
 
     assertEquals(
       TypeFactory.parameterizedClass(OneParameter.class, t),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     assertArrayEquals(
       expected,
@@ -60,7 +60,7 @@ public class TypesFromTest {
 
     assertEquals(
       TypeFactory.parameterizedClass(OneParameter.class, typeList),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     assertArrayEquals(
       expected,
@@ -85,7 +85,7 @@ public class TypesFromTest {
 
     assertEquals(
       TypeFactory.parameterizedClass(OneParameter.class, typeList),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     assertArrayEquals(
       expected,
@@ -106,7 +106,7 @@ public class TypesFromTest {
         Number.class,
         String.class,
         encodeCons(Serializable.class, Serializable.class)),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     Object[] expected_1 = { String.class };
 
@@ -145,7 +145,7 @@ public class TypesFromTest {
         encodeCons(String.class, Number.class, Object.class, Object[].class, Serializable.class),
         String.class,
         String.class),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     assertArrayEquals(
       expected,
@@ -172,7 +172,7 @@ public class TypesFromTest {
           listOf(Number.class),
           Object.class,
           mapOf(String.class, Integer.class))),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     assertArrayEquals(
       expected,
@@ -190,7 +190,7 @@ public class TypesFromTest {
 
     assertEquals(
       TypeFactory.parameterizedClass(OneParameter.class, String.class),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     assertArrayEquals(
       expected,
@@ -205,7 +205,7 @@ public class TypesFromTest {
   public void grandsonOfParameterizedType() {
     OneParameter<String> cons = new SonOfOneParameter() { /**/ };
 
-    assertNull(Types.genericSuperclassOf(cons.getClass()));
+    assertNull(Types.genericSuperclassOf(cons.getClass()).orElse(null));
 
     try {
       Types.from(Types::genericSuperclassOf, cons.getClass(), 0);
@@ -224,7 +224,7 @@ public class TypesFromTest {
 
   @Test
   public void nullBaseClass() {
-    assertNull(Types.genericSuperclassOf(null));
+    assertNull(Types.genericSuperclassOf(null).orElse(null));
 
     try {
       Types.from(Types::genericSuperclassOf, null, 0);
@@ -254,7 +254,7 @@ public class TypesFromTest {
 
     assertEquals(
       TypeFactory.parameterizedClass(OneParameter.class, String.class),
-      Types.genericSuperclassOf(cons.getClass()));
+      Types.genericSuperclassOf(cons.getClass()).get());
 
     try {
       Types.from(Types::genericSuperclassOf, cons.getClass(), -1);
@@ -287,7 +287,7 @@ public class TypesFromTest {
 
   @Test
   public void nonParameterizedSuperclass() {
-    assertNull(Types.genericSuperclassOf(String.class));
+    assertNull(Types.genericSuperclassOf(String.class).orElse(null));
 
     try {
       Types.from(Types::genericSuperclassOf, String.class, -1);
@@ -308,7 +308,7 @@ public class TypesFromTest {
   public void genericSuperclassOfDoesntWorkWithInterfaces() {
     IOneParameter<String> cons = new IOneParameter<String>() { /**/ };
 
-    assertNull(Types.genericSuperclassOf(cons.getClass()));
+    assertNull(Types.genericSuperclassOf(cons.getClass()).orElse(null));
 
     try {
       Types.from(Types::genericSuperclassOf, cons.getClass(), -1);
@@ -332,7 +332,7 @@ public class TypesFromTest {
 
     assertEquals(
       TypeFactory.parameterizedClass(IOneParameter.class, String.class),
-      Types.genericInterfaceOf(cons.getClass(), 0));
+      Types.genericInterfaceOf(cons.getClass(), 0).get());
 
     assertArrayEquals(
       expected,
@@ -347,7 +347,7 @@ public class TypesFromTest {
   public void genericInterfaceFailsIfNoInterfaceIsFoundAtIndex() {
     IOneParameter<String> cons = new IOneParameter<String>() { /**/ };
 
-    assertNull(Types.genericInterfaceOf(cons.getClass(), 1));
+    assertNull(Types.genericInterfaceOf(cons.getClass(), 1).orElse(null));
 
     try {
       Types.from(Types.genericInterfaceAt(1), cons.getClass(), 0);
@@ -363,29 +363,29 @@ public class TypesFromTest {
 
     assertEquals(
       TypeFactory.parameterizedClass(IOneParameter.class, String.class),
-      Types.genericInterfaceOf(cons.getClass(), 0));
+      Types.genericInterfaceOf(cons.getClass(), 0).get());
     assertEquals(
       TypeFactory.parameterizedClass(IOneParameter.class, String.class),
-      Types.genericInterfaceAt(0).genericSupertypeOf(cons.getClass()));
+      Types.genericInterfaceAt(0).genericSupertypeOf(cons.getClass()).get());
 
     assertEquals(
       TypeFactory.parameterizedClass(ITwoParameters.class, Integer.class, listOf(Double.class)),
-      Types.genericInterfaceOf(cons.getClass(), 1));
+      Types.genericInterfaceOf(cons.getClass(), 1).get());
     assertEquals(
       TypeFactory.parameterizedClass(ITwoParameters.class, Integer.class, listOf(Double.class)),
-      Types.genericInterfaceAt(1).genericSupertypeOf(cons.getClass()));
+      Types.genericInterfaceAt(1).genericSupertypeOf(cons.getClass()).get());
 
     assertEquals(
       TypeFactory.parameterizedClass(Comparable.class, String.class),
-      Types.genericInterfaceOf(String.class, 1));
+      Types.genericInterfaceOf(String.class, 1).get());
     assertEquals(
       TypeFactory.parameterizedClass(Comparable.class, String.class),
-      Types.genericInterfaceAt(1).genericSupertypeOf(String.class));
+      Types.genericInterfaceAt(1).genericSupertypeOf(String.class).get());
   }
 
   @Test
   public void nonParameterizedInterface() {
-    assertNull(Types.genericInterfaceOf(String.class, 0));
+    assertNull(Types.genericInterfaceOf(String.class, 0).orElse(null));
 
     try {
       Types.from(Types.genericInterfaceAt(0), String.class, -1);
@@ -406,11 +406,11 @@ public class TypesFromTest {
   public void invalidIndexGenericSuperinterface() {
     ClassWithMultipleInterfaces cons = new ClassWithMultipleInterfaces();
 
-    assertNull(Types.genericInterfaceOf(cons.getClass(), -1));
-    assertNull(Types.genericInterfaceAt(-1).genericSupertypeOf(cons.getClass()));
+    assertNull(Types.genericInterfaceOf(cons.getClass(), -1).orElse(null));
+    assertNull(Types.genericInterfaceAt(-1).genericSupertypeOf(cons.getClass()).orElse(null));
 
-    assertNull(Types.genericInterfaceOf(cons.getClass(), 3));
-    assertNull(Types.genericInterfaceAt(3).genericSupertypeOf(cons.getClass()));
+    assertNull(Types.genericInterfaceOf(cons.getClass(), 3).orElse(null));
+    assertNull(Types.genericInterfaceAt(3).genericSupertypeOf(cons.getClass()).orElse(null));
   }
 
   // doesn't work for length == 0, but close enough
