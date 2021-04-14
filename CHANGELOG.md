@@ -1,12 +1,11 @@
 0.7
 ---
-
+* `SupertypeSelector.genericSupertypeOf` returns an Optional instead of null.
 
 0.6
 ---
 * New general method `Types.from`, which helps support superinterfaces as well, and some assorted helper methods.
 * Fixing the Javadoc publishing workflow.
-* Assorted doc fixes.
 
 0.5
 ---

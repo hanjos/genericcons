@@ -147,7 +147,7 @@ public final class Types {
    * @see #fromSuperclass(Class, int)
    */
   public static List<? extends Type> from(SupertypeSelector selector, Class<?> baseClass, int index)
-      throws IllegalArgumentException {
+    throws IllegalArgumentException {
     if (selector == null) {
       throw new IllegalArgumentException("No selector given");
     }
@@ -161,8 +161,8 @@ public final class Types {
       return fromCons(supertype.getActualTypeArguments()[index]);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException(
-          "No type parameters in " + supertype + " at index " + index,
-          e);
+        "No type parameters in " + supertype + " at index " + index,
+        e);
     }
   }
 
@@ -178,7 +178,7 @@ public final class Types {
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
-      throws IllegalArgumentException {
+    throws IllegalArgumentException {
     return from(Types::genericSuperclassOf, baseClass, index);
   }
 
@@ -197,7 +197,7 @@ public final class Types {
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
    */
   public static List<? extends Type> fromInterface(Class<?> baseClass, int index)
-      throws IllegalArgumentException {
+    throws IllegalArgumentException {
     return Types.from(FIRST_INTERFACE_SELECTOR, baseClass, index);
   }
 
@@ -228,7 +228,7 @@ public final class Types {
 
     // end of recursion, add it and return
     if (!(type instanceof ParameterizedType)
-            || ((ParameterizedType) type).getRawType() != C.class) {
+          || ((ParameterizedType) type).getRawType() != C.class) {
       result.add(type);
       return result;
     }
@@ -258,9 +258,9 @@ public final class Types {
     Type superclass = baseClass.getGenericSuperclass();
 
     return Optional.ofNullable(
-        (superclass instanceof ParameterizedType)
-            ? (ParameterizedType) superclass
-            : null);
+      (superclass instanceof ParameterizedType)
+        ? (ParameterizedType) superclass
+        : null);
   }
 
   /**
@@ -281,9 +281,9 @@ public final class Types {
     }
 
     return Optional.ofNullable(
-        (supertypes[index] instanceof ParameterizedType)
-            ? (ParameterizedType) supertypes[index]
-            : null);
+      (supertypes[index] instanceof ParameterizedType)
+        ? (ParameterizedType) supertypes[index]
+        : null);
   }
 
   /**
@@ -301,19 +301,19 @@ public final class Types {
   }
 
   private static boolean isPrimitive(Type type) {
-    return type == boolean.class
-               || type == byte.class
-               || type == char.class
-               || type == double.class
-               || type == float.class
-               || type == int.class
-               || type == long.class
-               || type == short.class;
+    return type == boolean.class ||
+             type == byte.class ||
+             type == char.class ||
+             type == double.class ||
+             type == float.class ||
+             type == int.class ||
+             type == long.class ||
+             type == short.class;
   }
 
   private static boolean isReference(Type type) {
     return type != null &&
-               !Types.isPrimitive(type) &&
-               ((type instanceof Class) || (type instanceof ParameterizedType) || (type instanceof GenericArrayType));
+             !Types.isPrimitive(type) &&
+             ((type instanceof Class) || (type instanceof ParameterizedType) || (type instanceof GenericArrayType));
   }
 }
