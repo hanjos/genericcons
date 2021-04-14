@@ -48,7 +48,7 @@ public final class Types {
   public interface SupertypeSelector {
     /**
      * Searches the given class' inheritance tree for a specific parameterized type. Returns
-     * {@linkplain Optional#empty() Optional.empty()} if a supertype wasn't found, or if the supertype found isn't
+     * {@linkplain Optional#empty() empty} if a supertype wasn't found, or if the supertype found isn't
      * generic.
      *
      * @param baseClass whose inheritance tree to search.
@@ -152,9 +152,10 @@ public final class Types {
       throw new IllegalArgumentException("No selector given");
     }
 
-    ParameterizedType supertype =
-        selector.genericSupertypeOf(baseClass)
-            .orElseThrow(() -> new IllegalArgumentException("No generic supertype found for " + baseClass));
+    ParameterizedType supertype = selector.genericSupertypeOf(baseClass).orElse(null);
+    if (supertype == null) {
+      throw new IllegalArgumentException("No generic supertype found for " + baseClass);
+    }
 
     try {
       return fromCons(supertype.getActualTypeArguments()[index]);
@@ -258,8 +259,8 @@ public final class Types {
 
     return Optional.ofNullable(
         (superclass instanceof ParameterizedType)
-               ? (ParameterizedType) superclass
-               : null);
+            ? (ParameterizedType) superclass
+            : null);
   }
 
   /**
@@ -281,8 +282,8 @@ public final class Types {
 
     return Optional.ofNullable(
         (supertypes[index] instanceof ParameterizedType)
-               ? (ParameterizedType) supertypes[index]
-               : null);
+            ? (ParameterizedType) supertypes[index]
+            : null);
   }
 
   /**
