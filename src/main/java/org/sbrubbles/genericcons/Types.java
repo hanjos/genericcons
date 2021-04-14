@@ -136,8 +136,8 @@ public final class Types {
    * </table>
    *
    * @param selector  searches {@code baseClass}' inheritance tree for the desired generic supertype.
-   * @param baseClass the class whose generic supertype holds the type arguments.
-   * @param index     where in {@code baseClass}' supertype's type argument list is the desired type.
+   * @param baseClass the class whose generic supertype holds the desired types.
+   * @param index     where in {@code baseClass}' supertype's type argument list are the desired types.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null, if {@code selector} is null, or no type parameters were found.
    * @see #fromCons(Type)
@@ -172,7 +172,7 @@ public final class Types {
    * The same results can be obtained with {@link #from(SupertypeSelector, Class, int) from} and an
    * {@linkplain #genericSuperclassOf(Class) appropriate selector}, but this method is shorter.
    *
-   * @param baseClass the class whose generic superclass holds the type arguments.
+   * @param baseClass the class whose generic superclass holds the desired types.
    * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
@@ -191,7 +191,7 @@ public final class Types {
    * {@linkplain #genericInterfaceAt(int) appropriate selector}, but this method is shorter, especially from an
    * anonymous subclass.
    *
-   * @param baseClass the class whose generic superclass holds the type arguments.
+   * @param baseClass the class whose generic superinterface holds the desired types.
    * @param index     where in {@code baseClass}' first superinterface's type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
