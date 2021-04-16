@@ -1,6 +1,9 @@
 0.7
 ---
-* `SupertypeSelector.genericSupertypeOf` returns an Optional instead of null.
+* `Types.from` now takes `ParameterizedType`s instead of selectors and classes. This allows for other ways of getting
+  generic types.
+* `Types.generic*` methods return `Optional`s instead of `null`.
+* `Type.SupertypeSelector` no longer exists.
 
 0.6
 ---

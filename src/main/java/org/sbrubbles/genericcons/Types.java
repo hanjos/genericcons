@@ -11,18 +11,19 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A namespace for general type utilities.
+ * A namespace for type utilities.
  * <p>
- * Erasure makes it tricky to capture type data in Java.
- * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Type tokens</a> are a way around that, but
- * require that type captures be made from a subtype. This class provides methods that use this machinery to
- * extract the types and {@linkplain #fromCons(Type) decode any lists} found.
+ * Erasure makes it tricky to capture type data, although there are some ways around that, such as
+ * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">type tokens</a> and some reflection chicanery.
+ * This class provides methods that find and obtain any desired types, and {@linkplain #fromCons(Type) decode any lists}
+ * found.
  * <p>
- * The main methods are {@link #from(SupertypeSelector, Class, int) from}, which finds and gets the desired types,
- * and {@link #check(List, List) check}, which verifies if some objects are assignable to the types found. Other
- * methods provide support and ergonomics.
+ * The main methods are {@link #from(ParameterizedType, int) from}, which extracts the desired types from a given
+ * generic type, and {@link #check(List, List) check}, which verifies if objects are assignable to types. Other methods
+ * provide support and ergonomics. Particularly, the {@code generic*} family of methods is useful for obtaining generic
+ * types to feed {@code from}.
  * <p>
- * This class is not intended to be instantiated or inherited from.
+ * This class is not intended to be instantiated or inherited.
  *
  * @author Humberto Anjos
  * @see C
@@ -88,11 +89,11 @@ public final class Types {
    * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;String, List&lt;Double&gt;&gt;() { &#47;* ... *&#47; };
    *
    * // not best practice, but for a toy example, it'll do
-   * Optional&lt;ParameterizedType&gt; typeOpt = Types.genericSuperclassOf(a.getClass());
+   * Optional&lt;ParameterizedType&gt; superclass = Types.genericSuperclassOf(a.getClass());
    *
-   * System.out.println(Types.from(typeOpt.get(), 0)); // prints "[class java.lang.String]"
-   * System.out.println(Types.from(typeOpt.get(), 1)); // prints "[java.util.List&lt;java.lang.Double&gt;]"
-   * System.out.println(Types.from(typeOpt.get(), 2)); // throws an exception!
+   * System.out.println(Types.from(superclass.get(), 0)); // prints "[class java.lang.String]"
+   * System.out.println(Types.from(superclass.get(), 1)); // prints "[java.util.List&lt;java.lang.Double&gt;]"
+   * System.out.println(Types.from(superclass.get(), 2)); // throws an exception!
    * </pre>
    * <p>
    * Examples:
@@ -123,13 +124,12 @@ public final class Types {
       throw new IllegalArgumentException("No generic type given");
     }
 
-    try {
-      return fromCons(type.getActualTypeArguments()[index]);
-    } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException(
-        "No type parameters in " + type + " at index " + index,
-        e);
+    Type[] typeArguments = type.getActualTypeArguments();
+    if (index < 0 || index >= typeArguments.length) {
+      throw new IllegalArgumentException("No type parameters in " + type + " at index " + index);
     }
+
+    return fromCons(typeArguments[index]);
   }
 
   /**
@@ -142,12 +142,12 @@ public final class Types {
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
     throws IllegalArgumentException {
-    if(baseClass == null) {
+    if (baseClass == null) {
       throw new IllegalArgumentException("No base class given");
     }
 
     Optional<ParameterizedType> supertype = genericSuperclassOf(baseClass);
-    if(!supertype.isPresent()) {
+    if (!supertype.isPresent()) {
       throw new IllegalArgumentException("No generic superclass found for " + baseClass);
     }
 
@@ -165,12 +165,12 @@ public final class Types {
    */
   public static List<? extends Type> fromInterface(Class<?> baseClass, int index)
     throws IllegalArgumentException {
-    if(baseClass == null) {
+    if (baseClass == null) {
       throw new IllegalArgumentException("No base class given");
     }
 
     Optional<ParameterizedType> supertype = genericInterfaceOf(baseClass, 0);
-    if(!supertype.isPresent()) {
+    if (!supertype.isPresent()) {
       throw new IllegalArgumentException("No generic superinterface found for " + baseClass + " at index 0");
     }
 
