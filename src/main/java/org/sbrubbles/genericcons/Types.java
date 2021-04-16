@@ -113,10 +113,11 @@ public final class Types {
    * @param index where in {@code type}'s type argument list are the desired types.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code type} is null, or no type parameters were found.
-   * @see #fromCons(Type)
    * @see #genericSuperclassOf(Class)
    * @see #genericInterfaceOf(Class, int)
+   * @see #fromCons(Type)
    * @see #fromSuperclass(Class, int)
+   * @see #fromInterface(Class, int)
    */
   public static List<? extends Type> from(ParameterizedType type, int index)
     throws IllegalArgumentException {
@@ -139,6 +140,7 @@ public final class Types {
    * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
+   * @see #from(ParameterizedType, int)
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
     throws IllegalArgumentException {
@@ -162,6 +164,7 @@ public final class Types {
    * @param index     where in {@code baseClass}' first superinterface's type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
+   * @see #from(ParameterizedType, int)
    */
   public static List<? extends Type> fromInterface(Class<?> baseClass, int index)
     throws IllegalArgumentException {
@@ -242,7 +245,8 @@ public final class Types {
    *
    * @param baseClass a class.
    * @param index     which of {@code baseClass}' generic superinterfaces to return.
-   * @return the generic interface of {@code baseClass} at the given index, if there is one.
+   * @return the generic interface of {@code baseClass} at {@code index}, if there is one.
+   * @see #from(ParameterizedType, int)
    */
   public static Optional<ParameterizedType> genericInterfaceOf(Class<?> baseClass, int index) {
     if (baseClass == null) {
