@@ -1,3 +1,6 @@
+0.8
+---
+
 0.7
 ---
 * `Types.from` now takes `ParameterizedType`s instead of selectors and classes. This allows for other ways of getting

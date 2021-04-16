@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.sbrubbles</groupId>
   <artifactId>genericcons</artifactId>
-  <version>0.7</version>
+  <version>0.8-SNAPSHOT</version>
   <inceptionYear>2011</inceptionYear>
 
   <properties>
