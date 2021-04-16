@@ -28,7 +28,6 @@ import java.util.Optional;
  * @see C
  */
 public final class Types {
-
   /**
    * A {@linkplain SupertypeSelector supertype selector} for the first generic interface implemented by the given class.
    */
@@ -153,7 +152,7 @@ public final class Types {
     }
 
     Optional<ParameterizedType> supertype = selector.genericSupertypeOf(baseClass);
-    if (! supertype.isPresent()) {
+    if (!supertype.isPresent()) {
       throw new IllegalArgumentException("No generic supertype found for " + baseClass);
     }
 
@@ -182,7 +181,6 @@ public final class Types {
     return from(Types::genericSuperclassOf, baseClass, index);
   }
 
-
   /**
    * Searches {@code baseClass}' first superinterface for {@linkplain #fromCons(Type) the list of types} in
    * {@code index}.
@@ -191,7 +189,7 @@ public final class Types {
    * {@linkplain #genericInterfaceAt(int) appropriate selector}, but this method is shorter, especially from an
    * anonymous subclass.
    *
-   * @param baseClass the class whose generic superinterface holds the desired types.
+   * @param baseClass the class whose first superinterface holds the desired types.
    * @param index     where in {@code baseClass}' first superinterface's type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
@@ -227,8 +225,8 @@ public final class Types {
     List<Type> result = new ArrayList<>();
 
     // end of recursion, add it and return
-    if (!(type instanceof ParameterizedType)
-          || ((ParameterizedType) type).getRawType() != C.class) {
+    if (!(type instanceof ParameterizedType) ||
+        ((ParameterizedType) type).getRawType() != C.class) {
       result.add(type);
       return result;
     }
@@ -301,18 +299,18 @@ public final class Types {
 
   private static boolean isPrimitive(Type type) {
     return type == boolean.class ||
-             type == byte.class ||
-             type == char.class ||
-             type == double.class ||
-             type == float.class ||
-             type == int.class ||
-             type == long.class ||
-             type == short.class;
+           type == byte.class ||
+           type == char.class ||
+           type == double.class ||
+           type == float.class ||
+           type == int.class ||
+           type == long.class ||
+           type == short.class;
   }
 
   private static boolean isReference(Type type) {
     return type != null &&
-             !Types.isPrimitive(type) &&
-             ((type instanceof Class) || (type instanceof ParameterizedType) || (type instanceof GenericArrayType));
+           !Types.isPrimitive(type) &&
+           ((type instanceof Class) || (type instanceof ParameterizedType) || (type instanceof GenericArrayType));
   }
 }
