@@ -8,52 +8,28 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
- * A namespace for general type utilities.
+ * A namespace for type utilities.
  * <p>
- * Erasure makes it tricky to capture type data in Java.
- * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">Type tokens</a> are a way around that, but
- * require that type captures be made from a subtype. This class provides methods that use this machinery to
- * extract the types and {@linkplain #fromCons(Type) decode any lists} found.
+ * Erasure makes it tricky to capture type data, although there are some ways around that, such as
+ * <a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html">type tokens</a> and some reflection chicanery.
+ * This class provides methods that find and obtain any desired types, and {@linkplain #fromCons(Type) decode any lists}
+ * found.
  * <p>
- * The main methods are {@link #from(SupertypeSelector, Class, int) from}, which finds and gets the desired types,
- * and {@link #check(List, List) check}, which verifies if some objects are assignable to the types found. Other
- * methods provide support and ergonomics.
+ * The main methods are {@link #from(ParameterizedType, int) from}, which extracts the desired types from a given
+ * generic type, and {@link #check(List, List) check}, which verifies if objects are assignable to types. Other methods
+ * provide support and ergonomics. Particularly, the {@code generic*} family of methods is useful for obtaining generic
+ * types to feed {@code from}.
  * <p>
- * This class is not intended to be instantiated or inherited from.
+ * This class is not intended to be instantiated or inherited.
  *
  * @author Humberto Anjos
  * @see C
  */
 public final class Types {
-
-  /**
-   * A {@linkplain SupertypeSelector supertype selector} for the first generic interface implemented by the given class.
-   */
-  private static final SupertypeSelector FIRST_INTERFACE_SELECTOR = Types.genericInterfaceAt(0);
-
   private Types() { /* preventing instantiation */ }
-
-  /**
-   * A <a href="https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">functional interface</a>
-   * which defines how to get a specific parameterized supertype of a given class.
-   *
-   * @see #from(SupertypeSelector, Class, int)
-   * @see #genericSuperclassOf(Class)
-   * @see #genericInterfaceAt(int)
-   */
-  @FunctionalInterface
-  public interface SupertypeSelector {
-    /**
-     * Searches the given class' inheritance tree for a specific parameterized type. Returns {@code null} if no
-     * supertype was found, or if the supertype found is not generic.
-     *
-     * @param baseClass whose inheritance tree to search.
-     * @return the specific parameterized supertype desired, or {@code null} if there is none.
-     */
-    ParameterizedType genericSupertypeOf(Class<?> baseClass);
-  }
 
   /**
    * Checks if the object's runtime type is assignable to the given type.
@@ -104,99 +80,104 @@ public final class Types {
   }
 
   /**
-   * Searches {@code baseClass}' supertype, as per the given {@linkplain Types.SupertypeSelector selector}, for
-   * {@linkplain #fromCons(Type) the list of types} in {@code index}.
-   * <p>
-   * The selector is how the caller informs which supertype of {@code baseClass} to use (e.g. a parent class, one of the
-   * interfaces...). This class provides some helper methods to
-   * {@linkplain #genericSuperclassOf(Class) select} or {@linkplain #genericInterfaceAt(int) generate a selector}.
+   * Returns {@linkplain #fromCons(Type) the list of types} {@code type} holds in {@code index}.
+   * This class provides some methods to fetch parameterized types from common sources.
    * <p>
    * Usage:
    * <pre>
    * // note that a holds an anonymous subclass of A, not A itself!
    * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;String, List&lt;Double&gt;&gt;() { &#47;* ... *&#47; };
    *
-   * System.out.println(Types.from(Types::genericSuperclassOf, a.getClass(), 0)); // prints "[class java.lang.String]"
-   * System.out.println(Types.from(Types::genericSuperclassOf, a.getClass(), 1)); // prints "[java.util.List&lt;java.lang.Double&gt;]"
-   * System.out.println(Types.from(Types::genericSuperclassOf, a.getClass(), 2)); // throws an exception!
+   * // not best practice, but for a toy example, it'll do
+   * Optional&lt;ParameterizedType&gt; superclass = Types.genericSuperclassOf(a.getClass());
+   *
+   * System.out.println(Types.from(superclass.get(), 0)); // prints "[class java.lang.String]"
+   * System.out.println(Types.from(superclass.get(), 1)); // prints "[java.util.List&lt;java.lang.Double&gt;]"
+   * System.out.println(Types.from(superclass.get(), 2)); // throws an exception!
    * </pre>
    * <p>
    * Examples:
    * <table>
-   *  <tr><th>Generic supertype</th><th align="center">Index</th><th>Output</th></tr>
+   *  <tr><th>Type</th><th align="center">Index</th><th>Output</th></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td align="center">0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, Integer&gt;</td><td align="center">1</td><td>[Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Number, Integer&gt;&gt;</td><td align="center">1</td><td>[Number, Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">1</td><td>[Object, Number, Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">2</td><td>error: IllegalArgumentException!</td></tr>
-   *  <tr><td>none</td><td align="center">0</td><td>error: IllegalArgumentException!</td></tr>
+   *  <tr><td>Object</td><td align="center">doesn't matter</td><td>error: IllegalArgumentException!</td></tr>
+   *  <tr><td>none</td><td align="center">doesn't matter</td><td>error: IllegalArgumentException!</td></tr>
    * </table>
    *
-   * @param selector  searches {@code baseClass}' inheritance tree for the desired generic supertype.
-   * @param baseClass the class whose generic supertype holds the type arguments.
-   * @param index     where in {@code baseClass}' supertype's type argument list is the desired type.
+   * @param type  a generic type.
+   * @param index where in {@code type}'s type argument list are the desired types.
    * @return a list of the types found in {@code index}.
-   * @throws IllegalArgumentException if {@code baseClass} is null, if {@code selector} is null, or no type parameters were found.
-   * @see #fromCons(Type)
-   * @see Types.SupertypeSelector
+   * @throws IllegalArgumentException if {@code type} is null, or no type parameters were found.
    * @see #genericSuperclassOf(Class)
-   * @see #genericInterfaceAt(int)
+   * @see #genericInterfaceOf(Class, int)
+   * @see #fromCons(Type)
    * @see #fromSuperclass(Class, int)
+   * @see #fromInterface(Class, int)
    */
-  public static List<? extends Type> from(SupertypeSelector selector, Class<?> baseClass, int index)
+  public static List<? extends Type> from(ParameterizedType type, int index)
     throws IllegalArgumentException {
-    if(selector == null) {
-      throw new IllegalArgumentException("No selector given");
+    if (type == null) {
+      throw new IllegalArgumentException("No generic type given");
     }
 
-    ParameterizedType supertype = selector.genericSupertypeOf(baseClass);
-    if(supertype == null) {
-      throw new IllegalArgumentException("No generic supertype found for " + baseClass);
+    Type[] typeArguments = type.getActualTypeArguments();
+    if (index < 0 || index >= typeArguments.length) {
+      throw new IllegalArgumentException("No type parameters in " + type + " at index " + index);
     }
 
-    try {
-      return fromCons(supertype.getActualTypeArguments()[index]);
-    } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException(
-        "No type parameters in " + supertype + " at index " + index,
-        e);
-    }
+    return fromCons(typeArguments[index]);
   }
 
   /**
    * Searches {@code baseClass}' superclass for {@linkplain #fromCons(Type) the list of types} in {@code index}.
-   * <p>
-   * The same results can be obtained with {@link #from(SupertypeSelector, Class, int) from} and an
-   * {@linkplain #genericSuperclassOf(Class) appropriate selector}, but this method is shorter.
    *
-   * @param baseClass the class whose generic superclass holds the type arguments.
+   * @param baseClass the class whose generic superclass holds the desired types.
    * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
+   * @see #from(ParameterizedType, int)
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
     throws IllegalArgumentException {
-    return from(Types::genericSuperclassOf, baseClass, index);
-  }
+    if (baseClass == null) {
+      throw new IllegalArgumentException("No base class given");
+    }
 
+    Optional<ParameterizedType> supertype = genericSuperclassOf(baseClass);
+    if (!supertype.isPresent()) {
+      throw new IllegalArgumentException("No generic superclass found for " + baseClass);
+    }
+
+    return from(supertype.get(), index);
+  }
 
   /**
    * Searches {@code baseClass}' first superinterface for {@linkplain #fromCons(Type) the list of types} in
    * {@code index}.
-   * <p>
-   * The same results can be obtained with {@link #from(SupertypeSelector, Class, int) from} and an
-   * {@linkplain #genericInterfaceAt(int) appropriate selector}, but this method is shorter, especially from an
-   * anonymous subclass.
    *
-   * @param baseClass the class whose generic superclass holds the type arguments.
+   * @param baseClass the class whose first superinterface holds the desired types.
    * @param index     where in {@code baseClass}' first superinterface's type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
+   * @see #from(ParameterizedType, int)
    */
   public static List<? extends Type> fromInterface(Class<?> baseClass, int index)
     throws IllegalArgumentException {
-    return Types.from(FIRST_INTERFACE_SELECTOR, baseClass, index);
+    if (baseClass == null) {
+      throw new IllegalArgumentException("No base class given");
+    }
+
+    Optional<ParameterizedType> supertype = genericInterfaceOf(baseClass, 0);
+    if (!supertype.isPresent()) {
+      throw new IllegalArgumentException("No generic superinterface found for " + baseClass + " at index 0");
+    }
+
+    return from(supertype.get(), index);
   }
 
   /**
@@ -225,8 +206,8 @@ public final class Types {
     List<Type> result = new ArrayList<>();
 
     // end of recursion, add it and return
-    if (!(type instanceof ParameterizedType)
-      || ((ParameterizedType) type).getRawType() != C.class) {
+    if (!(type instanceof ParameterizedType) ||
+        ((ParameterizedType) type).getRawType() != C.class) {
       result.add(type);
       return result;
     }
@@ -240,78 +221,63 @@ public final class Types {
   }
 
   /**
-   * Returns the generic superclass of {@code baseClass}, or {@code null} if there is none. Can be used as a
-   * {@linkplain Types.SupertypeSelector supertype selector}.
-   * 
+   * Returns the generic superclass of {@code baseClass}, if there is one.
+   *
    * @param baseClass a class.
-   * @return the generic superclass of {@code baseClass}, or {@code null} if there is none.
-   * @see Types.SupertypeSelector
-   * @see #from(SupertypeSelector, Class, int)
+   * @return the generic superclass of {@code baseClass}, if there is one.
+   * @see #from(ParameterizedType, int)
    */
-  public static ParameterizedType genericSuperclassOf(Class<?> baseClass) {
-    if(baseClass == null) {
-      return null;
+  public static Optional<ParameterizedType> genericSuperclassOf(Class<?> baseClass) {
+    if (baseClass == null) {
+      return Optional.empty();
     }
 
     Type superclass = baseClass.getGenericSuperclass();
 
-    return (superclass instanceof ParameterizedType)
+    return Optional.ofNullable(
+      (superclass instanceof ParameterizedType)
         ? (ParameterizedType) superclass
-        : null;
+        : null);
   }
 
   /**
-   * Returns the generic interface of {@code baseClass} at the given index, or {@code null} if there is none.
+   * Returns the generic interface of {@code baseClass} at {@code index}, if there is one.
    *
    * @param baseClass a class.
-   * @param index which superinterface to return.
-   * @return the generic interface of {@code baseClass} at the given index, or {@code null} if none is found.
+   * @param index     which of {@code baseClass}' generic superinterfaces to return.
+   * @return the generic interface of {@code baseClass} at {@code index}, if there is one.
+   * @see #from(ParameterizedType, int)
    */
-  public static ParameterizedType genericInterfaceOf(Class<?> baseClass, int index) {
-    if(baseClass == null) {
-      return null;
+  public static Optional<ParameterizedType> genericInterfaceOf(Class<?> baseClass, int index) {
+    if (baseClass == null) {
+      return Optional.empty();
     }
 
     Type[] supertypes = baseClass.getGenericInterfaces();
-    if(index < 0 || index >= supertypes.length) {
-      return null;
+    if (index < 0 || index >= supertypes.length) {
+      return Optional.empty();
     }
 
-    return (supertypes[index] instanceof ParameterizedType)
-      ? (ParameterizedType) supertypes[index]
-      : null;
-  }
-
-  /**
-   * Returns a {@linkplain Types.SupertypeSelector supertype selector} which fetches the generic superinterface of a
-   * given class at the given index.
-   *
-   * @param index which superinterface to return.
-   * @return a selector which returns the generic superinterface of a given class at {@code index}, or {@code null} if
-   *         none is found.
-   * @see Types.SupertypeSelector
-   * @see #from(SupertypeSelector, Class, int)
-   */
-  public static SupertypeSelector genericInterfaceAt(final int index) {
-    return baseClass -> {
-      return genericInterfaceOf(baseClass, index);
-    };
+    return Optional.ofNullable(
+      (supertypes[index] instanceof ParameterizedType)
+        ? (ParameterizedType) supertypes[index]
+        : null);
   }
 
   private static boolean isPrimitive(Type type) {
-    return type == boolean.class
-      || type == byte.class
-      || type == char.class
-      || type == double.class
-      || type == float.class
-      || type == int.class
-      || type == long.class
-      || type == short.class;
+    return type == boolean.class ||
+           type == byte.class ||
+           type == char.class ||
+           type == double.class ||
+           type == float.class ||
+           type == int.class ||
+           type == long.class ||
+           type == short.class;
   }
 
   private static boolean isReference(Type type) {
     return type != null &&
-      !Types.isPrimitive(type) &&
-      ((type instanceof Class) || (type instanceof ParameterizedType) || (type instanceof GenericArrayType));
+           !Types.isPrimitive(type) &&
+           ((type instanceof Class) || (type instanceof ParameterizedType) || (type instanceof GenericArrayType));
   }
 }

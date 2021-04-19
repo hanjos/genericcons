@@ -1,4 +1,4 @@
-![CI](https://github.com/hanjos/genericcons/workflows/CI/badge.svg) [![Javadocs](https://img.shields.io/static/v1?label=Javadocs&message=0.6&color=informational&logo=read-the-docs)][v0.6] [![Maven package](https://img.shields.io/static/v1?label=Maven&message=0.6&color=orange&logo=apache-maven)](https://github.com/hanjos/genericcons/packages/611536)
+![CI](https://github.com/hanjos/genericcons/workflows/CI/badge.svg) [![Javadocs](https://img.shields.io/static/v1?label=Javadocs&message=0.7&color=informational&logo=read-the-docs)][vLatest] [![Maven package](https://img.shields.io/static/v1?label=Maven&message=0.7&color=orange&logo=apache-maven)](https://github.com/hanjos/genericcons/packages/611536)
 
 Who said Java generics can't accept an open-ended number of type variables? Just write something like
 
@@ -35,15 +35,15 @@ It occurred to me one day, and I haven't contributed to Java's grand tradition o
 Basically, [Maven][apache-maven] and [GitHub Packages][github-packages]:
 
 1. Add https://maven.pkg.github.com/hanjos/genericcons as a repo in your `pom.xml`;
-1. Setup a [personal access token][pat] in your `settings.xml` with package reading rights;
+1. Set up a [personal access token][pat] in your `settings.xml` with package reading rights;
 1. Add the dependency in your `pom.xml`. The versions available can be seen [here][packages].
-1. And you're good to go!
+1. You're good to go!
 
 Of course, one can always download the code and `mvn install`...
 
 [1]: http://gafter.blogspot.com/2006/12/super-type-tokens.html
 [2]: http://en.wikipedia.org/wiki/Cons
-[v0.6]: https://sbrubbles.org/genericcons/docs/0.6/apidocs/index.html
+[vLatest]: https://sbrubbles.org/genericcons/docs/0.7/apidocs/index.html
 [apache-maven]: https://maven.apache.org/
 [packages]: https://github.com/hanjos/genericcons/packages
 [pat]: https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages#authenticating-with-a-personal-access-token
