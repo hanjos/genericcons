@@ -133,7 +133,7 @@ public class TypesFromTest {
       Types.fromSuperclass(cons.getClass(), 0));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = ParameterizedTypeNotFoundException.class)
   public void grandsonOfParameterizedType() {
     OneParameter<String> cons = new SonOfOneParameter() { /**/};
 
@@ -144,22 +144,22 @@ public class TypesFromTest {
   public void nullType() {
     try {
       Types.from(null, 0);
-      fail("Types.from should've thrown IllegalArgumentException");
-    } catch (IllegalArgumentException e) {
+      fail("Types.from should've thrown NullPointerException");
+    } catch (NullPointerException e) {
       /* if we're here, we're good */
     }
 
     try {
       Types.fromSuperclass(null, 0);
-      fail("Types.fromSuperclass should've thrown IllegalArgumentException");
-    } catch (IllegalArgumentException e) {
+      fail("Types.fromSuperclass should've thrown NullPointerException");
+    } catch (NullPointerException e) {
       /* if we're here, we're good */
     }
 
     try {
       Types.fromInterface(null, 0);
-      fail("Types.fromInterface should've thrown IllegalArgumentException");
-    } catch (IllegalArgumentException e) {
+      fail("Types.fromInterface should've thrown NullPointerException");
+    } catch (NullPointerException e) {
       /* if we're here, we're good */
     }
   }
@@ -170,20 +170,20 @@ public class TypesFromTest {
 
     try {
       Types.from(Types.genericSuperclassOf(cons.getClass()).get(), -1);
-      fail("Types.from with genericSuperclassOf should've thrown IllegalArgumentException");
-    } catch (IllegalArgumentException e) {
+      fail("Types.from with genericSuperclassOf should've thrown IndexOutOfBoundsException");
+    } catch (IndexOutOfBoundsException e) {
       /* if we're here, we're good */
     }
 
     try {
       Types.fromSuperclass(cons.getClass(), -1);
-      fail("Types.fromSuperclass should've thrown IllegalArgumentException");
-    } catch (IllegalArgumentException e) {
+      fail("Types.fromSuperclass should've thrown IndexOutOfBoundsException");
+    } catch (IndexOutOfBoundsException e) {
       /* if we're here, we're good */
     }
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = ParameterizedTypeNotFoundException.class)
   public void fromSuperclassDoesntWorkWithInterfaces() {
     IOneParameter<String> cons = new IOneParameter<String>() { /**/};
     Types.fromSuperclass(cons.getClass(), 0);
@@ -222,8 +222,8 @@ public class TypesFromTest {
   public void nonParameterizedSupertypes() {
     try {
       Types.fromSuperclass(String.class, 0);
-      fail("Types.fromSuperclass should've thrown IllegalArgumentException");
-    } catch (IllegalArgumentException e) {
+      fail("Types.fromSuperclass should've thrown ParameterizedTypeNotFoundException");
+    } catch (ParameterizedTypeNotFoundException e) {
       /* if we're here, we're good */
     }
 
@@ -231,8 +231,8 @@ public class TypesFromTest {
       // XXX the first interface is Serializable, which is not generic, so this call should fail.
       // Comparable<String> is the second interface
       Types.fromInterface(String.class, 0);
-      fail("Types.fromInterface should've thrown IllegalArgumentException");
-    } catch (IllegalArgumentException e) {
+      fail("Types.fromInterface should've thrown ParameterizedTypeNotFoundException");
+    } catch (ParameterizedTypeNotFoundException e) {
       /* if we're here, we're good */
     }
   }

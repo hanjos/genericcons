@@ -88,9 +88,9 @@ public final class Types {
    * // note that a holds an anonymous subclass of A, not A itself!
    * A&lt;String, List&lt;Double&gt;&gt; a = new A&lt;String, List&lt;Double&gt;&gt;() { &#47;* ... *&#47; };
    *
-   * // not best practice, but for a toy example, it'll do
    * Optional&lt;ParameterizedType&gt; superclass = Types.genericSuperclassOf(a.getClass());
    *
+   * // not best practice, but here it'll do
    * System.out.println(Types.from(superclass.get(), 0)); // prints "[class java.lang.String]"
    * System.out.println(Types.from(superclass.get(), 1)); // prints "[java.util.List&lt;java.lang.Double&gt;]"
    * System.out.println(Types.from(superclass.get(), 2)); // throws an exception!
@@ -112,7 +112,8 @@ public final class Types {
    * @param type  a generic type.
    * @param index where in {@code type}'s type argument list are the desired types.
    * @return a list of the types found in {@code index}.
-   * @throws IllegalArgumentException if {@code type} is null, or no type parameters were found.
+   * @throws NullPointerException if {@code type} is null.
+   * @throws IndexOutOfBoundsException if no type parameters were found at {@code index}.
    * @see #genericSuperclassOf(Class)
    * @see #genericInterfaceOf(Class, int)
    * @see #fromCons(Type)
@@ -120,14 +121,14 @@ public final class Types {
    * @see #fromInterface(Class, int)
    */
   public static List<? extends Type> from(ParameterizedType type, int index)
-    throws IllegalArgumentException {
+    throws NullPointerException, IndexOutOfBoundsException {
     if (type == null) {
-      throw new IllegalArgumentException("No generic type given");
+      throw new NullPointerException("No generic type given");
     }
 
     Type[] typeArguments = type.getActualTypeArguments();
     if (index < 0 || index >= typeArguments.length) {
-      throw new IllegalArgumentException("No type parameters in " + type + " at index " + index);
+      throw new IndexOutOfBoundsException("No type parameters in " + type + " at index " + index);
     }
 
     return fromCons(typeArguments[index]);
@@ -139,18 +140,21 @@ public final class Types {
    * @param baseClass the class whose generic superclass holds the desired types.
    * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
    * @return a list of the types found in {@code index}.
-   * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
+   * @throws NullPointerException if {@code baseClass} is null.
+   * @throws ParameterizedTypeNotFoundException if {@code baseClass}' superclass isn't generic.
+   * @throws IndexOutOfBoundsException if no type parameters were found in {@code baseClass}' superclass at
+   *                                   {@code index}.
    * @see #from(ParameterizedType, int)
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
-    throws IllegalArgumentException {
+    throws NullPointerException, ParameterizedTypeNotFoundException, IndexOutOfBoundsException {
     if (baseClass == null) {
-      throw new IllegalArgumentException("No base class given");
+      throw new NullPointerException("No base class given");
     }
 
     Optional<ParameterizedType> supertype = genericSuperclassOf(baseClass);
     if (!supertype.isPresent()) {
-      throw new IllegalArgumentException("No generic superclass found for " + baseClass);
+      throw new ParameterizedTypeNotFoundException("No generic superclass found for " + baseClass);
     }
 
     return from(supertype.get(), index);
@@ -163,18 +167,21 @@ public final class Types {
    * @param baseClass the class whose first superinterface holds the desired types.
    * @param index     where in {@code baseClass}' first superinterface's type argument list is the desired type.
    * @return a list of the types found in {@code index}.
-   * @throws IllegalArgumentException if {@code baseClass} is null or no type parameters were found.
+   * @throws NullPointerException if {@code baseClass} is null.
+   * @throws ParameterizedTypeNotFoundException if {@code baseClass}' first superinterface isn't generic.
+   * @throws IndexOutOfBoundsException if no type parameters were found in {@code baseClass}' first superinterface at
+   *                                   {@code index}.
    * @see #from(ParameterizedType, int)
    */
   public static List<? extends Type> fromInterface(Class<?> baseClass, int index)
-    throws IllegalArgumentException {
+    throws NullPointerException, ParameterizedTypeNotFoundException, IndexOutOfBoundsException {
     if (baseClass == null) {
-      throw new IllegalArgumentException("No base class given");
+      throw new NullPointerException("No base class given");
     }
 
     Optional<ParameterizedType> supertype = genericInterfaceOf(baseClass, 0);
     if (!supertype.isPresent()) {
-      throw new IllegalArgumentException("No generic superinterface found for " + baseClass + " at index 0");
+      throw new ParameterizedTypeNotFoundException("No generic superinterface in " + baseClass + " at index 0");
     }
 
     return from(supertype.get(), index);

@@ -1,10 +1,11 @@
 0.8
 ---
+* `Types.from*` methods now throw specific exceptions instead of catch-all `IllegalArgumentException`s.
+
 
 0.7
 ---
-* `Types.from` now takes `ParameterizedType`s instead of selectors and classes. This allows for other ways of getting
-  generic types.
+* `Types.from` now takes `ParameterizedType`s instead of selectors and classes. This allows for other ways of getting generic types.
 * `Types.generic*` methods return `Optional`s instead of `null`.
 * `Type.SupertypeSelector` no longer exists.
 
