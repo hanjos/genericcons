@@ -932,3 +932,9 @@ pre, code, tt {
 a:link, a:visited {
   color:#5486A6; /* lighten(nav color, 10%) */
 }
+
+/* splits parameters and exceptions in separate lines */
+.methodSignature {
+  white-space: revert;
+  font-size: 1rem;
+}
