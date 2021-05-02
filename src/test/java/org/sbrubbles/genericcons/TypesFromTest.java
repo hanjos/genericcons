@@ -9,6 +9,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 import static org.sbrubbles.genericcons.fixtures.Utils.listOf;
@@ -133,7 +134,7 @@ public class TypesFromTest {
       Types.fromSuperclass(cons.getClass(), 0));
   }
 
-  @Test(expected = ParameterizedTypeNotFoundException.class)
+  @Test(expected = NoSuchElementException.class)
   public void grandsonOfParameterizedType() {
     OneParameter<String> cons = new SonOfOneParameter() { /**/};
 
@@ -183,7 +184,7 @@ public class TypesFromTest {
     }
   }
 
-  @Test(expected = ParameterizedTypeNotFoundException.class)
+  @Test(expected = NoSuchElementException.class)
   public void fromSuperclassDoesntWorkWithInterfaces() {
     IOneParameter<String> cons = new IOneParameter<String>() { /**/};
     Types.fromSuperclass(cons.getClass(), 0);
@@ -222,8 +223,8 @@ public class TypesFromTest {
   public void nonParameterizedSupertypes() {
     try {
       Types.fromSuperclass(String.class, 0);
-      fail("Types.fromSuperclass should've thrown ParameterizedTypeNotFoundException");
-    } catch (ParameterizedTypeNotFoundException e) {
+      fail("Types.fromSuperclass should've thrown NoSuchElementException");
+    } catch (NoSuchElementException e) {
       /* if we're here, we're good */
     }
 
@@ -231,8 +232,8 @@ public class TypesFromTest {
       // XXX the first interface is Serializable, which is not generic, so this call should fail.
       // Comparable<String> is the second interface
       Types.fromInterface(String.class, 0);
-      fail("Types.fromInterface should've thrown ParameterizedTypeNotFoundException");
-    } catch (ParameterizedTypeNotFoundException e) {
+      fail("Types.fromInterface should've thrown NoSuchElementException");
+    } catch (NoSuchElementException e) {
       /* if we're here, we're good */
     }
   }

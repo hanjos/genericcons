@@ -5,10 +5,7 @@ import com.coekie.gentyref.GenericTypeReflector;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * A namespace for type utilities.
@@ -141,20 +138,20 @@ public final class Types {
    * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws NullPointerException if {@code baseClass} is null.
-   * @throws ParameterizedTypeNotFoundException if {@code baseClass}' superclass isn't generic.
+   * @throws NoSuchElementException if {@code baseClass}' superclass isn't generic.
    * @throws IndexOutOfBoundsException if no type parameters were found in {@code baseClass}' superclass at
    *                                   {@code index}.
    * @see #from(ParameterizedType, int)
    */
   public static List<? extends Type> fromSuperclass(Class<?> baseClass, int index)
-    throws NullPointerException, ParameterizedTypeNotFoundException, IndexOutOfBoundsException {
+    throws NullPointerException, NoSuchElementException, IndexOutOfBoundsException {
     if (baseClass == null) {
       throw new NullPointerException("No base class given");
     }
 
     Optional<ParameterizedType> supertype = genericSuperclassOf(baseClass);
     if (!supertype.isPresent()) {
-      throw new ParameterizedTypeNotFoundException("No generic superclass found for " + baseClass);
+      throw new NoSuchElementException("No generic superclass found for " + baseClass);
     }
 
     return from(supertype.get(), index);
@@ -168,20 +165,21 @@ public final class Types {
    * @param index     where in {@code baseClass}' first superinterface's type argument list is the desired type.
    * @return a list of the types found in {@code index}.
    * @throws NullPointerException if {@code baseClass} is null.
-   * @throws ParameterizedTypeNotFoundException if {@code baseClass}' first superinterface isn't generic.
+   * @throws NoSuchElementException if {@code baseClass} doesn't have a superinterface, or it's first superinterface
+   *                                isn't generic.
    * @throws IndexOutOfBoundsException if no type parameters were found in {@code baseClass}' first superinterface at
    *                                   {@code index}.
    * @see #from(ParameterizedType, int)
    */
   public static List<? extends Type> fromInterface(Class<?> baseClass, int index)
-    throws NullPointerException, ParameterizedTypeNotFoundException, IndexOutOfBoundsException {
+    throws NullPointerException, NoSuchElementException, IndexOutOfBoundsException {
     if (baseClass == null) {
       throw new NullPointerException("No base class given");
     }
 
     Optional<ParameterizedType> supertype = genericInterfaceOf(baseClass, 0);
     if (!supertype.isPresent()) {
-      throw new ParameterizedTypeNotFoundException("No generic superinterface in " + baseClass + " at index 0");
+      throw new NoSuchElementException("No generic superinterface in " + baseClass + " at index 0");
     }
 
     return from(supertype.get(), index);
