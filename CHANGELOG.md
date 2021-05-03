@@ -1,7 +1,7 @@
 0.8
 ---
 * `Types.from*` methods now throw specific exceptions instead of catch-all `IllegalArgumentException`s.
-
+* Some cleanup.
 
 0.7
 ---

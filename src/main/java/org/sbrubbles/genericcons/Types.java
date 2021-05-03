@@ -2,7 +2,6 @@ package org.sbrubbles.genericcons;
 
 import com.coekie.gentyref.GenericTypeReflector;
 
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -43,8 +42,8 @@ public final class Types {
       return false;
     }
 
-    if (object == null) { // reference types match with null
-      return Types.isReference(type);
+    if (object == null) { // non-primitive types match with null
+      return !Types.isPrimitive(type);
     }
 
     return GenericTypeReflector.isSuperType(type, object.getClass());
@@ -109,7 +108,7 @@ public final class Types {
    * @param type  a generic type.
    * @param index where in {@code type}'s type argument list are the desired types.
    * @return a list of the types found in {@code index}.
-   * @throws NullPointerException if {@code type} is null.
+   * @throws NullPointerException      if {@code type} is null.
    * @throws IndexOutOfBoundsException if no type parameters were found at {@code index}.
    * @see #genericSuperclassOf(Class)
    * @see #genericInterfaceOf(Class, int)
@@ -137,8 +136,8 @@ public final class Types {
    * @param baseClass the class whose generic superclass holds the desired types.
    * @param index     where in {@code baseClass}' superclass' type argument list is the desired type.
    * @return a list of the types found in {@code index}.
-   * @throws NullPointerException if {@code baseClass} is null.
-   * @throws NoSuchElementException if {@code baseClass}' superclass isn't generic.
+   * @throws NullPointerException      if {@code baseClass} is null.
+   * @throws NoSuchElementException    if {@code baseClass}' superclass isn't generic.
    * @throws IndexOutOfBoundsException if no type parameters were found in {@code baseClass}' superclass at
    *                                   {@code index}.
    * @see #from(ParameterizedType, int)
@@ -164,9 +163,9 @@ public final class Types {
    * @param baseClass the class whose first superinterface holds the desired types.
    * @param index     where in {@code baseClass}' first superinterface's type argument list is the desired type.
    * @return a list of the types found in {@code index}.
-   * @throws NullPointerException if {@code baseClass} is null.
-   * @throws NoSuchElementException if {@code baseClass} doesn't have a superinterface, or it's first superinterface
-   *                                isn't generic.
+   * @throws NullPointerException      if {@code baseClass} is null.
+   * @throws NoSuchElementException    if {@code baseClass} doesn't have a superinterface, or it's first superinterface
+   *                                   isn't generic.
    * @throws IndexOutOfBoundsException if no type parameters were found in {@code baseClass}' first superinterface at
    *                                   {@code index}.
    * @see #from(ParameterizedType, int)
@@ -212,7 +211,7 @@ public final class Types {
 
     // end of recursion, add it and return
     if (!(type instanceof ParameterizedType) ||
-        ((ParameterizedType) type).getRawType() != C.class) {
+      ((ParameterizedType) type).getRawType() != C.class) {
       result.add(type);
       return result;
     }
@@ -271,18 +270,12 @@ public final class Types {
 
   private static boolean isPrimitive(Type type) {
     return type == boolean.class ||
-           type == byte.class ||
-           type == char.class ||
-           type == double.class ||
-           type == float.class ||
-           type == int.class ||
-           type == long.class ||
-           type == short.class;
-  }
-
-  private static boolean isReference(Type type) {
-    return type != null &&
-           !Types.isPrimitive(type) &&
-           ((type instanceof Class) || (type instanceof ParameterizedType) || (type instanceof GenericArrayType));
+      type == byte.class ||
+      type == char.class ||
+      type == double.class ||
+      type == float.class ||
+      type == int.class ||
+      type == long.class ||
+      type == short.class;
   }
 }
