@@ -100,9 +100,8 @@ public final class Types {
    *  <tr><td>Map&lt;String, C&lt;Number, Integer&gt;&gt;</td><td align="center">1</td><td>[Number, Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">1</td><td>[Object, Number, Integer]</td></tr>
-   *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">2</td><td>error: IllegalArgumentException!</td></tr>
-   *  <tr><td>Object</td><td align="center">doesn't matter</td><td>error: IllegalArgumentException!</td></tr>
-   *  <tr><td>none</td><td align="center">doesn't matter</td><td>error: IllegalArgumentException!</td></tr>
+   *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">2</td><td>error: IndexOutOfBoundsException!</td></tr>
+   *  <tr><td>none</td><td align="center">doesn't matter</td><td>error: NullPointerException!</td></tr>
    * </table>
    *
    * @param type  a generic type.
