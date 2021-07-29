@@ -1,3 +1,7 @@
+0.9
+---
+* New method `Types.cons` as a dual to `Types.fromCons`.
+
 0.8
 ---
 * `Types.from*` methods now throw specific exceptions instead of catch-all `IllegalArgumentException`s.
