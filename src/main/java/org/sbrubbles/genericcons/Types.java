@@ -270,25 +270,15 @@ public final class Types {
   }
 
   /**
-   * Encodes the given list of types as a {@linkplain C cons}, as accepted by {@link #fromCons(Type)}:
-   *
-   * <ul>
-   *   <li>A {@code null} or empty list yields {@code null};</li>
-   *   <li>A single type is returned as is;</li>
-   *   <li>Two or more types are encoded as a {@link C C} type.</li>
-   * </ul>
-   *
-   * Any {@code C} types within the given list will be broken down and flattened into a larger list.
-   *
-   * This method is equivalent to calling {@link Types#cons(List)}, with a slightly more convenient syntax.
+   * Encodes the given list of types as a {@linkplain C cons}, as accepted by {@link #fromCons(Type)}. This method is
+   * equivalent to calling {@link Types#cons(List)}, with a slightly more convenient syntax.
    *
    * @param types a list of types to encode.
    * @return a type encoding the given list, as extractable by {@link #fromCons(Type)}.
    * @throws NullPointerException if {@code types} is not empty and at least one of the given types is null.
-   * @see #fromCons(Type)
    * @see #cons(List)
    */
-  public static Type cons(Type... types) {
+  public static Type cons(Type... types) throws NullPointerException {
     if (types == null || types.length == 0) {
       return null;
     }
@@ -297,22 +287,32 @@ public final class Types {
   }
 
   /**
-   * Encodes the given list of types as a {@linkplain C cons}, as accepted by {@link #fromCons(Type)}:
+   * Encodes the given list of types as a {@linkplain C cons}, as accepted by {@link #fromCons(Type)}.
    *
+   * That means:
    * <ul>
    *   <li>A {@code null} or empty list yields {@code null};</li>
    *   <li>A single type is returned as is;</li>
    *   <li>Two or more types are encoded as a {@link C C} type.</li>
    * </ul>
-   *
+   * <p>
    * Any {@code C} types within the given list will be broken down and flattened into a larger list.
+   * <p>
+   * This method and {@link #fromCons(Type)} are duals: that means that
+   *
+   * <pre>
+   *   List&lt;? extends Type&gt; types = // ...
+   *   assert Object.equals(types, Types.fromCons(Types.cons(types)));
+   * </pre>
+   *
+   * holds for any list of {@link Type}s not containing {@code C} types, which will be flattened in this method.
    *
    * @param types a list of types to encode.
    * @return a type encoding the given list, as extractable by {@link #fromCons(Type)}.
    * @throws NullPointerException if {@code types} is not empty and at least one of the given types is null.
    * @see #fromCons(Type)
    */
-  public static Type cons(List<? extends Type> types) {
+  public static Type cons(List<? extends Type> types) throws NullPointerException {
     if(types == null || types.isEmpty()) {
       return null;
     }
