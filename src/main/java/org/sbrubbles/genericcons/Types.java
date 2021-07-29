@@ -1,6 +1,7 @@
 package org.sbrubbles.genericcons;
 
 import com.coekie.gentyref.GenericTypeReflector;
+import com.coekie.gentyref.TypeFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -265,6 +266,45 @@ public final class Types {
       (supertypes[index] instanceof ParameterizedType)
         ? (ParameterizedType) supertypes[index]
         : null);
+  }
+
+  /**
+   * Encodes the given list of types as a {@linkplain C cons}, as accepted by {@link #fromCons(Type)}:
+   *
+   * <ul>
+   *   <li>A {@code null} or empty list yields {@code null};</li>
+   *   <li>A single type is returned as is;</li>
+   *   <li>Two or more types are encoded as a {@link C C} type.</li>
+   * </ul>
+   *
+   * @param types a list of types to encode.
+   * @return a type encoding the given list, as extractable by {@link #fromCons(Type)}.
+   * @throws NullPointerException if {@code types} is not empty and at least one of the given types is null.
+   * @see #fromCons(Type)
+   */
+  public static Type cons(Type... types) {
+    if (types == null || types.length == 0) {
+      return null;
+    }
+
+    if(types.length == 1) {
+      return types[0];
+    }
+
+    if(types[types.length - 2] == null || types[types.length - 1] == null) {
+      throw new NullPointerException("Null types can't be encoded!");
+    }
+
+    Type cons = TypeFactory.parameterizedClass(C.class, types[types.length - 2], types[types.length - 1]);
+    for(int i = types.length - 3; i >= 0; i--) {
+      if(types[i] == null) {
+        throw new NullPointerException("Null types can't be encoded!");
+      }
+
+      cons = TypeFactory.parameterizedClass(C.class, types[i], cons);
+    }
+
+    return cons;
   }
 
   private static boolean isPrimitive(Type type) {
