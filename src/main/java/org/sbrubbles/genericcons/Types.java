@@ -202,6 +202,7 @@ public final class Types {
    *
    * @param type a type.
    * @return the list of the types represented by the given type.
+   * @see #cons(List) 
    */
   public static List<? extends Type> fromCons(Type type) {
     if (type == null) {
@@ -308,7 +309,8 @@ public final class Types {
    * holds for any list of {@link Type}s not containing {@code C} types, which will be flattened in this method.
    *
    * @param types a list of types to encode.
-   * @return a type encoding the given list, as extractable by {@link #fromCons(Type)}.
+   * @return a type encoding the given list, as extractable by {@link #fromCons(Type)}, or {@code null} if the given
+   *         list if {@code null} or empty.
    * @throws NullPointerException if {@code types} is not empty and at least one of the given types is null.
    * @see #fromCons(Type)
    */
