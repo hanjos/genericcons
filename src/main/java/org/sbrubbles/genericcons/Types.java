@@ -103,7 +103,7 @@ public final class Types {
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">0</td><td>[String]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">1</td><td>[Object, Number, Integer]</td></tr>
    *  <tr><td>Map&lt;String, C&lt;Object, C&lt;Number, Integer&gt;&gt;&gt;</td><td align="center">2</td><td>error: IndexOutOfBoundsException!</td></tr>
-   *  <tr><td>none</td><td align="center">doesn't matter</td><td>error: NullPointerException!</td></tr>
+   *  <tr><td>null</td><td align="center">doesn't matter</td><td>error: NullPointerException!</td></tr>
    * </table>
    *
    * @param type  a generic type.
@@ -202,7 +202,7 @@ public final class Types {
    *
    * @param type a type.
    * @return the list of the types represented by the given type.
-   * @see #cons(List) 
+   * @see #cons(List)
    */
   public static List<? extends Type> fromCons(Type type) {
     if (type == null) {
@@ -289,7 +289,7 @@ public final class Types {
 
   /**
    * Encodes the given list of types as a {@linkplain C cons}, as accepted by {@link #fromCons(Type)}.
-   *
+   * <p>
    * That means:
    * <ul>
    *   <li>A {@code null} or empty list yields {@code null};</li>
@@ -305,32 +305,32 @@ public final class Types {
    *   List&lt;? extends Type&gt; types = // ...
    *   assert Object.equals(types, Types.fromCons(Types.cons(types)));
    * </pre>
-   *
+   * <p>
    * holds for any list of {@link Type}s not containing {@code C} types, which will be flattened in this method.
    *
    * @param types a list of types to encode.
    * @return a type encoding the given list, as extractable by {@link #fromCons(Type)}, or {@code null} if the given
-   *         list if {@code null} or empty.
+   * list if {@code null} or empty.
    * @throws NullPointerException if {@code types} is not empty and at least one of the given types is null.
    * @see #fromCons(Type)
    */
   public static Type cons(List<? extends Type> types) throws NullPointerException {
-    if(types == null || types.isEmpty()) {
+    if (types == null || types.isEmpty()) {
       return null;
     }
 
     List<? extends Type> flattenedTypes = types.stream()
-      .peek(t -> { if(t == null) { throw new NullPointerException("Null types can't be encoded!"); }})
+      .peek(t -> { if (t == null) { throw new NullPointerException("Null types can't be encoded!"); } })
       .flatMap(t -> Types.fromCons(t).stream())
       .collect(Collectors.toList());
 
-    if(flattenedTypes.size() == 1) {
+    if (flattenedTypes.size() == 1) {
       return flattenedTypes.get(0);
     }
 
     final int SIZE = flattenedTypes.size();
     Type cons = TypeFactory.parameterizedClass(C.class, flattenedTypes.get(SIZE - 2), flattenedTypes.get(SIZE - 1));
-    for(int i = SIZE - 3; i >= 0; i--) {
+    for (int i = SIZE - 3; i >= 0; i--) {
       cons = TypeFactory.parameterizedClass(C.class, flattenedTypes.get(i), cons);
     }
 
