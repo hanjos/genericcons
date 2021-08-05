@@ -6,6 +6,7 @@ import com.coekie.gentyref.TypeFactory;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -328,25 +329,26 @@ public final class Types {
       return null;
     }
 
-    List<? extends Type> flattenedTypes = types.stream()
-      .flatMap(t -> Types.fromCons(t).stream())
-      .collect(Collectors.toList());
+    final Collector<Type, Object, List<Type>> collectReverseList = Collectors.collectingAndThen(
+      Collectors.toList(),
+      (list) -> {
+        Collections.reverse(list);
+        return list;
+      });
 
-    if (flattenedTypes.isEmpty()) {
-      return null;
-    }
+    return types.stream()
+      .flatMap(t -> Types.fromCons(t).stream().map(Type.class::cast)) // mapping for the reduce to work
+      .collect(collectReverseList)
+      .stream()
+      .reduce(
+        null,
+        (acc, next) -> {
+          if (acc == null) {
+            return next;
+          }
 
-    if (flattenedTypes.size() == 1) {
-      return flattenedTypes.get(0);
-    }
-
-    final int SIZE = flattenedTypes.size();
-    Type cons = TypeFactory.parameterizedClass(C.class, flattenedTypes.get(SIZE - 2), flattenedTypes.get(SIZE - 1));
-    for (int i = SIZE - 3; i >= 0; i--) {
-      cons = TypeFactory.parameterizedClass(C.class, flattenedTypes.get(i), cons);
-    }
-
-    return cons;
+          return TypeFactory.parameterizedClass(C.class, next, acc);
+        });
   }
 
   private static boolean isPrimitive(Type type) {
