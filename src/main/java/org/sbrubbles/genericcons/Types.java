@@ -329,25 +329,18 @@ public final class Types {
       return null;
     }
 
-    final Collector<Type, Object, List<Type>> collectReverseList = Collectors.collectingAndThen(
-      Collectors.toList(),
-      (list) -> {
-        Collections.reverse(list);
-        return list;
-      });
-
     return types.stream()
-      .flatMap(t -> Types.fromCons(t).stream().map(Type.class::cast)) // mapping for the reduce to work
-      .collect(collectReverseList)
+      .flatMap(t -> Types.fromCons(t).stream().map(Type.class::cast)) // flatten conses and Type::cast to later reduce
+      .collect(toReverseList())// cons are built back to front; so reverse the given list before reducing it
       .stream()
       .reduce(
-        null,
+        null, // empty lists cons to null
         (acc, next) -> {
           if (acc == null) {
-            return next;
+            return next; // a single element list returns that element unchanged
           }
 
-          return TypeFactory.parameterizedClass(C.class, next, acc);
+          return TypeFactory.parameterizedClass(C.class, next, acc); // cons up
         });
   }
 
@@ -360,5 +353,15 @@ public final class Types {
       type == int.class ||
       type == long.class ||
       type == short.class;
+  }
+
+  // a collector that collects the elements into a list and then reverses it
+  private static <T> Collector<T, ?, List<T>> toReverseList() {
+    return Collectors.collectingAndThen(
+      Collectors.toList(),
+      (list) -> {
+        Collections.reverse(list);
+        return list;
+      });
   }
 }
