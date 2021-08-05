@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class TypesFromConsTest {
+public class TypesConsTest {
   private static final Type CONS_4_TYPES = new TypeToken<C<String, C<Number, C<Object, List<Double>>>>>() { /**/ }.getType();
   private static final Type CONS_3_TYPES = new TypeToken<C<List<Double>, C<String, Object>>>() { /**/ }.getType();
   private static final Type CONS_STRING_OBJECT = new TypeToken<C<String, Object>>() { /**/ }.getType();
