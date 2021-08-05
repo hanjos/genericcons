@@ -14,6 +14,7 @@ import static org.junit.Assert.assertFalse;
 import static org.sbrubbles.genericcons.fixtures.Utils.*;
 
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class TypesSuppliersTest {
   @Test
   public void genericSuperclassOfOneNonConsParameter() {
@@ -41,7 +42,7 @@ public class TypesSuppliersTest {
 
     assertEquals(
       type(OneParameter.class,
-           cons(String.class, Number.class, Object.class, Object[].class, Serializable.class)),
+        cons(String.class, Number.class, Object.class, Object[].class, Serializable.class)),
       Types.genericSuperclassOf(c.getClass()).get());
   }
 
@@ -52,9 +53,9 @@ public class TypesSuppliersTest {
 
     assertEquals(
       type(ThreeParameters.class,
-           Number.class,
-           String.class,
-           cons(Serializable.class, Serializable.class)),
+        Number.class,
+        String.class,
+        cons(Serializable.class, Serializable.class)),
       Types.genericSuperclassOf(c.getClass()).get());
   }
 
@@ -65,10 +66,10 @@ public class TypesSuppliersTest {
 
     assertEquals(
       type(OneParameter.class,
-           cons(String.class,
-                listOf(Number.class),
-                Object.class,
-                mapOf(String.class, Integer.class))),
+        cons(String.class,
+          listOf(Number.class),
+          Object.class,
+          mapOf(String.class, Integer.class))),
       Types.genericSuperclassOf(c.getClass()).get());
   }
 

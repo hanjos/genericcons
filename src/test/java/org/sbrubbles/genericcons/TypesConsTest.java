@@ -65,8 +65,8 @@ public class TypesConsTest {
     assertEquals(String.class, Types.cons(String.class));
     assertEquals(LIST_OF_DOUBLE, Types.cons(LIST_OF_DOUBLE));
 
-    assertEquals(String.class, Types.cons(Arrays.asList(String.class)));
-    assertEquals(LIST_OF_DOUBLE, Types.cons(Arrays.asList(LIST_OF_DOUBLE)));
+    assertEquals(String.class, Types.cons(Collections.singletonList(String.class)));
+    assertEquals(LIST_OF_DOUBLE, Types.cons(Collections.singletonList(LIST_OF_DOUBLE)));
   }
 
   @Test
@@ -93,7 +93,7 @@ public class TypesConsTest {
   @Test
   public void buildFromConsTypes() {
     assertEquals(CONS_4_TYPES, Types.cons(CONS_4_TYPES));
-    assertEquals(CONS_4_TYPES, Types.cons(Arrays.asList(CONS_4_TYPES)));
+    assertEquals(CONS_4_TYPES, Types.cons(Collections.singletonList(CONS_4_TYPES)));
 
     assertEquals(CONS_3_TYPES, Types.cons(LIST_OF_DOUBLE, CONS_STRING_OBJECT));
     assertEquals(CONS_3_TYPES, Types.cons(LIST_OF_DOUBLE, String.class, Object.class));
@@ -107,7 +107,9 @@ public class TypesConsTest {
   @Test
   public void consAndFromConsAreDuals() {
     assertTrue(Types.fromCons(Types.cons()).isEmpty());
-    assertEquals(Arrays.asList(String.class), Types.fromCons(Types.cons(Arrays.asList(String.class))));
+    assertTrue(Types.fromCons(Types.cons(Collections.emptyList())).isEmpty());
+
+    assertEquals(Collections.singletonList(String.class), Types.fromCons(Types.cons(Collections.singletonList(String.class))));
     assertEquals(FOUR_TYPES, Types.fromCons(Types.cons(FOUR_TYPES)));
   }
 }

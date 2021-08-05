@@ -15,6 +15,7 @@ import static org.junit.Assert.*;
 import static org.sbrubbles.genericcons.fixtures.Utils.listOf;
 import static org.sbrubbles.genericcons.fixtures.Utils.mapOf;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class TypesFromTest {
   @Test
   public void oneNonConsParameter() {
