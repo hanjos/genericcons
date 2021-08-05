@@ -79,36 +79,15 @@ public class TypesFromConsTest {
   }
 
   @Test
-  public void rejectNullTypes() {
-    try {
-      Types.cons(null, Object.class, null);
-      fail();
-    } catch(NullPointerException e) { /**/ }
+  public void nullTypesAreIgnored() {
+    assertNull(Types.cons(null, null));
+    assertNull(Types.cons(Arrays.asList(null, null)));
 
-    try {
-      Types.cons(String.class, null);
-      fail();
-    } catch(NullPointerException e) { /**/ }
+    assertEquals(Object.class, Types.cons(null, Object.class, null));
+    assertEquals(Object.class, Types.cons(Arrays.asList(null, Object.class, null)));
 
-    try {
-      Types.cons(String.class, Object.class, null, LIST_OF_DOUBLE);
-      fail();
-    } catch(NullPointerException e) { /**/ }
-
-    try {
-      Types.cons(Arrays.asList(null, Object.class, null));
-      fail();
-    } catch(NullPointerException e) { /**/ }
-
-    try {
-      Types.cons(Arrays.asList(String.class, null));
-      fail();
-    } catch(NullPointerException e) { /**/ }
-
-    try {
-      Types.cons(Arrays.asList(String.class, Object.class, null, LIST_OF_DOUBLE));
-      fail();
-    } catch(NullPointerException e) { /**/ }
+    assertEquals(CONS_4_TYPES, Types.cons(String.class, null, Number.class, Object.class, null, LIST_OF_DOUBLE));
+    assertEquals(CONS_4_TYPES, Types.cons(Arrays.asList(String.class, null, Number.class, Object.class, null, LIST_OF_DOUBLE)));
   }
 
   @Test

@@ -297,7 +297,17 @@ public final class Types {
    *   <li>Two or more types are encoded as a {@link C C} type.</li>
    * </ul>
    * <p>
-   * Any {@code C} types within the given list will be broken down and flattened into a larger list.
+   * Any {@code C} types within the given list will be broken down and flattened into a larger list. Any {@code null}s
+   * within the given type list are considered empty {@code C} types, as per {@code fromCons}. So (excusing the
+   * pseudo-Java)
+   * <pre>
+   *   Types.cons([null, String, Object, null, Number, List&lt;Double&gt;])
+   * </pre>
+   * and
+   * <pre>
+   *   Types.cons([C&lt;String, Object&gt;, null, C&lt;Number, List&lt;Double&gt;&gt;])
+   * </pre>
+   * return the same result: a type representing {@code C<String, C<Object, C<Number, List<Double>>>>}.
    * <p>
    * This method and {@link #fromCons(Type)} are duals: that means that
    *
@@ -306,23 +316,25 @@ public final class Types {
    *   assert Object.equals(types, Types.fromCons(Types.cons(types)));
    * </pre>
    * <p>
-   * holds for any list of {@link Type}s not containing {@code C} types, which will be flattened in this method.
+   * holds for any list of {@link Type}s not containing {@code C} types.
    *
    * @param types a list of types to encode.
    * @return a type encoding the given list, as extractable by {@link #fromCons(Type)}, or {@code null} if the given
    * list if {@code null} or empty.
-   * @throws NullPointerException if {@code types} is not empty and at least one of the given types is null.
    * @see #fromCons(Type)
    */
-  public static Type cons(List<? extends Type> types) throws NullPointerException {
-    if (types == null || types.isEmpty()) {
+  public static Type cons(List<? extends Type> types) {
+    if (types == null) {
       return null;
     }
 
     List<? extends Type> flattenedTypes = types.stream()
-      .peek(t -> { if (t == null) { throw new NullPointerException("Null types can't be encoded!"); } })
       .flatMap(t -> Types.fromCons(t).stream())
       .collect(Collectors.toList());
+
+    if (flattenedTypes.isEmpty()) {
+      return null;
+    }
 
     if (flattenedTypes.size() == 1) {
       return flattenedTypes.get(0);
